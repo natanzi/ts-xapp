@@ -1,0 +1,42 @@
+{
+    "json_url": "TS-xApp-OAIC",
+    "xapp_name": "TS-xApp-OAIC",
+    "version": "1.0.0",
+    "containers": [
+        {
+            "name": "TS-xApp-OAIC",
+            "image": {
+                "registry": "xApp-registry.local:5008",
+                "name": "TS-xApp-OAIC",
+                "tag": "1.0.0"
+            }
+        }
+    ],
+    "messaging": {
+        "ports": [
+            {
+                "name": "rmr-data",
+                "container": "TS-xApp-OAIC",
+                "port": 4560,
+                "rxMessages": [ "RIC_SUB_RESP", "RIC_SUB_FAILURE", "RIC_INDICATION", "RIC_SUB_DEL_RESP", "RIC_SUB_DEL_FAILURE" ],
+                "txMessages": [ "RIC_SUB_REQ", "RIC_SUB_DEL_REQ" ],
+                "policies": [1],
+                "description": "rmr receive data port for TS-xApp-OAIC"
+            },
+            {
+                "name": "rmr-route",
+                "container": "TS-xApp-OAIC",
+                "port": 4561,
+                "description": "rmr route port for TS-xApp-OAIC"
+            }
+        ]
+    },
+    "rmr": {
+        "protPort": "tcp:4560",
+        "maxSize": 2072,
+        "numWorkers": 1,
+        "txMessages": [ "RIC_SUB_REQ", "RIC_SUB_DEL_REQ" ],
+        "rxMessages": [ "RIC_SUB_RESP", "RIC_SUB_FAILURE", "RIC_INDICATION", "RIC_SUB_DEL_RESP", "RIC_SUB_DEL_FAILURE" ],
+    "policies": [1]
+    }
+}
