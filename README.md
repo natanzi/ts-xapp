@@ -22,7 +22,7 @@ The Traffic Steering (TS) xApp is a robust tool developed specifically for the [
 
 ## 🛠 Prerequisites
 
-- Ensure [OAIC and SRSRAN are installed](https://openaicellular.github.io/oaic/).
+- Ensure [OAIC and SRSRAN](https://openaicellular.github.io/oaic/) are installed.
 - Set up multiple UEs and initiate traffic flow within the network.
 
 ## 🚀 Getting Started
