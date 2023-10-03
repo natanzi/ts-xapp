@@ -29,9 +29,10 @@ The Traffic Steering (TS) xApp is a robust tool developed specifically for the [
 
 1. **Clone the Repository**:
 https://github.com/natanzi/TS-xApp
-2. Run the xApp on by:
+2. pip install -r requirements.txt
+3. Run the xApp on by:
    python TS_xApp.py
-3. **Monitor**: Keep an eye on the logs to gain insights into the xApp's operations and decision-making processes.
+5. **Monitor**: Keep an eye on the logs to gain insights into the xApp's operations and decision-making processes.
 
 ## 🤝 Contributing
 
