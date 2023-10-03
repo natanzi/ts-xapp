@@ -1,6 +1,7 @@
 logging
 socket
 threading
-influxdb_client
-flask
 sctp
+Flask==2.0.1
+influxdb-client==1.21.0
+pysctp==0.6.11
