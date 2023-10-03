@@ -15,4 +15,4 @@ RUN pip install --upgrade pip && pip install requirements.txt
 
 # Set our xApp to run immediately when deployed
 ENV PYTHONUNBUFFERED 1
-CMD TS-xApp.py
+CMD TS_xApp.py
