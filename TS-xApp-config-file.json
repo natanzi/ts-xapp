@@ -1,13 +1,13 @@
 {
-    "json_url": "TS-xApp-OAIC",
-    "xapp_name": "TS-xApp-OAIC",
+    "json_url": "TS-xApp",
+    "xapp_name": "TS-xApp",
     "version": "1.0.0",
     "containers": [
         {
-            "name": "TS-xApp-OAIC",
+            "name": "TS-xApp",
             "image": {
                 "registry": "xApp-registry.local:5008",
-                "name": "TS-xApp-OAIC",
+                "name": "TS-xApp",
                 "tag": "1.0.0"
             }
         }
@@ -16,18 +16,18 @@
         "ports": [
             {
                 "name": "rmr-data",
-                "container": "TS-xApp-OAIC",
+                "container": "TS-xApp",
                 "port": 4560,
                 "rxMessages": [ "RIC_SUB_RESP", "RIC_SUB_FAILURE", "RIC_INDICATION", "RIC_SUB_DEL_RESP", "RIC_SUB_DEL_FAILURE" ],
                 "txMessages": [ "RIC_SUB_REQ", "RIC_SUB_DEL_REQ" ],
                 "policies": [1],
-                "description": "rmr receive data port for TS-xApp-OAIC"
+                "description": "rmr receive data port for TS-xApp"
             },
             {
                 "name": "rmr-route",
-                "container": "TS-xApp-OAIC",
+                "container": "TS-xApp",
                 "port": 4561,
-                "description": "rmr route port for TS-xApp-OAIC"
+                "description": "rmr route port for TS-xApp"
             }
         ]
     },
