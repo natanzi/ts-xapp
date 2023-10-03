@@ -15,8 +15,7 @@ The Traffic Steering (TS) xApp is designed to manage and optimize traffic flow w
 
 ### Prerequisites
 - Install OAIC, SRSRAN
-- Ensure you have the required dependencies installed, such as the E2 and A1 interfaces.
-- Push traffic on the network
+- Add multiple UE and push traffic on the network
 
 ### Running the xApp
 
