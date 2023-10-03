@@ -14,9 +14,9 @@ The Traffic Steering (TS) xApp is a robust tool developed specifically for the [
   
 - **InfluxDB Integration**: Efficiently logs metrics and policies in InfluxDB, setting the stage for in-depth historical data analysis and visualization tools like Grafana.
   
-- **Flask API Support**: Facilitates external xApps to dynamically push or modify policies.
+- **Flask API Support**: Facilitates external xApps to dynamically push or modify policies (to accepting ML/RL/DRL plugin).
   
-- **Scalability**: Architecturally designed to accommodate a growing number of UEs and cells, ensuring sustained efficiency as the network scales.
+- **Scalability**: architecturally designed to accommodate a growing number of UEs and cells, ensuring sustained efficiency as the network scales.
   
 - **Modular Design**: Built with future expansion in mind, allowing for effortless integration of upcoming features.
 
