@@ -8,13 +8,15 @@ The Traffic Steering (TS) xApp is designed to manage and optimize traffic flow w
 - **Dynamic Policy Handling**: The xApp can dynamically update its traffic steering policy based on updates received from the A1 interface.
 - **Load Balancing**: One of the primary features is the ability to balance the load across cells. If a cell is detected as overloaded, the xApp can initiate handovers to redistribute UEs to underloaded cells.
 - **Modular Design**: The xApp is designed with modularity in mind, allowing for easy expansion and integration of additional features in the future.
-
-## Setup and Usage
+- **Supports external xApps to push policies via a Flask API.
+- **UE Profiling: Assigns each UE a profile detailing its ID, hosting cell, priority, type, origin, signal strength, and throughput.
+- **InfluxDB Integration: Stores metrics and policies in InfluxDB for historical data analysis and visualization (like Grafana).
+- **Scalability: Designed to handle a growing number of UEs and cells, ensuring the xApp remains efficient as the network expands.
 
 ### Prerequisites
-
+- Install OAIC, SRSRAN
 - Ensure you have the required dependencies installed, such as the E2 and A1 interfaces.
-- The sample data for cells and UEs can be modified as per your network setup.
+- Push traffic on the network
 
 ### Running the xApp
 
