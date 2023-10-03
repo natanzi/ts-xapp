@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
 
-# Sample data
+# Sample data or reading from E2 node 
 cells = ["Cell 1", "Cell 2", "Cell 3"]
 ues = ["UE 1", "UE 2", "UE 3"]
 
