@@ -1,3 +1,4 @@
+#This is TS xApp version 1.0.0
 import logging
 import socket
 import time
