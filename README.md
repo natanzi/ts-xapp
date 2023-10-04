@@ -31,9 +31,8 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
    ```bash
    sudo docker build . -t xApp-registry.local:5008/TS-xApp:1.0.0
    
-6. Find your local IP address:
-   hostname -I
-   export HOST_IP=<your_ip_address>
+6. Get Local IP Address
+   export HOST_IP=$(hostname -I | awk '{print $1}')
 
 ## 🤝 Contributing
 Your contributions can enhance this xApp! Fork the repository and submit a pull request with your changes.
