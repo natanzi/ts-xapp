@@ -29,6 +29,7 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
 Find your local IP address:
 hostname -I
 export HOST_IP=<your_ip_address>
+
 5. Configure the Nginx Web server to host the xApp descriptor files.
 6. Host the config files:
 curl http://$HOST_IP:5010/config_files/TS-xApp-config-file.json
