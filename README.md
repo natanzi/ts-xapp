@@ -25,7 +25,7 @@ The Traffic Steering (TS) xApp is a specialized tool designed for the [OAIC O-RA
    ./ricinstalation.sh
 2. Start SRSRAN:
    ```bash
-   ./srsran.sh
+   ./srsrandeploy.sh
 3. Execute TS-xApp:
    ```bash
    ./ts-xapp.sh
