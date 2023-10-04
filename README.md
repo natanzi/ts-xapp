@@ -29,3 +29,14 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
 Find your local IP address:
 hostname -I
 export HOST_IP=<your_ip_address>
+5. Configure the Nginx Web server to host the xApp descriptor files.
+6. Host the config files:
+curl http://$HOST_IP:5010/config_files/TS-xApp-config-file.json
+7. Update the IP in the onboard file.
+8. Onboard and deploy the TS xApp.
+9. Verify the xApp deployment:
+sudo kubectl get pods -A
+🤝 Contributing
+Your contributions can enhance this xApp! Fork the repository and submit a pull request with your changes.
+
+This version of the README is more concise, organized, and uses consistent formatting. It should provide a clearer overview and instructions for users.
