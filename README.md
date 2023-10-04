@@ -26,6 +26,7 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
 4. Build the Docker image and submit it to the xApp registry:
    ```bash
    sudo docker build . -t xApp-registry.local:5008/TS-xApp:1.0.0
+   
 5. Find your local IP address:
    hostname -I
    export HOST_IP=<your_ip_address>
