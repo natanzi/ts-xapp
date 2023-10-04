@@ -23,11 +23,12 @@ RUN apt-get update && apt-get -y install build-essential musl-dev libjpeg-dev zl
 
 # Copy all files from the current directory on the host to the /tmp/ml directory inside the Docker container.
 # This is useful for transferring your application code and dependencies into the container.
-COPY . /tmp/ml
+COPY . /tmp/TS-xApp
 
 # Set the working directory inside the container to /tmp/ml.
 # All subsequent commands will be run from this directory.
-WORKDIR /tmp/ml
+# Go to /tmp/TS-xApp
+WORKDIR /tmp/TS-xApp
 
 # Upgrade pip to the latest version and then install the Python packages listed in requirements.txt.
 # The -r flag is used to specify that pip should install packages from the provided requirements file.
