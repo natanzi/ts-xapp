@@ -30,7 +30,7 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
    hostname -I
    export HOST_IP=<your_ip_address>
 
-🤝 Contributing
+## 🤝 Contributing
 Your contributions can enhance this xApp! Fork the repository and submit a pull request with your changes.
 
 This version of the README is more concise, organized, and uses consistent formatting. It should provide a clearer overview and instructions for users.
