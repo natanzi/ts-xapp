@@ -20,9 +20,9 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
 
 ## 🚀 Getting Started
 
-1. Execute `Ricinstalation.sh`.
-2. Run `srsran installation`.
-3. Clone the TS-xApp repository.
+1. Execute `ricinstalation.sh`.
+2. Run `srsran.sh`.
+3. Clone the TS-xApp repository: https://github.com/natanzi/TS-xApp
 4. Build the Docker image and submit it to the xApp registry:
    ```bash
    sudo docker build . -t xApp-registry.local:5008/TS-xApp:1.0.0
@@ -30,13 +30,6 @@ The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN t
    hostname -I
    export HOST_IP=<your_ip_address>
 
-5. Configure the Nginx Web server to host the xApp descriptor files.
-6. Host the config files:
-curl http://$HOST_IP:5010/config_files/TS-xApp-config-file.json
-7. Update the IP in the onboard file.
-8. Onboard and deploy the TS xApp.
-9. Verify the xApp deployment:
-sudo kubectl get pods -A
 🤝 Contributing
 Your contributions can enhance this xApp! Fork the repository and submit a pull request with your changes.
 
