@@ -1,41 +1,31 @@
 # Traffic Steering (TS) xApp
 
-The Traffic Steering (TS) xApp is a robust tool developed specifically for the [OAIC O-RAN testbed](https://www.openaicellular.org/). It's designed to efficiently manage and optimize traffic flow within cellular networks. By leveraging real-time metrics and adhering to dynamic policies, this xApp facilitates informed decisions regarding user equipment (UE) handovers between cells, ensuring peak network performance.
+The Traffic Steering (TS) xApp is a powerful tool tailored for the [OAIC O-RAN testbed](https://www.openaicellular.org/). It aims to manage and optimize traffic flow within cellular networks efficiently. By harnessing real-time metrics and adhering to dynamic policies, this xApp ensures optimal network performance through informed decisions about user equipment (UE) handovers between cells.
 
 ## 🌟 Key Features
 
-- **Interface Integration**: Seamless integration with both E2 and A1 interfaces for direct communication with the RAN and real-time metric acquisition.
-  
-- **Dynamic Policy Management**: Ability to adaptively update traffic steering policies based on real-time updates from the A1 interface.
-  
-- **Load Balancing**: Proactively detects overloaded cells and initiates handovers, redistributing UEs to ensure balanced load distribution across cells.
-  
-- **UE Profiling**: Comprehensive profiling for each UE, detailing attributes like ID, hosting cell, priority, type, origin, signal strength, and throughput.
-  
-- **InfluxDB Integration**: Efficiently logs metrics and policies in InfluxDB, setting the stage for in-depth historical data analysis and visualization tools like Grafana.
-  
-- **Flask API Support**: Facilitates external xApps to dynamically push or modify policies (to accepting ML/RL/DRL plugin).
-  
-- **Scalability**: architecturally designed to accommodate a growing number of UEs and cells, ensuring sustained efficiency as the network scales.
-  
-- **Modular Design**: Built with future expansion in mind, allowing for effortless integration of upcoming features.
+- **Interface Integration**: Seamless integration with E2 and A1 interfaces for direct RAN communication and real-time metric acquisition.
+- **Dynamic Policy Management**: Adapts traffic steering policies based on real-time A1 interface updates.
+- **Load Balancing**: Detects overloaded cells and redistributes UEs for balanced load across cells.
+- **UE Profiling**: Detailed profiling of each UE, including attributes like ID, cell, priority, type, origin, signal strength, and throughput.
+- **InfluxDB Integration**: Logs metrics and policies in InfluxDB, facilitating historical data analysis and visualization with tools like Grafana.
+- **Flask API Support**: Enables external xApps to dynamically push or modify policies, supporting ML/RL/DRL plugins.
+- **Scalability**: Designed to handle an increasing number of UEs and cells without compromising efficiency.
+- **Modular Design**: Future-proofed for easy integration of upcoming features.
 
 ## 🛠 Prerequisites
 
-- Ensure [OAIC and SRSRAN](https://openaicellular.github.io/oaic/) are installed.
-- Set up multiple UEs and initiate traffic flow within the network.
+- Install [OAIC and SRSRAN](https://openaicellular.github.io/oaic/).
+- Set up multiple UEs and initiate network traffic flow.
 
 ## 🚀 Getting Started
 
-1. **Clone the Repository**:
-https://github.com/natanzi/TS-xApp
-2. pip install -r requirements.txt
-3. Run the xApp on by:
-   python TS_xApp.py
-5. **Monitor**: Keep an eye on the logs to gain insights into the xApp's operations and decision-making processes.
-
-## 🤝 Contributing
-
-Your contributions can make this xApp even better! Feel free to fork the repository and submit a pull request with your enhancements.
-ges.
-
+1. Execute `Ricinstalation.sh`.
+2. Run `srsran installation`.
+3. Clone the TS-xApp repository.
+4. Build the Docker image and submit it to the xApp registry:
+   ```bash
+   sudo docker build . -t xApp-registry.local:5008/TS-xApp:1.0.0
+Find your local IP address:
+hostname -I
+export HOST_IP=<your_ip_address>
