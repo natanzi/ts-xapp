@@ -3,7 +3,8 @@ FROM ubuntu
 RUN apt-get update       
 RUN apt-get install --assume-yes git
 FROM continuumio/miniconda3
-FROM python:3.8-slim
+FROM python:3.12-rc-slim
+
 
 
 # RMR setup
