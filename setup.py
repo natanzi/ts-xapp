@@ -43,7 +43,7 @@ setup(
         "abcplus", 
         "influxdb-client"
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.12',
     entry_points={"console_scripts": ["run-mr.py=mr.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
