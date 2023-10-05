@@ -1,6 +1,7 @@
 # Traffic Steering (TS) xApp
 
-The Traffic Steering (TS) xApp is a specialized tool designed for the [OAIC O-RAN testbed](https://www.openaicellular.org/). Its primary purpose is to efficiently manage and optimize traffic flow within cellular networks. By utilizing real-time metrics and adhering to dynamic policies, this xApp ensures optimal network performance by making informed decisions about user equipment (UE) handovers between cells. This xApp can be onboarded through the xApp Onboarder.
+The Traffic Steering (TS) xApp is a specialized tool designed for the [OAIC O-RAN testbed](https://www.openaicellular.org/). Its primary purpose is to efficiently manage and optimize traffic flow within cellular networks. By utilizing real-time metrics and adhering to dynamic policies, this xApp ensures optimal network performance by making informed decisions about user equipment (UE) handovers between cells. 
+This xApp can be onboarded through the xApp Onboarder.
 
 ## 🌟 Key Features
 
