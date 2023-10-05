@@ -41,6 +41,7 @@ ENV PYTHONUNBUFFERED 1
 
 EXPOSE 8585
 EXPOSE 8586
+# Set an React web dashboard and grafana
 EXPOSE 3000
 EXPOSE 5000
 
