@@ -2,7 +2,7 @@ logging
 socket
 threading
 sctp
-Flask==2.0.1
-influxdb-client==1.21.0
-pysctp==0.6.11
+Flask==3.0.0
+influxdb-client==1.38.0
+pysctp==0.7.2
 ricxappframe
