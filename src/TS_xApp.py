@@ -3,8 +3,6 @@ import logging
 import socket
 import time
 from threading import Thread, Lock
-from e2 import E2Driver
-from a1 import A1Driver
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from flask import Flask, request, jsonify
