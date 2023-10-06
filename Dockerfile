@@ -52,7 +52,9 @@ EXPOSE 5000
 
 #install
 COPY setup.py /tmp
+COPY README.md /tmp
 COPY LICENSE.txt /tmp/
+COPY init/ /tmp/init
 COPY mr/ /mr
 RUN pip install /tmp
 
