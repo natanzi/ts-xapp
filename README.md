@@ -6,7 +6,7 @@ This xApp can be onboarded through the xApp Onboarder.
 ## 🌟 Key Features
 
 - **Interface Integration**: Integrates seamlessly with E2 and A1 interfaces for direct RAN communication and real-time metric acquisition.
-- **-KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
+- **KPIMON xApp integration**: KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
 - **Dynamic Policy Management**: Adapts traffic steering policies in response to real-time updates from the A1 interface.
 - **Load Balancing**: Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
 - **UE Profiling**: Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
