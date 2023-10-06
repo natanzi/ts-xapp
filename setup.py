@@ -17,7 +17,7 @@ setup(
     author_email='snatanzi@wpi.edu',
     url="https://github.com/natanzi/TS-xApp",
     install_requires=[
-        "ricxappframe>=1.1.1,<3.0.0", 
+        "ricxappframe>=1.1.1,<3.2.4", 
         "ricsdl==3.1.1", 
         "socket.py==0.1.0", 
         "APScheduler", 
@@ -45,7 +45,7 @@ setup(
         "influxdb-client"
     ],
     python_requires='>=3.12',
-    install_requires=["ricxappframe>=1.1.1,<3.2.3"],
+    install_requires=["ricxappframe>=1.1.1,<3.2.4"],
     entry_points={"console_scripts": ["run-mr.py=mr.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
