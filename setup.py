@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 # Read the content of the README.md file
 def read_file(filename):
@@ -44,6 +45,7 @@ setup(
         "influxdb-client"
     ],
     python_requires='>=3.12',
+    install_requires=["ricxappframe>=1.1.1,<3.2.3"],
     entry_points={"console_scripts": ["run-mr.py=mr.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
