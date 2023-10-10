@@ -1,0 +1,10 @@
+{
+"$schema": "http://json-schema.org/draft-07/schema#",
+"$id": "#/controls",
+"type": "object",
+"title": "Controls Section Schema",
+"required": [
+],
+"properties": {
+}
+}
