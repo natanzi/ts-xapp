@@ -23,6 +23,7 @@ This xApp can be onboarded through the xApp Onboarder.
 
 - Ensure [OAIC and SRSRAN](https://openaicellular.github.io/oaic/) are installed.
 - Set up multiple UEs and initiate network traffic flow.
+- Running KPImon xApp
 
 ## 🚀 Getting Started
 
