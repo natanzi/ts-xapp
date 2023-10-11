@@ -43,7 +43,7 @@ setup(
     ],
     python_requires='>=3.12',
     install_requires=["ricxappframe>=1.1.1"],
-    entry_points={"console_scripts": ["run-mr.py=mr.main:start"]},  # adds a magical entrypoint for Docker
+    entry_points={"console_scripts": ["run-src.py=src.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
 )
