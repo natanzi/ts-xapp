@@ -42,6 +42,9 @@ This xApp can be onboarded through the xApp Onboarder.
 3. Execute TS-xApp:
    ```bash
    ./ts-xapp.sh
+4. Execute KPIM-xApp:
+   ```bash
+   ./kpimon.sh
 
 
 ## 🤝 Contributing
