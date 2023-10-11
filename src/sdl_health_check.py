@@ -20,5 +20,7 @@ def sdl_health_check():
     except Exception as e:
         print(f"SDL Health Check: EXCEPTION - {str(e)}")
 
-# Execute the SDL health check
-sdl_health_check()
+# If running this file directly, execute the SDL health check
+if __name__ == "__main__":
+    sdl_health_check()
+
