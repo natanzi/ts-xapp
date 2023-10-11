@@ -32,8 +32,8 @@ COPY . /tmp/TS-xApp
 
 # Set the working directory inside the container to /tmp/ml.
 # All subsequent commands will be run from this directory.
-# Go to /tmp/TS-xApp
-WORKDIR /tmp/TS-xApp
+# Go to /src/TS-xApp
+WORKDIR /src/TS-xApp
 
 # Upgrade pip to the latest version and then install the Python packages listed in requirements.txt.
 # The -r flag is used to specify that pip should install packages from the provided requirements file.
