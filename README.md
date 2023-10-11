@@ -6,7 +6,7 @@ This xApp can be onboarded through the xApp Onboarder.
 ## 🌟 Key Features
 
 - **Interface Integration**: 
-  - A1 and E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
+  - E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
 - **Health check operations**: 
   - RMR and SDL Health check.
 - **KPIMON xApp integration**:
