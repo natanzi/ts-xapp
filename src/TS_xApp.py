@@ -176,7 +176,21 @@ def main_menu():
         else:
             print("Invalid choice. Please try again.")
 
+def main():
+    try:
+        ts_xapp = TrafficSteering()
+        ts_xapp.on_register()
+        Thread(target=ts_xapp.run).start()
+        main_menu()  # Display the interactive menu
+        app.run(port=5000)
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
+    finally:
+        if ts_xapp.server:
+            ts_xapp.server.close()
+
 if __name__ == "__main__":
+    main()
     try:
         ts_xapp = TrafficSteering()
         ts_xapp.on_register()
