@@ -1,5 +1,4 @@
-# Use the Miniconda3 image as the base image. Miniconda is a minimal installer for Conda, a package manager for Python.
-FROM ubuntu:latest
+# Use the Miniconda3 image as the base image.
 FROM frolvlad/alpine-miniconda3
 
 # Set environment variables
@@ -40,6 +39,9 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+# Copy the rest of the application code and dependencies into the container
+COPY . /app/TS-xApp
+
 # Expose the necessary ports
 EXPOSE 8585
 EXPOSE 8586
@@ -48,13 +50,4 @@ EXPOSE 5000
 
 # Set the default command to run when the container starts.
 # This will execute the TS-xApp.py script using Python.
-# Run the application
-CMD ["python", "TS-xApp.py"]
-%%%%%%
-
-# This is useful for transferring your application code and dependencies into the container.
-COPY . /app/TS-xApp
-
-# Set the default command to run when the container starts.
-# This will execute the TS-xApp.py script using Python.
-CMD ["python3.12", "TS-xApp.py"]
+CMD ["python", "/app/TS-xApp/TS-xApp.py"]
