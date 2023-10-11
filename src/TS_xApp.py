@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 from rmr_health_check import RMRHealthCheckXapp
 from sdl_health_check import sdl_health_check
+from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
 
 
 # Initialize logging
@@ -181,6 +182,18 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please try again.")
+#def some_function_that_handles_events():
+    # ... some of your code ...
+
+    # Example of how you might use the imported functions:
+    #if handover_failed:
+        #handle_handover_failure({"failed_ue_id": "12345", "reason": "Could not establish connection with target cell"})
+
+    #if data_retrieval_failed:
+        #handle_data_retrieval_failure({"e2_node_id": "67890", "reason": "Connection timeout"})
+
+    #if cell_is_congested:
+        #handle_cell_congestion({"cell_id": "101112", "traffic_load": "High", "available_capacity": "Low"})
 
 def main():
     rmr_health_check = None
