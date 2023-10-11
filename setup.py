@@ -11,7 +11,7 @@ setup(
     packages=find_packages(exclude=["tests.*", "tests"]),
     description="Traffic Steering xApp",
     long_description=read_file('README.md'),
-    long_description_content_type="text/markdown",  # Specify the content type of the long description
+    long_description_content_type="text/markdown",
     author='Milad Natanzi',
     author_email='snatanzi@wpi.edu',
     url="https://github.com/natanzi/TS-xApp",
@@ -41,9 +41,12 @@ setup(
         "abcplus", 
         "influxdb-client"
     ],
-    python_requires='>=3.12',
-    install_requires=["ricxappframe>=1.1.1"],
-    entry_points={"console_scripts": ["run-src.py=src.main:start"]},  # adds a magical entrypoint for Docker
+    python_requires='>=3.8',  # Adjust this as necessary
+    entry_points={
+        "console_scripts": [
+            "ts-xapp=src.TS_xApp:main_function"  # Adjust according to your module and function name
+        ]
+    },
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
 )
