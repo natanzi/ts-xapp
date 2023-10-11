@@ -5,7 +5,7 @@ RUN apt-get install --assume-yes git
 FROM frolvlad/alpine-miniconda3
 
 # RMR setup
-RUN mkdir -p /opt/route/
+RUN mkdir -p /app/route/
 
 # copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/lib64/librmr* /usr/local/lib64/
@@ -13,10 +13,10 @@ COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local
 
 
 COPY init/test_route.rt /opt/route/test_route.rt
-ENV RMR_SEED_RT /opt/route/test_route.rt
+ENV RMR_SEED_RT /app/route/test_route.rt
 ENV LD_LIBRARY_PATH /usr/local/lib/:/usr/local/lib64
-COPY local.rt /opt/route_mr/local.rt
-ENV RMR_SEED_RT /opt/route_mr/local.rt
+COPY local.rt /app/route_mr/local.rt
+ENV RMR_SEED_RT /app/route_mr/local.rt
 
 
 # Update the package list and install necessary system libraries and tools.
@@ -27,12 +27,12 @@ RUN python3 -m pip install ricsdl
 
 # Copy all files from the current directory on the host to the /tmp/ml directory inside the Docker container.
 # This is useful for transferring your application code and dependencies into the container.
-COPY . /tmp/TS-xApp
+COPY . /app/TS-xApp
 
-# Set the working directory inside the container to /tmp/ml.
+# Set the working directory inside the container to /app/
 # All subsequent commands will be run from this directory.
-# Go to /src/TS-xApp
-WORKDIR /src/TS-xApp
+# Go to /app/
+WORKDIR /app/
 
 # Upgrade pip to the latest version and then install the Python packages listed in requirements.txt.
 # The -r flag is used to specify that pip should install packages from the provided requirements file.
@@ -50,11 +50,11 @@ EXPOSE 3000
 EXPOSE 5000
 
 #install
-COPY setup.py /tmp
-COPY README.md /tmp
-COPY LICENSE.txt /tmp/
-COPY init/ /tmp/init
-COPY mr/ /mr
+COPY setup.py /app
+COPY README.md /app
+COPY LICENSE.txt /app/
+COPY init/ /app/init
+COPY src/ /app
 RUN pip install /tmp
 
 
