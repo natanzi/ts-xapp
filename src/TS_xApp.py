@@ -1,6 +1,5 @@
 #This is TS xApp version 1.0.0
 import logging
-from threading import Thread
 import socket
 import time
 import os
