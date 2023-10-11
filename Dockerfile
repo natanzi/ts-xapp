@@ -26,10 +26,6 @@ RUN mkdir -p /app/route_mr/ /app/TS-xApp
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/lib64/librmr* /usr/local/lib64/
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/bin/rmr* /usr/local/bin/
 
-# Copy only the necessary files
-COPY ./init/test_route.rt /app/route/test_route.rt
-COPY ./local.rt /app/route_mr/local.rt
-
 # Set the working directory
 WORKDIR /app/TS-xApp
 
