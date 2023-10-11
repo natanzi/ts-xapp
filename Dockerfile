@@ -1,5 +1,4 @@
 # Use the Miniconda3 image as the base image. Miniconda is a minimal installer for Conda, a package manager for Python.
-FROM ubuntu
 RUN apt-get update       
 RUN apt-get install --assume-yes git
 FROM frolvlad/alpine-miniconda3
