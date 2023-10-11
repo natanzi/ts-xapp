@@ -1,5 +1,6 @@
 #This is TS xApp version 1.0.0
 import logging
+from threading import Thread
 import socket
 import time
 import os
@@ -183,17 +184,37 @@ def main_menu():
             print("Invalid choice. Please try again.")
 
 def main():
+    rmr_health_check = None
+    ts_xapp = None
     try:
+        # Initialize RMR health check
+        rmr_health_check = RMRHealthCheckXapp()
+        if not rmr_health_check.rmr_health_check():
+            logging.error("RMR health check failed. Exiting.")
+            return
+
+        # Perform SDL health check
+        if not sdl_health_check():
+            logging.error("SDL health check failed. Exiting.")
+            return
+
+        # Initialize and run the Traffic Steering xApp
         ts_xapp = TrafficSteering()
         ts_xapp.on_register()
         Thread(target=ts_xapp.run).start()
-        main_menu()  # Display the interactive menu
+
+        # Start the interactive menu
+        main_menu()
+
+        # Run the Flask application
         app.run(port=5000)
+
     except Exception as e:
         logging.error(f"An error occurred: {e}")
+
     finally:
-        if ts_xapp.server:
+        if ts_xapp and ts_xapp.server:
             ts_xapp.server.close()
 
 if __name__ == "__main__":
-    main()  # This line starts the main function when the script is executed
+    main()
