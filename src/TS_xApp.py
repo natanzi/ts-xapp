@@ -2,13 +2,14 @@
 import logging
 import socket
 import time
+import os
 from threading import Thread, Lock
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from flask import Flask, request, jsonify
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
-import sctp
-import os
+from health_check import HealthCheckXapp
+
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
