@@ -39,7 +39,7 @@ This xApp can be onboarded through the xApp Onboarder.
 2. Start SRSRAN:
    ```bash
    ./srsrandeploy.sh
-3. Execute KPIM-xApp:
+3. Execute KPImon-xApp:
    ```bash
    ./kpimon.sh
 4. Execute TS-xApp:
