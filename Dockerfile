@@ -33,14 +33,13 @@ COPY ./local.rt /app/route_mr/local.rt
 # Set the working directory
 WORKDIR /app/TS-xApp
 
-# Install Python dependencies
-# Note: It's assumed that requirements.txt is in the root of the context directory.
-COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
-
 # Copy the rest of the application code and dependencies into the container
 COPY . /app/TS-xApp
+
+# Install Python dependencies
+# Note: It's assumed that requirements.txt is in the root of the context directory.
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 # Expose the necessary ports
 EXPOSE 8585
