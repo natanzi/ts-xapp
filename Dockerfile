@@ -29,13 +29,13 @@ COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local
 # Set the working directory
 WORKDIR /app/TS-xApp
 
-# Copy the rest of the application code and dependencies into the container
-COPY . /app/TS-xApp
-
-# Install Python dependencies
-# Note: It's assumed that requirements.txt is in the root of the context directory.
+# Copy the requirements.txt first, for separate dependency resolving and layering
+COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
+
+# Copy the rest of the application code and dependencies into the container
+COPY . .
 
 # Expose the necessary ports
 EXPOSE 8585
@@ -45,4 +45,4 @@ EXPOSE 5000
 
 # Set the default command to run when the container starts.
 # This will execute the TS-xApp.py script using Python.
-CMD ["python", "/app/TS-xApp/TS-xApp.py"]
+CMD ["python", "TS-xApp.py"]
