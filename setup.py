@@ -39,7 +39,7 @@ setup(
         "abcplus", 
         "influxdb-client"
     ],
-    python_requires='>=3.8',  # Adjust this as necessary
+    python_requires='>=3.12',  # Adjust this as necessary
     entry_points={
         "console_scripts": [
             "ts-xapp=src.TS_xApp:main",  # This tells setuptools to create a script that runs src.TS_xApp.main()
