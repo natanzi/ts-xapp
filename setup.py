@@ -1,10 +1,9 @@
 from setuptools import setup, find_packages
 import os
 
-# Read the content of the README.md file
 def read_file(filename):
-    with open(filename, 'r') as f:
-        return f.read()
+    with open(os.path.join(os.path.dirname(__file__), filename), 'r') as file:
+        return file.read()
 
 setup(
     name="TS-xApp",
@@ -22,7 +21,6 @@ setup(
         "socket.py==0.1.0", 
         "APScheduler", 
         "thread6", 
-        "redis", 
         "pandas>=1.1.3", 
         "joblib>=0.3.2", 
         "Scikit-learn>=0.21", 
@@ -33,7 +31,6 @@ setup(
         "Cython", 
         "numpy >= 1.16.2", 
         "ipython", 
-        "tensorflow", 
         "statistics", 
         "matplotlib", 
         "gym", 
@@ -45,7 +42,7 @@ setup(
         "influxdb-client"
     ],
     python_requires='>=3.12',
-    install_requires=["ricxappframe>=1.1.1,<3.2.4"],
+    install_requires=["ricxappframe>=1.1.1"],
     entry_points={"console_scripts": ["run-mr.py=mr.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
