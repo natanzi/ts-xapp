@@ -55,7 +55,7 @@ COPY README.md /app
 COPY LICENSE.txt /app/
 COPY init/ /app/init
 COPY src/ /app
-RUN pip install /tmp
+RUN pip install /app
 
 
 
