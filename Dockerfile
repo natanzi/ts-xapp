@@ -31,7 +31,7 @@ COPY ./init/test_route.rt /app/route/test_route.rt
 COPY ./local.rt /app/route_mr/local.rt
 
 # Set the working directory
-WORKDIR /app/
+WORKDIR /app/TS-xApp
 
 # Install Python dependencies
 # Note: It's assumed that requirements.txt is in the root of the context directory.
