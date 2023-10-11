@@ -3,10 +3,9 @@ FROM ubuntu
 RUN apt-get update       
 RUN apt-get install --assume-yes git
 FROM frolvlad/alpine-miniconda3
-FROM python:3.12-rc-slim
 
 # RMR setup
-RUN mkdir -p /opt/route_mr/
+RUN mkdir -p /opt/route/
 
 # copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/lib64/librmr* /usr/local/lib64/
