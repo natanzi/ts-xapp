@@ -29,6 +29,7 @@ write_api = client.write_api(write_options=SYNCHRONOUS)
 app = Flask(__name__)
 
 print("Wellcome to start TS-xApp, in this stage we are going to run the TS xApp....")
+print("We should test O-RAN compoonet")
 
 class UE:
     def __init__(self, ue_id, cell, priority, ue_type, origin, signal_strength, throughput):
