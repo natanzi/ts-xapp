@@ -8,7 +8,8 @@ from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from flask import Flask, request, jsonify
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
-from health_check import HealthCheckXapp
+from rmr_health_check import RMRHealthCheckXapp
+from sdl_health_check import sdl_health_check
 
 
 # Initialize logging
