@@ -1,7 +1,7 @@
 from ricxappframe.xapp_frame import RMRXapp
 import ricxappframe.rmr.rmr_constants as rmrC
 
-class HealthCheckXapp(RMRXapp):
+class RMRHealthCheckXapp(RMRXapp):
     def __init__(self):
         super().__init__()
 
@@ -19,7 +19,8 @@ class HealthCheckXapp(RMRXapp):
         except Exception as e:
             print(f"RMR Health Check: EXCEPTION - {str(e)}")
 
-# Initialize and execute the RMR health check
-xapp = HealthCheckXapp()
-xapp.rmr_health_check()
+# If running this file directly, execute the RMR health check
+if __name__ == "__main__":
+    xapp = RMRHealthCheckXapp()
+    xapp.rmr_health_check()
 
