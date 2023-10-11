@@ -9,14 +9,21 @@ This xApp can be onboarded through the xApp Onboarder.
   - A1 and E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
 - **RMR operations**: 
   - Read-write operations into persistent storage,xAPP Configuration Management,xAPP SDL Check, Raising alarms, Health check.
-- **KPIMON xApp integration**: KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
-- **Dynamic Policy Management**: Adapts traffic steering policies in response to real-time updates from the A1 interface.
-- **Load Balancing**: Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
-- **UE Profiling**: Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
-- **InfluxDB Integration**: Logs metrics and policies in InfluxDB, paving the way for historical data analysis and visualization using tools like Grafana.
-- **Flask API Support**: Allows external xApps to dynamically push or modify policies, with support for ML/RL/DRL plugins.
+- **KPIMON xApp integration**:
+-  KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
+- **Dynamic Policy Management**:
+-  Adapts traffic steering policies in response to real-time updates from the A1 interface.
+- **Load Balancing**:
+-  Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
+- **UE Profiling**:
+-  Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
+- **InfluxDB Integration**:
+-  Logs metrics and policies in InfluxDB, paving the way for historical data analysis and visualization using tools like Grafana.
+- **Flask API Support**:
+-  Allows external xApps to dynamically push or modify policies, with support for ML/RL/DRL plugins.
 - **Scalability**: Built to accommodate a growing number of UEs and cells, ensuring consistent efficiency.
-- **Modular Design**: Prepared for effortless integration of future features.
+- **Modular Design**:
+-  Prepared for effortless integration of future features.
 
 ## 🛠 Prerequisites
 
