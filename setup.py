@@ -16,7 +16,7 @@ setup(
     author_email='snatanzi@wpi.edu',
     url="https://github.com/natanzi/TS-xApp",
     install_requires=[
-        "ricxappframe>=1.1.1,<3.2.4", 
+        "ricxappframe>=1.1.1", 
         "ricsdl==3.1.1", 
         "socket.py==0.1.0", 
         "APScheduler", 
