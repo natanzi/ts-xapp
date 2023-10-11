@@ -23,7 +23,6 @@ setup(
         "thread6", 
         "pandas>=1.1.3", 
         "joblib>=0.3.2", 
-        "schedule>=0.0.0", 
         "influxdb", 
         "p5py", 
         "PEP517", 
