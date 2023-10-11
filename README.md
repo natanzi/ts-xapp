@@ -8,7 +8,7 @@ This xApp can be onboarded through the xApp Onboarder.
 - **Interface Integration**: 
   - A1 and E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
 - **RMR operations**: 
-  - Read-write operations into persistent storage,xAPP Configuration Management,xAPP SDL Check, Raising alarms, Health check.
+  - RMR and SDL Health check.
 - **KPIMON xApp integration**:
 -  KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
 - **Dynamic Policy Management**:
