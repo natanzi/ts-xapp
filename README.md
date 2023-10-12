@@ -44,7 +44,8 @@ This xApp can be onboarded through the xApp Onboarder.
    ./kpimon.sh
 4. Execute TS-xApp:
    ```bash
-   ./ts-xapp.sh
+   pip install .
+
 
 
 ## 🤝 Contributing
