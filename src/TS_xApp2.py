@@ -10,7 +10,8 @@ from rmr_health_check import RMRHealthCheckXapp
 from sdl_health_check import sdl_health_check
 from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
 from path.to.SubscriptionHandler import SubscriptionHandler
-from path.to.RMRManager import RMRManager 
+from path.to.RMRManager import RMRManager
+from config import Config  # Importing the Config class
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -20,8 +21,12 @@ def main():
     ts_xapp = None
     rmr_manager = None  # RMR Manager instance
     subscription_handler = None  # Subscription handler instance
+    config = None  # Configuration instance
 
     try:
+        # Load the configuration
+        config = Config(xapp_name="TS xApp", config_file="path/to/your/config.json")  # Replace with your actual xApp name and config file path
+
         # Initialize RMR health check
         rmr_health_check = RMRHealthCheckXapp()
         if not rmr_health_check.rmr_health_check():
@@ -34,18 +39,18 @@ def main():
             return
 
         # Initialize RMR Manager
-        rmr_manager = RMRManager()
+        rmr_manager = RMRManager(config)  # Pass the config to the RMRManager
         rmr_manager.start()  # Start RMR Manager
 
         # Initialize Subscription Handler
-        subscription_handler = SubscriptionHandler()
+        subscription_handler = SubscriptionHandler(config)  # Pass the config to the SubscriptionHandler
         subscription_handler.subscribe()  # Subscribe to necessary events
 
         # Start the interactive menu
         main_menu()
 
         # Initialize and run the Traffic Steering xApp
-        ts_xapp = TrafficSteering()
+        ts_xapp = TrafficSteering(config)  # Pass the config to the TrafficSteering xApp
         ts_xapp.on_register()
         Thread(target=ts_xapp.run).start()
 
@@ -62,6 +67,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
