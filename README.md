@@ -6,18 +6,24 @@ This xApp can be onboarded through the xApp Onboarder.
 ## 🌟 Key Features
 
 - **Interface Integration**: 
-  - A1 and E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
-- **RMR Health Check**: 
-  - Read-write operations into persistent storage.
-  - xAPP Configuration Management,xAPP SDL Check, Raising alarms and generating metrics.
-- **KPIMON xApp integration**: KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
-- **Dynamic Policy Management**: Adapts traffic steering policies in response to real-time updates from the A1 interface.
-- **Load Balancing**: Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
-- **UE Profiling**: Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
-- **InfluxDB Integration**: Logs metrics and policies in InfluxDB, paving the way for historical data analysis and visualization using tools like Grafana.
-- **Flask API Support**: Allows external xApps to dynamically push or modify policies, with support for ML/RL/DRL plugins.
+  - E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
+- **Health check operations**: 
+  - RMR and SDL Health check.
+- **KPIMON xApp integration**:
+-  KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
+- **Dynamic Policy Management**:
+-  Adapts traffic steering policies in response to real-time updates from the A1 interface.
+- **Load Balancing**:
+-  Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
+- **UE Profiling**:
+-  Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
+- **InfluxDB Integration**:
+-  Logs metrics and policies in InfluxDB, paving the way for historical data analysis and visualization using tools like Grafana.
+- **Flask API Support**:
+-  Allows external xApps to dynamically push or modify policies, with support for ML/RL/DRL plugins.
 - **Scalability**: Built to accommodate a growing number of UEs and cells, ensuring consistent efficiency.
-- **Modular Design**: Prepared for effortless integration of future features.
+- **Modular Design**:
+-  Prepared for effortless integration of future features.
 
 ## 🛠 Prerequisites
 
@@ -33,7 +39,10 @@ This xApp can be onboarded through the xApp Onboarder.
 2. Start SRSRAN:
    ```bash
    ./srsrandeploy.sh
-3. Execute TS-xApp:
+3. Execute KPImon-xApp:
+   ```bash
+   ./kpimon.sh
+4. Execute TS-xApp:
    ```bash
    ./ts-xapp.sh
 

@@ -2,12 +2,18 @@
 import logging
 import socket
 import time
+import os
 from threading import Thread, Lock
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 from flask import Flask, request, jsonify
-import sctp
-import os
+from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
+from rmr_health_check import RMRHealthCheckXapp
+from sdl_health_check import sdl_health_check
+from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
+from path.to.SubscriptionHandler import SubscriptionHandler  # Adjust the import path as necessary
+from ricxappframe.xapp_frame import RMRXapp  # And other necessary imports
+
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +32,9 @@ client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN)
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 app = Flask(__name__)
+
+print("Wellcome to start TS-xApp, in this stage we are going to run the TS xApp....")
+print("We should test O-RAN compoonet")
 
 class UE:
     def __init__(self, ue_id, cell, priority, ue_type, origin, signal_strength, throughput):
@@ -175,16 +184,51 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please try again.")
+#def some_function_that_handles_events():
+    # ... some of your code ...
 
-if __name__ == "__main__":
+    # Example of how you might use the imported functions:
+    #if handover_failed:
+        #handle_handover_failure({"failed_ue_id": "12345", "reason": "Could not establish connection with target cell"})
+
+    #if data_retrieval_failed:
+        #handle_data_retrieval_failure({"e2_node_id": "67890", "reason": "Connection timeout"})
+
+    #if cell_is_congested:
+        #handle_cell_congestion({"cell_id": "101112", "traffic_load": "High", "available_capacity": "Low"})
+
+def main():
+    rmr_health_check = None
+    ts_xapp = None
     try:
+        # Initialize RMR health check
+        rmr_health_check = RMRHealthCheckXapp()
+        if not rmr_health_check.rmr_health_check():
+            logging.error("RMR health check failed. Exiting.")
+            return
+
+        # Perform SDL health check
+        if not sdl_health_check():
+            logging.error("SDL health check failed. Exiting.")
+            return
+
+        # Initialize and run the Traffic Steering xApp
         ts_xapp = TrafficSteering()
         ts_xapp.on_register()
         Thread(target=ts_xapp.run).start()
-        main_menu()  # Display the interactive menu
+
+        # Start the interactive menu
+        main_menu()
+
+        # Run the Flask application
         app.run(port=5000)
+
     except Exception as e:
         logging.error(f"An error occurred: {e}")
+
     finally:
-        if ts_xapp.server:
+        if ts_xapp and ts_xapp.server:
             ts_xapp.server.close()
+
+if __name__ == "__main__":
+    main()
