@@ -1,37 +1,40 @@
-import rmr
 import time
-import logging
+import rmr
+from ricxappframe.xapp_frame import RMRXapp
 
 class RMRManager:
-    def __init__(self, service, level, port="4560"):
+    def __init__(self, service, level, logger):
         self.service = service
         self.level = level
-        self.port = port
-        self.rmr_context = None
+        self.logger = logger
+        self.rmr_mrc = None
+        self.init_rmr()
 
-    def initialize(self):
-        logging.info('Initializing RMR')
-        rmr_init_str = bytes(self.port, encoding='utf-8')
-        self.rmr_context = rmr.rmr_init(rmr_init_str, rmr.RMR_MAX_RCV_BYTES, 0x00)
-        while rmr.rmr_ready(self.rmr_context) == 0:
-            logging.info('RMR not yet ready')
+    def init_rmr(self):
+        data = None
+        os.environ["RMR_SRC_ID"] = self.service
+        os.environ["RMR_LOG_VLEVEL"] = str(self.level)
+        os.environ["RMR_RTG_SVC"] = "4561"
+        # ... (rest of the RMR initialization code)
+        self.rmrInit(b"4560")
+
+    def rmrInit(self, initbind):
+        self.rmr_mrc = rmr.rmr_init(initbind, rmr.RMR_MAX_RCV_BYTES, 0x00)
+        while rmr.rmr_ready(self.rmr_mrc) == 0:
             time.sleep(1)
-        rmr.rmr_set_stimeout(self.rmr_context, 1)
-        rmr.rmr_set_vlevel(self.level)
-        logging.info('RMR ready')
+            self.logger.info('RMR not yet ready')
+        rmr.rmr_set_stimeout(self.rmr_mrc, 1)
+        rmr.rmr_set_vlevel(5)
+        self.logger.info('RMR ready')
 
-    def receive_messages(self):
-        logging.info('Waiting for messages')
+    def receive_message(self):
         while True:
-            rmr_buffer = rmr.rmr_torcv_msg(self.rmr_context, None, 10000)
-            summary = rmr.message_summary(rmr_buffer)
+            print("Waiting for a message, will timeout after 10s")
+            rmr_sbuf = rmr.rmr_torcv_msg(self.rmr_mrc, None, 10000)
+            summary = rmr.message_summary(rmr_sbuf)
             if summary[rmr.RMR_MS_MSG_STATE] == 12:
-                logging.info("No messages received within the timeout period")
+                print("Nothing received")
             else:
-                logging.info(f"Message received: {summary}")
-                # Process the message here
-            rmr.rmr_free_msg(rmr_buffer)
-
-    def close(self):
-        if self.rmr_context:
-            rmr.rmr_close(self.rmr_context)
+                print("Message received!: {}".format(summary))
+                data = rmr.get_payload(rmr_sbuf)
+            rmr.rmr_free_msg(rmr_sbuf)
