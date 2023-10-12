@@ -1,11 +1,11 @@
-#This is TS xApp version 1.0.0
+# This is TS xApp version 1.0.0
 import logging
 import socket
 import time
 import os
 from threading import Thread, Lock
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
-from menu import main_menu  
+from menu import main_menu  # Importing the main_menu from menu.py
 from rmr_health_check import RMRHealthCheckXapp
 from sdl_health_check import sdl_health_check
 from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
@@ -15,8 +15,6 @@ from path.to.SubscriptionHandler import SubscriptionHandler  # Adjust the import
 logging.basicConfig(level=logging.INFO)
 
 def main():
-        main_menu()
-
     rmr_health_check = None
     ts_xapp = None
     try:
@@ -31,15 +29,15 @@ def main():
             logging.error("SDL health check failed. Exiting.")
             return
 
+        # Start the interactive menu
+        main_menu()
+
         # Initialize and run the Traffic Steering xApp
         ts_xapp = TrafficSteering()
         ts_xapp.on_register()
         Thread(target=ts_xapp.run).start()
 
-        # Start the interactive menu
-        main_menu()
-
-      except Exception as e:
+    except Exception as e:
         logging.error(f"An error occurred: {e}")
 
     finally:
@@ -48,4 +46,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
