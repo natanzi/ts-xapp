@@ -4,22 +4,14 @@ import socket
 import time
 import os
 from threading import Thread, Lock
-from flask import Flask, request, jsonify
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 from rmr_health_check import RMRHealthCheckXapp
 from sdl_health_check import sdl_health_check
 from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
 from path.to.SubscriptionHandler import SubscriptionHandler  # Adjust the import path as necessary
 
-
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
-
-
-
-write_api = client.write_api(write_options=SYNCHRONOUS)
-
-app = Flask(__name__)
 
 print("Wellcome to start TS-xApp, in this stage we are going to run the TS xApp....")
 print("We should test O-RAN compoonet")
@@ -60,18 +52,6 @@ def main_menu():
             break
         else:
             print("Invalid choice. Please try again.")
-#def some_function_that_handles_events():
-    # ... some of your code ...
-
-    # Example of how you might use the imported functions:
-    #if handover_failed:
-        #handle_handover_failure({"failed_ue_id": "12345", "reason": "Could not establish connection with target cell"})
-
-    #if data_retrieval_failed:
-        #handle_data_retrieval_failure({"e2_node_id": "67890", "reason": "Connection timeout"})
-
-    #if cell_is_congested:
-        #handle_cell_congestion({"cell_id": "101112", "traffic_load": "High", "available_capacity": "Low"})
 
 def main():
     rmr_health_check = None
@@ -96,10 +76,7 @@ def main():
         # Start the interactive menu
         main_menu()
 
-        # Run the Flask application
-        app.run(port=5000)
-
-    except Exception as e:
+      except Exception as e:
         logging.error(f"An error occurred: {e}")
 
     finally:
