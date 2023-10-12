@@ -4,8 +4,6 @@ import socket
 import time
 import os
 from threading import Thread, Lock
-from influxdb_client import InfluxDBClient, Point, WritePrecision
-from influxdb_client.client.write_api import SYNCHRONOUS
 from flask import Flask, request, jsonify
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 from rmr_health_check import RMRHealthCheckXapp
@@ -19,11 +17,6 @@ from ricxappframe.xapp_frame import RMRXapp  # And other necessary imports
 logging.basicConfig(level=logging.INFO)
 
 
-# InfluxDB Configuration
-INFLUXDB_URL = 'http://localhost:8086'
-INFLUXDB_TOKEN = 'YOUR_TOKEN'
-INFLUXDB_ORG = 'YOUR_ORG'
-INFLUXDB_BUCKET = 'YOUR_BUCKET'
 
 client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN)
 write_api = client.write_api(write_options=SYNCHRONOUS)
