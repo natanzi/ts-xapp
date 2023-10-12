@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.INFO)
 
 
 
-client = InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN)
 write_api = client.write_api(write_options=SYNCHRONOUS)
 
 app = Flask(__name__)
