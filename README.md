@@ -46,8 +46,9 @@ Start with root permission and:
 3. Execute KPImon-xApp:
    ```bash
    ./kpimon.sh
-4. Go to TS-xApp folder and :
+4. Go to TS-xApp folder and move the ts-xapp.sh to oaic folder and run it:
    ```bash
+   chmod +x ts-xapp.sh
    ./ts-xapp.sh
 
 ## 🤝 Contributing
