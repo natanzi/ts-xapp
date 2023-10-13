@@ -1,0 +1,12 @@
+APScheduler
+flask
+influxdb
+influxdb-client
+joblib
+numpy
+pandas
+ricsdl==3.1.3
+ricxappframe>=1.1.1
+socket.py
+thread6
+wheel
