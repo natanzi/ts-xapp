@@ -1,4 +1,4 @@
-# This is Traffic Steering xApp version 1.0.0 by Milad Ntanzi
+# This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
 import socket
 import time
 import os
@@ -23,10 +23,10 @@ def main():
 
     try:
         # Load the configuration
-        config = Config(xapp_name="ts-lsxApp", config_file="/home/ubnt/oaic/ts-xApp/init/ts-xApp-config-file.json")  # Use the absolute path to your config file
+        config = Config(xapp_name="ts-lsxApp", config_file="/home/ubnt/oaic/ts-xapp/init/ts-xapp-config-file.json") 
 
         # Initialize the logger
-        app_logger = AppLogger(name="ts-xApp", verbose=2)  # Replace with your actual xApp name and desired verbosity level
+        app_logger = AppLogger(name="ts-xapp", verbose=2)  # Replace with your actual xApp name and desired verbosity level
         logger = app_logger.get_logger()
 
         # Initialize RMR health check
