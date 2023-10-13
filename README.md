@@ -32,6 +32,7 @@ This xApp can be onboarded through the xApp Onboarder.
 - Running KPImon xApp
 
 ## 🚀 Getting Started
+Start with root permission and:
 
 1. Execute the RIC installation:
    ```bash
