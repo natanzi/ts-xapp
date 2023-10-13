@@ -1,10 +1,10 @@
 {
-    "json_url": "TS-xApp",
-    "xapp_name": "TS-xApp",
+    "json_url": "ts-xApp",
+    "xapp_name": "ts-xApp",
     "version": "1.0.0",
     "containers": [
         {
-            "name": "TS-xApp",
+            "name": "ts-xApp",
             "image": {
                 "registry": "xApp-registry.local:5008",
                 "name": "TS-xApp",
@@ -16,7 +16,7 @@
         "ports": [
             {
                 "name": "rmr-data",
-                "container": "TS-xApp",
+                "container": "ts-xApp",
                 "port": 4560,
                 "rxMessages": [ "RIC_SUB_RESP", "RIC_SUB_FAILURE", "RIC_INDICATION", "RIC_SUB_DEL_RESP", "RIC_SUB_DEL_FAILURE" ],
                 "txMessages": [ "RIC_SUB_REQ", "RIC_SUB_DEL_REQ" ],
@@ -25,9 +25,9 @@
             },
             {
                 "name": "rmr-route",
-                "container": "TS-xApp",
+                "container": "ts-xApp",
                 "port": 4561,
-                "description": "rmr route port for TS-xApp"
+                "description": "rmr route port for ts-xApp"
             }
         ]
     },
