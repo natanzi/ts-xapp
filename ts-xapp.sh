@@ -72,7 +72,7 @@ export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
-cd ${OAIC}/ts-xApp
+cd ${OAIC}/ts-xapp
 echo ">>> checking directory"
 ls
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
@@ -90,7 +90,7 @@ curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" |
 ls
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
 
-echo ">>> ts-xApp-onboard.url"
+echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
 echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
