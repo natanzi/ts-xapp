@@ -23,6 +23,7 @@ echo ">>> reloading nginx..."
 sudo nginx -t 
 cd ${OAIC}
 sudo cp TS-xApp/TS-xApp-config-file.json /var/www/xApp_config.local/config_files/
+sudo chmod 755 /var/www/xApp_config.local/config_files/TS-xApp-config-file.json
 sudo systemctl reload nginx
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
