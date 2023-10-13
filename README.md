@@ -47,7 +47,5 @@ Start with root permission and:
    ```bash
    ./ts-xApp.sh
 
-
-
 ## 🤝 Contributing
 We welcome your contributions to enhance this xApp! Feel free to fork the repository and submit a pull request with your improvements.
