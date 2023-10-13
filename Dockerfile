@@ -11,9 +11,7 @@ ENV PYTHONUNBUFFERED=1 \
 RUN apk --no-cache add \
     build-base \
     musl-dev \
-    jpeg-dev \
     zlib-dev \
-    mesa-dev \
     wget \
     dpkg \
     git \
