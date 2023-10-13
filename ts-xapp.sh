@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
     case "$choice" in 
@@ -19,10 +21,21 @@ cd /etc/nginx/sites-enabled
 sudo unlink default || { echo 'Failed to unlink default'; check_continue; }
 cd ../
 cd ../../var/www
-sudo mkdir xApp_config.local || { echo 'Failed to create directory xApp_config.local'; check_continue; }
+# Check if directory exists, if not create it
+if [ ! -d "xApp_config.local" ]; then
+  sudo mkdir xApp_config.local || { echo 'Failed to create directory xApp_config.local'; check_continue; }
+else
+  echo "Directory xApp_config.local already exists"
+fi
 cd xApp_config.local/
-sudo mkdir config_files || { echo 'Failed to create directory config_files'; check_continue; }
+# Check if directory exists, if not create it
+if [ ! -d "config_files" ]; then
+  sudo mkdir config_files || { echo 'Failed to create directory config_files'; check_continue; }
+else
+  echo "Directory config_files already exists"
+fi
 cd ../../../etc/nginx/conf.d
+# Overwrite the file if it exists
 sudo sh -c "echo 'server {
 listen 5010 default_server;
 server_name xApp_config.local;
@@ -34,7 +47,8 @@ root /var/www/xApp_config.local/;
 echo ">>> reloading nginx..."
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${OAIC}
-sudo cp ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
+# Overwrite the file if it exists
+sudo cp -f ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
 sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json || { echo 'Failed to change file permissions'; check_continue; }
 sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
@@ -71,4 +85,4 @@ curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Faile
 echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xApp"}' || { echo 'Failed to post xApp'; check_continue; }
 
-echo 'Successful: ts-xApp up and and running'
+echo 'Successful: ts-xApp up and running'
