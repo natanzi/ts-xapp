@@ -33,7 +33,7 @@ setup(
     python_requires='>=3.8',  
     entry_points={
         "console_scripts": [
-            "ts-xapp=src.TS_xApp:main",  # This tells setuptools to create a script that runs src.TS_xApp.main()
+            "ts-xapp=src.ts_xApp:main",  # This tells setuptools to create a script that runs src.TS_xApp.main()
         ]
     },
     license="Apache 2.0",
