@@ -1,4 +1,4 @@
-# This is TS xApp version 1.0.0
+# This is Traffic Steering xApp version 1.0.0 by Milad Ntanzi
 import socket
 import time
 import os
