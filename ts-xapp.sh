@@ -1,8 +1,19 @@
-sudo apt install iperf3
-sudo apt install vim
+#!/bin/bash
+
+function check_continue() {
+    read -p "An issue occurred. Do you want to continue? (y/n): " choice
+    case "$choice" in 
+      y|Y ) echo "Continuing...";;
+      n|N ) echo "Exiting..."; exit 1;;
+      * ) echo "Invalid input"; check_continue;;
+    esac
+}
+
+sudo apt install iperf3 || { echo 'iperf3 installation failed'; check_continue; }
+sudo apt install vim || { echo 'vim installation failed'; check_continue; }
 OAIC=`pwd`
-sudo apt-get install nginx
-          
+sudo apt-get install nginx || { echo 'nginx installation failed'; check_continue; }
+
 sudo systemctl start nginx.service
 cd /etc/nginx/sites-enabled
 sudo unlink default
@@ -21,21 +32,21 @@ root /var/www/xApp_config.local/;
 }' >xApp_config.local.conf"
 
 echo ">>> reloading nginx..."
-sudo nginx -t 
+sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${OAIC}
 sudo cp ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/
-sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xApp-config-file.json
+sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json
 sudo systemctl reload nginx
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
 
 echo ">>> checking for config-file"
-curl http://${MACHINE_IP}:5010/config_files/ts-xApp-config-file.json
+curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
 cd ${OAIC}/ts-xApp
 echo ">>> checking directory"
 ls
-sudo docker build . -t xApp-registry.local:5008/ts-xApp:1.0.0
+sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
 export KONG_PROXY=`sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}'`
 export APPMGR_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}'`
@@ -46,18 +57,18 @@ echo "APPMGR_HTTP = $APPMGR_HTTP"
 echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
 
 echo ">>> getting charts..."
-curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
 ls
-echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xApp-config-file.json"}' > ts-xApp-onboard.url
-          
+echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xApp-config-file.json"}' > ts-xapp-onboard.url
+
 echo ">>> ts-xApp-onboard.url"
-cat ts-xApp-onboard.url
+cat ts-xapp-onboard.url
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xApp-onboard.url"
+curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xApp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
 
 echo ">>> curl GET..."
-curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xApp"}'
-          
+curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xApp"}' || { echo 'Failed to post xApp'; check_continue; }
+
 echo 'Successful: ts-xApp up and running'
