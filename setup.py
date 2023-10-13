@@ -4,8 +4,6 @@ import os
 def read_file(filename):
     with open(os.path.join(os.path.dirname(__file__), filename), 'r', encoding='utf-8') as file:  # specify the encoding
         return file.read()
-
-
 setup(
     name="TS-xApp",
     version="1.0.0",
