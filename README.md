@@ -40,6 +40,9 @@ Start with root permission and:
 2. Start SRSRAN:
    ```bash
    ./srsrandeploy.sh
+
+   After this step you should run the below command and see 14 pods
+   sudo kubectl get pods -A
 3. Execute KPImon-xApp:
    ```bash
    ./kpimon.sh
