@@ -88,16 +88,16 @@ echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
 echo ">>> getting charts..."
 curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
 ls
-echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xApp-config-file.json"}' > ts-xapp-onboard.url
+echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
 
 echo ">>> ts-xApp-onboard.url"
 cat ts-xapp-onboard.url
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xApp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
+curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
 
 echo ">>> curl GET..."
 curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xApp"}' || { echo 'Failed to post xApp'; check_continue; }
+curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}' || { echo 'Failed to post xApp'; check_continue; }
 
-echo 'Successful: ts-xApp up and running'
+echo 'Successful: ts-xapp up and running'
