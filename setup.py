@@ -2,8 +2,9 @@ from setuptools import setup, find_packages
 import os
 
 def read_file(filename):
-    with open(os.path.join(os.path.dirname(__file__), filename), 'r') as file:
+    with open(os.path.join(os.path.dirname(__file__), filename), 'r', encoding='utf-8') as file:  # specify the encoding
         return file.read()
+
 
 setup(
     name="TS-xApp",
@@ -16,30 +17,20 @@ setup(
     author_email='snatanzi@wpi.edu',
     url="https://github.com/natanzi/TS-xApp",
     install_requires=[
+        "wheel",
         "ricxappframe>=1.1.1", 
         "ricsdl==3.1.3", 
-        "socket.py==0.1.0", 
+        "socket.py", 
         "APScheduler", 
         "thread6", 
-        "pandas>=1.1.3", 
-        "joblib>=0.3.2", 
+        "pandas", 
+        "joblib", 
         "influxdb", 
-        "p5py", 
-        "PEP517", 
-        "Cython", 
-        "numpy >= 1.16.2", 
-        "ipython", 
-        "statistics", 
-        "matplotlib", 
-        "gym", 
-        "pygame", 
-        "typing", 
-        "shapely", 
-        "svgpath2mpl", 
-        "abcplus", 
-        "influxdb-client"
+        "numpy", 
+        "influxdb-client",
+        "flask"
     ],
-    python_requires='>=3.12',  # Adjust this as necessary
+    python_requires='>=3.9',  
     entry_points={
         "console_scripts": [
             "ts-xapp=src.TS_xApp:main",  # This tells setuptools to create a script that runs src.TS_xApp.main()

@@ -1,0 +1,15 @@
+Metadata-Version: 2.1
+Name: socket.py
+Version: 0.1.0
+Summary: A lightweight Node.js ↔ Python data socket
+Home-page: https://github.com/0xJeremy/socket.py
+Author: Jeremy Kanovsky
+Author-email: kanovsky.jeremy@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+
+UNKNOWN
+
+
