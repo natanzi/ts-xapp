@@ -23,10 +23,10 @@ def main():
 
     try:
         # Load the configuration
-        config = Config(xapp_name="ts-xApp", config_file="path/to/your/config.json")  # Replace with your actual xApp name and config file path
+        config = Config(xapp_name="ts-lsxApp", config_file="/home/ubnt/oaic/TS-xApp/init/ts-xApp-config-file.json")  # Use the absolute path to your config file
 
         # Initialize the logger
-        app_logger = AppLogger(name="TS-xApp", verbose=2)  # Replace with your actual xApp name and desired verbosity level
+        app_logger = AppLogger(name="ts-xApp", verbose=2)  # Replace with your actual xApp name and desired verbosity level
         logger = app_logger.get_logger()
 
         # Initialize RMR health check
