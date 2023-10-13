@@ -1,5 +1,3 @@
-#!/bin/bash
-
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
     case "$choice" in 
@@ -14,14 +12,16 @@ sudo apt install vim || { echo 'vim installation failed'; check_continue; }
 OAIC=`pwd`
 sudo apt-get install nginx || { echo 'nginx installation failed'; check_continue; }
 
-sudo systemctl start nginx.service
+sudo systemctl start nginx.service || { echo 'Failed to start nginx'; check_continue; }
+# New command to check the status of nginx
+sudo systemctl status nginx --no-pager || { echo 'nginx service is not running'; check_continue; }
 cd /etc/nginx/sites-enabled
-sudo unlink default
+sudo unlink default || { echo 'Failed to unlink default'; check_continue; }
 cd ../
 cd ../../var/www
-sudo mkdir xApp_config.local
+sudo mkdir xApp_config.local || { echo 'Failed to create directory xApp_config.local'; check_continue; }
 cd xApp_config.local/
-sudo mkdir config_files
+sudo mkdir config_files || { echo 'Failed to create directory config_files'; check_continue; }
 cd ../../../etc/nginx/conf.d
 sudo sh -c "echo 'server {
 listen 5010 default_server;
@@ -34,9 +34,9 @@ root /var/www/xApp_config.local/;
 echo ">>> reloading nginx..."
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${OAIC}
-sudo cp ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/
-sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json
-sudo systemctl reload nginx
+sudo cp ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
+sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json || { echo 'Failed to change file permissions'; check_continue; }
+sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
 
@@ -71,4 +71,4 @@ curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Faile
 echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xApp"}' || { echo 'Failed to post xApp'; check_continue; }
 
-echo 'Successful: ts-xApp up and running'
+echo 'Successful: ts-xApp up and and running'
