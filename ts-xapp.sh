@@ -23,7 +23,7 @@ fi
 # Existing script continues from here...
 sudo apt install iperf3 || { echo 'iperf3 installation failed'; check_continue; }
 sudo apt install vim || { echo 'vim installation failed'; check_continue; }
-OAIC=`pwd`
+oaic=`pwd`
 sudo apt-get install nginx || { echo 'nginx installation failed'; check_continue; }
 
 sudo systemctl start nginx.service || { echo 'Failed to start nginx'; check_continue; }
@@ -58,7 +58,7 @@ root /var/www/xApp_config.local/;
 
 echo ">>> reloading nginx..."
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
-cd ${OAIC}
+cd ${oaic}
 # Overwrite the file if it exists
 sudo cp -f /home/ubnt/oaic/ts-xapp/init/ts-xapp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
 [ -r "/var/www/xApp_config.local/config_files/ts-xapp-config-file.json" ] || { echo 'Config File not found or is not readable'; check_continue; }
@@ -72,7 +72,7 @@ export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
-cd ${OAIC}/ts-xapp
+cd ${oaic}/ts-xapp
 echo ">>> checking directory"
 ls
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
