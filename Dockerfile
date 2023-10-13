@@ -43,5 +43,5 @@ EXPOSE 5000
 
 # Set the default command to run when the container starts.
 # This will execute the TS-xApp.py script using Python.
-CMD ["python", "src/ts-xApp.py"]
+CMD ["python", "src/ts-xapp.py"]
 
