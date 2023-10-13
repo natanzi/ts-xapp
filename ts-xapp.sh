@@ -38,3 +38,24 @@ sudo docker build . -t xApp-registry.local:5008/TS-xApp:1.0.0
 export KONG_PROXY=`sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}'`
 export APPMGR_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}'`
 export ONBOARDER_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}'`
+
+echo "KONG_PROXY = $KONG_PROXY"
+echo "APPMGR_HTTP = $APPMGR_HTTP"
+echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
+
+echo ">>> getting charts..."
+curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+ls
+echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/TS-xApp-config-file.json"}' > TS-xApp-onboard.url
+          
+echo ">>> TS-xApp-onboard.url"
+cat TS-xApp-onboard.url
+echo ">>> curl POST..."
+curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@TS-xApp-onboard.url"
+
+echo ">>> curl GET..."
+curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+echo ">>> curl POST..."
+curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "TS-xApp"}'
+          
+echo 'Successful: TS-xApp up and running'
