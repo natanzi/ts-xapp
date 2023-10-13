@@ -7,7 +7,7 @@
             "name": "ts-xApp",
             "image": {
                 "registry": "xApp-registry.local:5008",
-                "name": "TS-xApp",
+                "name": "ts-xApp",
                 "tag": "1.0.0"
             }
         }
