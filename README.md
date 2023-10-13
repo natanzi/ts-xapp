@@ -32,6 +32,7 @@ This xApp can be onboarded through the xApp Onboarder.
 - Running KPImon xApp
 
 ## 🚀 Getting Started
+Start with root permission and:
 
 1. Execute the RIC installation:
    ```bash
@@ -44,9 +45,7 @@ This xApp can be onboarded through the xApp Onboarder.
    ./kpimon.sh
 4. Go to TS-xApp folder and :
    ```bash
-   pip install .
-
-
+   ./ts-xApp.sh
 
 ## 🤝 Contributing
 We welcome your contributions to enhance this xApp! Feel free to fork the repository and submit a pull request with your improvements.
