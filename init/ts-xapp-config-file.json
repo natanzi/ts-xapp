@@ -21,7 +21,7 @@
                 "rxMessages": [ "RIC_SUB_RESP", "RIC_SUB_FAILURE", "RIC_INDICATION", "RIC_SUB_DEL_RESP", "RIC_SUB_DEL_FAILURE" ],
                 "txMessages": [ "RIC_SUB_REQ", "RIC_SUB_DEL_REQ" ],
                 "policies": [1],
-                "description": "rmr receive data port for TS-xApp"
+                "description": "rmr receive data port for ts-xApp"
             },
             {
                 "name": "rmr-route",
