@@ -20,14 +20,14 @@ RUN apk --no-cache add \
     lksctp-tools-dev
 
 # RMR setup
-RUN mkdir -p /app/route_mr/ /app/TS-xApp
+RUN mkdir -p /app/route_mr/ /app/ts-xApp
 
 # copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/lib64/librmr* /usr/local/lib64/
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/bin/rmr* /usr/local/bin/
 
 # Set the working directory
-WORKDIR /app/TS-xApp
+WORKDIR /app/ts-xApp
 
 # Copy the requirements.txt first, for separate dependency resolving and layering
 COPY requirements.txt .
@@ -45,5 +45,5 @@ EXPOSE 5000
 
 # Set the default command to run when the container starts.
 # This will execute the TS-xApp.py script using Python.
-CMD ["python", "src/TS-xApp.py"]
+CMD ["python", "src/ts-xApp.py"]
 
