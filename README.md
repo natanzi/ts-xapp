@@ -45,7 +45,7 @@ Start with root permission and:
    ./kpimon.sh
 4. Go to TS-xApp folder and :
    ```bash
-./ts-xApp.sh
+   ./ts-xApp.sh
 
 
 
