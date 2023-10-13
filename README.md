@@ -44,7 +44,7 @@ This xApp can be onboarded through the xApp Onboarder.
    ./kpimon.sh
 4. Go to TS-xApp folder and :
    ```bash
-   pip install .
+python3 setup.py install
 
 
 
