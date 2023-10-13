@@ -37,7 +37,7 @@ Start with root permission and:
 1. Execute the RIC installation:
    ```bash
    ./ricinstallation.sh
-2. Start SRSRAN:
+2. move ssrsran script to oaic folder and Start SRSRAN:
    ```bash
    ./srsrandeploy.sh
 
