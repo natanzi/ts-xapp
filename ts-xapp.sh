@@ -1,5 +1,4 @@
-#!/bin/bash
-
+# Function to check if the script encounters any issues and prompts the user to continue or exit
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
     case "$choice" in 
@@ -9,6 +8,19 @@ function check_continue() {
     esac
 }
 
+# Check if the script is being run as root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+# Check if the current directory is /home/ubnt/oaic
+if [ "$(pwd)" != "/home/ubnt/oaic" ]; then
+    echo "This script must be run from the /home/ubnt/oaic directory"
+    exit 1
+fi
+
+# Existing script continues from here...
 sudo apt install iperf3 || { echo 'iperf3 installation failed'; check_continue; }
 sudo apt install vim || { echo 'vim installation failed'; check_continue; }
 OAIC=`pwd`
