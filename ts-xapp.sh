@@ -30,7 +30,11 @@ sudo systemctl start nginx.service || { echo 'Failed to start nginx'; check_cont
 # New command to check the status of nginx
 sudo systemctl status nginx --no-pager || { echo 'nginx service is not running'; check_continue; }
 cd /etc/nginx/sites-enabled
-sudo unlink default || { echo 'Failed to unlink default'; check_continue; }
+if [ -e "default" ]; then
+    sudo unlink default || { echo 'Failed to unlink default'; check_continue; }
+else
+    echo "'default' file does not exist, skipping unlink."
+fi
 cd ../
 cd ../../var/www
 # Check if directory exists, if not create it
