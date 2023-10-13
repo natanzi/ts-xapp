@@ -1,6 +1,5 @@
 sockets
 thread6
-sctp
 Flask==3.0.0
 influxdb-client==1.38.0
 ricxappframe
