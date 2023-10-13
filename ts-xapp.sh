@@ -60,7 +60,7 @@ echo ">>> reloading nginx..."
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${OAIC}
 # Overwrite the file if it exists
-sudo cp -f /home/ubnt/oaic/ts-xapp/init/ts-xApp/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
+sudo cp -f /home/ubnt/oaic/ts-xapp/init/ts-xApp-config-file.json /var/www/xApp_config.local/config_files/ || { echo 'Failed to copy config file'; check_continue; }
 sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json || { echo 'Failed to change file permissions'; check_continue; }
 sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
