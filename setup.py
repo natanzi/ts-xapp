@@ -15,7 +15,7 @@ setup(
     long_description_content_type="text/markdown",
     author='Milad Natanzi',
     author_email='snatanzi@wpi.edu',
-    url="https://github.com/natanzi/TS-xApp",
+    url="https://github.com/natanzi/ts-xApp",
     install_requires=[
         "wheel",
         "ricxappframe>=1.1.1", 
