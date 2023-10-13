@@ -1,4 +1,4 @@
-socket
+sockets
 threading
 sctp
 Flask==3.0.0
