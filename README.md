@@ -71,6 +71,9 @@ Start with root permission and:
 > ```bash
 > curl -L -X DELETE "http://${ONBOARDER_HTTP}:8080/api/charts/ts-xapp/1.0.0"
 > ```
+> To delete a Docker image
+> ```bash
+> sudo docker rmi -f xApp-registry.local:5008/ts-xapp:1.0.0
 
 
 ## 🤝 Contributing
