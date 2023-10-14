@@ -90,6 +90,26 @@ echo ">>> Creating ts-xapp Docker image"
 echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
+echo ">>> Checking if Docker image was successfully built..."
+
+# Check if the Docker image was successfully created
+IMAGE_EXISTS=$(sudo docker image ls | grep "xApp-registry.local:5008/ts-xapp" | grep "1.0.0")
+
+if [ -z "$IMAGE_EXISTS" ]; then
+  echo "Docker image build failed. Do you want to exit the script? (y/n): "
+  read response
+  if [[ "$response" == "y" || "$response" == "Y" ]]; then
+    echo "Exiting script."
+    exit 1
+  else
+    echo "Continuing script."
+    # Continue with other operations or retry logic
+  fi
+else
+  echo "Docker image built successfully."
+fi
+
+echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
 sleep 20
 
 echo ">>> xApp Onboarder Deployment"
