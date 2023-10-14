@@ -119,12 +119,12 @@ curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content
 
 echo 'Successful: ts-xapp up and running'
 # Verifying xApp Deployment
-# We should see a ricxapp-s-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.
+echo 'We should see a ricxapp-s-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
 echo 'Verifying xApp Deployment...'
 sudo kubectl get pods -A
 
 # We can check the xApp logs using the following command. This will show us the logs of the pod with the label app=ricxapp-ts-xapp in the ricxapp namespace.
-echo 'Checking xApp logs...'
-sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
+#echo 'Checking xApp logs...'
+#sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
 
 # To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
