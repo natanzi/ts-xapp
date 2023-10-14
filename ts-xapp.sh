@@ -106,11 +106,13 @@ if [ -z "$IMAGE_EXISTS" ]; then
     # Continue with other operations or retry logic
   fi
 else
-  echo "Docker image built successfully."
+  echo "Docker image built successfully. Here are the details:"
+  sudo docker images --filter=reference='xApp-registry.local:5008/ts-xapp:1.0.0'
 fi
 
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
 sleep 20
+
 
 echo ">>> xApp Onboarder Deployment"
 echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
