@@ -86,24 +86,30 @@ echo ">>> building docker image...."
 cd ${oaic}/ts-xapp
 echo ">>> checking directory"
 ls
+echo ">>> Creating KPIMON xApp Docker image"
+echo ">>> Now, we create a docker image of the ts xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
+echo ">>> xApp Onboarder Deployment"
+echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 export KONG_PROXY=`sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}'`
 export APPMGR_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}'`
 export ONBOARDER_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}'`
 
+echo ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
 echo "KONG_PROXY = $KONG_PROXY"
 echo "APPMGR_HTTP = $APPMGR_HTTP"
 echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
 
-echo ">>> getting charts..."
+echo ">>> getting charts ... Check for helm charts"
+echo ">>> Get helm charts and check if the current xApp is one of them. If there is no helm chart, then we are good to go. Otherwise, we have to use the existing chart or delete it and then proceed forward."
 curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
 ls
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
 
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
-echo ">>> curl POST..."
+echo ">>> curl POST For Deploying the xApp"
 curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
 
 echo ">>> curl GET..."
