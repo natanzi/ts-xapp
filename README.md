@@ -6,30 +6,31 @@ This xApp can be onboarded through the xApp Onboarder.
 ## 🌟 Key Features
 
 - **Interface Integration**: 
-  - E2 Interface  interactions for direct RAN communication and real-time metric acquisition.
-- **Health check operations**: 
-  - RMR and SDL Health check.
-- **KPIMON xApp integration**:
--  KPIMON xApp is in charge of collecting RAN metrics and writing to InfluxDB.
+  - Direct RAN communication and real-time metric acquisition through E2 Interface interactions.
+- **Health Check Operations**: 
+  - Includes RMR and SDL health checks.
+- **KPIMON xApp Integration**:
+  - Responsible for collecting RAN metrics and writing to InfluxDB.
 - **Dynamic Policy Management**:
--  Adapts traffic steering policies in response to real-time updates from the A1 interface.
+  - Adapts traffic steering policies in response to real-time updates from the A1 interface.
 - **Load Balancing**:
--  Identifies overloaded cells and redistributes UEs to achieve balanced load across cells.
+  - Redistributes UEs to achieve balanced load across cells when overload is detected.
 - **UE Profiling**:
--  Provides detailed profiling for each UE, capturing attributes such as ID, cell, priority, type, origin, signal strength, and throughput.
+  - Captures detailed profiles for each UE, including attributes like ID, cell, priority, type, origin, signal strength, and throughput.
 - **InfluxDB Integration**:
--  Logs metrics and policies in InfluxDB, paving the way for historical data analysis and visualization using tools like Grafana.
+  - Logs metrics and policies for historical data analysis and visualization with tools like Grafana.
 - **Flask API Support**:
--  Allows external xApps to dynamically push or modify policies, with support for ML/RL/DRL plugins.
-- **Scalability**: Built to accommodate a growing number of UEs and cells, ensuring consistent efficiency.
+  - Enables external xApps to dynamically push or modify policies, supporting ML/RL/DRL plugins.
+- **Scalability**:
+  - Accommodates a growing number of UEs and cells while maintaining efficiency.
 - **Modular Design**:
--  Prepared for effortless integration of future features.
+  - Allows for easy integration of future features.
 
 ## 🛠 Prerequisites
 
-- Ensure [OAIC and SRSRAN](https://openaicellular.github.io/oaic/) are installed.
-- Set up multiple UEs and initiate network traffic flow.
-- Running KPImon xApp
+- Installation of [OAIC and SRSRAN](https://openaicellular.github.io/oaic/).
+- Setup of multiple UEs with initiated network traffic flow.
+- KPImon xApp running in the environment.
 
 ## 🚀 Getting Started
 Start with root permission and:
@@ -50,6 +51,17 @@ Start with root permission and:
    ```bash
    chmod +x ts-xapp.sh
    ./ts-xapp.sh
+Note:
+
+xApp Re-Deployment & Undeployment
+To redeploy the xApp on the near-RT RIC side, run:
+sudo kubectl -n ricxapp rollout restart deployment ricxapp-ts-xapp
+
+To undeploy the xApp, first retrieve the IP address of the App Manager:
+export APPMGR_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}'`
+
+To remove the xApp descriptors from the Chart Museum, execute:
+curl -L -X DELETE "http://${ONBOARDER_HTTP}:8080/api/charts/ts-xapp/1.0.0"
 
 ## 🤝 Contributing
 We welcome your contributions to enhance this xApp! Feel free to fork the repository and submit a pull request with your improvements.
