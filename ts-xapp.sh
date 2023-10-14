@@ -1,3 +1,5 @@
+git clone https://github.com/natanzi/ts-xapp
+
 # Function to check if the script encounters any issues and prompts the user to continue or exit
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
@@ -14,8 +16,8 @@ if [ "$(id -u)" != "0" ]; then
    exit 1
 fi
 
-# Check if the current directory is /home/ubnt/oaic
-if [ "$(pwd)" != "/home/ubnt/oaic" ]; then
+# Check if the current directory is /home/ubnt/oaic/ts-xapp
+if [ "$(pwd)" != "/home/ubnt/oaic/ts-xapp" ]; then
     echo "This script must be run from the /home/ubnt/oaic directory"
     exit 1
 fi
