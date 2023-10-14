@@ -37,15 +37,18 @@ Start with root permission and:
 
 1. Execute the RIC installation:
    ```bash
+   chmod +x ./ricinstallation.sh
    ./ricinstallation.sh
 2. move ssrsran script to oaic folder and Start SRSRAN:
    ```bash
+   chmod +x srsrandeploy.sh
    ./srsrandeploy.sh
 
    After this step you should run the below command and see 14 pods
    sudo kubectl get pods -A
 3. Execute KPImon-xApp:
    ```bash
+   chmod +x kpimon.sh
    ./kpimon.sh
 4. Go to ts-xapp folder and move the ts-xapp.sh to oaic folder and run it:
    ```bash
