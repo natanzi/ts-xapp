@@ -90,6 +90,8 @@ echo ">>> Creating ts-xapp Docker image"
 echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
+sleep 20
+
 echo ">>> xApp Onboarder Deployment"
 echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 export KONG_PROXY=`sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}'`
@@ -118,13 +120,26 @@ echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}' || { echo 'Failed to post xApp'; check_continue; }
 
 echo 'Successful: ts-xapp up and running'
-# Verifying xApp Deployment
-echo 'We should see a ricxapp-s-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
-echo 'Verifying xApp Deployment...'
-sudo kubectl get pods -A
 
-# We can check the xApp logs using the following command. This will show us the logs of the pod with the label app=ricxapp-ts-xapp in the ricxapp namespace.
-#echo 'Checking xApp logs...'
-#sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
+# Verifying xApp Deployment
+echo 'We should see a ricxapp-ts-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
+echo 'Verifying xApp Deployment...'
+sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp
+
+# Check if the user wants to see the xApp logs
+read -p "Do you see the ricxapp-ts-xapp in the list and want to check its logs? (y/n): " choice
+case "$choice" in 
+  y|Y )
+    echo 'Checking xApp logs...'
+    # This command will show us the logs of the pod with the label app=ricxapp-ts-xapp in the ricxapp namespace.
+    sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
+    ;;
+  n|N )
+    echo "Skipping xApp logs..."
+    ;;
+  * ) 
+    echo "Invalid input"
+    ;;
+esac
 
 # To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
