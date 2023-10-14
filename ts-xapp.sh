@@ -109,7 +109,7 @@ echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-co
 
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
-echo ">>> curl POST For Deploying the xApp"
+echo ">>> curl POST... Now we are ready to deploy the xApp"
 curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
 
 echo ">>> curl GET..."
