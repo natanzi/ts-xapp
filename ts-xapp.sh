@@ -20,11 +20,18 @@ if [ "$(pwd)" != "/home/ubnt/oaic" ]; then
     exit 1
 fi
 
-# Existing script continues from here...
+echo "Installing iperf3..."
 sudo apt install iperf3 || { echo 'iperf3 installation failed'; check_continue; }
+echo "iperf3 installation completed."
+
+echo "Installing vim..."
 sudo apt install vim || { echo 'vim installation failed'; check_continue; }
+echo "vim installation completed."
+
 oaic=`pwd`
+echo "Installing nginx..."
 sudo apt-get install nginx || { echo 'nginx installation failed'; check_continue; }
+echo "nginx installation completed."  # Corrected here (added closing quotation mark)
 
 sudo systemctl start nginx.service || { echo 'Failed to start nginx'; check_continue; }
 # New command to check the status of nginx
@@ -41,14 +48,14 @@ cd ../../var/www
 if [ ! -d "xApp_config.local" ]; then
   sudo mkdir xApp_config.local || { echo 'Failed to create directory xApp_config.local'; check_continue; }
 else
-  echo "Directory xApp_config.local already exists"
+  echo "Directory xApp_config.local already exists."
 fi
 cd xApp_config.local/
 # Check if directory exists, if not create it
 if [ ! -d "config_files" ]; then
   sudo mkdir config_files || { echo 'Failed to create directory config_files'; check_continue; }
 else
-  echo "Directory config_files already exists"
+  echo "Directory config_files already exists."
 fi
 cd ../../../etc/nginx/conf.d
 # Overwrite the file if it exists
