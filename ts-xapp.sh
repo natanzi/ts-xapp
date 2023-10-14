@@ -86,8 +86,8 @@ echo ">>> building docker image...."
 cd ${oaic}/ts-xapp
 echo ">>> checking directory"
 ls
-echo ">>> Creating KPIMON xApp Docker image"
-echo ">>> Now, we create a docker image of the ts xApp using the given docker file."
+echo ">>> Creating ts-xapp Docker image"
+echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
 echo ">>> xApp Onboarder Deployment"
@@ -118,3 +118,13 @@ echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}' || { echo 'Failed to post xApp'; check_continue; }
 
 echo 'Successful: ts-xapp up and running'
+# Verifying xApp Deployment
+# We should see a ricxapp-s-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.
+echo 'Verifying xApp Deployment...'
+sudo kubectl get pods -A
+
+# We can check the xApp logs using the following command. This will show us the logs of the pod with the label app=ricxapp-ts-xapp in the ricxapp namespace.
+echo 'Checking xApp logs...'
+sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
+
+# To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
