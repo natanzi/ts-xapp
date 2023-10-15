@@ -3,7 +3,7 @@ cat << 'EOF'
 #          Welcome to OAIC Traffic Steering xApp Fast Installation             #
 #                                                                              #
 #   This script installs Nginx and configures the necessary files for running  #
-#   the Traffic Steering (TS) xApp.                                            #
+#   the Traffic Steering (TS) xApp on OAIC Testbed.                                            #
 #                                                                              #
 #   The Traffic Steering (TS) xApp is a specialized tool designed for the      #
 #   OAIC O-RAN testbed. Its primary purpose is to efficiently manage and       #
