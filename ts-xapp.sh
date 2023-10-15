@@ -45,7 +45,7 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # Check if the current directory is /home/ubnt/oaic/ts-xapp
-if [ "$(pwd)" != "/home/ubnt/oaic/ts-xapp" ]; then
+if [ "$(pwd)" != "/home/ubnt/main-file-repo/oaic/ts-xapp" ]; then
     echo "This script must be run from the /home/ubnt/oaic directory"
     exit 1
 fi
