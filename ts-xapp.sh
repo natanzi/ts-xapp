@@ -94,8 +94,10 @@ location /config_files/ {
 root /var/www/xApp_config.local/;
 }
 }' >xApp_config.local.conf"
-sleep 5
+
 echo ">>> reloading nginx..."
+sleep 3
+
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${oaic}
 # Overwrite the file if it exists
@@ -107,7 +109,7 @@ sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json 
 sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
-sleep 5
+sleep 3
 echo "Machine IP: $MACHINE_IP"
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
@@ -118,11 +120,26 @@ ls
 echo ">>> Creating ts-xapp Docker image"
 echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
-sleep 5
-echo ">>> Checking if Docker image was successfully built..."
 
 # Check if the Docker image was successfully created
 IMAGE_EXISTS=$(sudo docker image ls | grep "xApp-registry.local:5008/ts-xapp" | grep "1.0.0")
+
+# Check if the image exists
+if [ -n "$IMAGE_EXISTS" ]; then
+    # Print the result in a rectangle with '#'
+    echo "#############################################"
+    echo "#                                           #"
+    echo "#    Docker Image Found:                    #"
+    echo "#    $IMAGE_EXISTS                          #"
+    echo "#                                           #"
+    echo "#############################################"
+else
+    echo "#############################################"
+    echo "#                                           #"
+    echo "#    No Docker Image Found for ts-xapp !     #"
+    echo "#                                           #"
+    echo "#############################################"
+fi
 
 if [ -z "$IMAGE_EXISTS" ]; then
   echo "Docker image build failed. Do you want to exit the script? (y/n): "
