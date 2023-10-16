@@ -161,7 +161,6 @@ def main_menu():
         print("3 - Slicing-based Steering")
         print("4 - Service-based Steering")
         print("5 - Energy Efficiency")
-        print("6 - Undeploy the TS-xApp")
         print("Enter 'exit' to quit the application.\n")
         
         choice = input("Please select an option: ")
@@ -177,9 +176,6 @@ def main_menu():
             print("Service-based Steering applied. See the result in the dashboard.")
         elif choice == '5':
             print("Energy Efficiency applied. See the result in the dashboard.")
-        elif choice == '6':
-            print("TS-xApp undeployed successfully.")
-            break
         elif choice.lower() == 'exit':
             break
         else:
