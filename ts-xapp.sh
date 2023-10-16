@@ -138,17 +138,13 @@ if [ -z "$IMAGE_EXISTS" ]; then
   fi
 else
   echo "Docker image built successfully. Here are the details:"
-  cat << 'EOF'
-################################################################################
-################################################################################
-EOF
   sudo docker images --filter=reference='xApp-registry.local:5008/ts-xapp:1.0.0'
 fi
 
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
 sleep 20
 
-
+###############################################################################
 # Function to check the status of the last command executed
 check_status() {
     if [ $? -ne 0 ]; then
@@ -178,6 +174,7 @@ NC='\033[0m' # No Color
 echo -e "${RED}>>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform.${NC}"
 
 # These lines display the variables with their values in red
+export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
 echo -e "KONG_PROXY = ${RED}$KONG_PROXY${NC}"
 echo -e "APPMGR_HTTP = ${RED}$APPMGR_HTTP${NC}"
 echo -e "ONBOARDER_HTTP = ${RED}$ONBOARDER_HTTP${NC}"
@@ -218,12 +215,13 @@ sleep 5
 # Verifying xApp Deployment
 echo 'We should see a ricxapp-ts-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
 echo 'Verifying xApp Deployment...'
+sudo kubectl get pods -A
 POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
+
 if [ -z "$POD_STATUS" ]; then
-    echo "Error: Failed to verify xApp deployment. ricxapp-ts-xapp is not running."
-    exit 1
+    echo "No ricxapp-ts-xapp pods found in the ricxapp namespace."
 else
-    echo "ricxapp-ts-xapp is running."
+    echo "$POD_STATUS"
 fi
 
 # Check if the user wants to see the xApp logs
