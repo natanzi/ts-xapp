@@ -50,7 +50,7 @@ Start with root permission and:
    ```bash
    chmod +x kpimon.sh
    ./kpimon.sh
-4. Execute KPImon-xApp:
+4. Clone TS xApp fro the below repo
    ```bash
    git clone https://github.com/natanzi/ts-xapp
    
