@@ -109,7 +109,7 @@ sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json 
 sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
-
+echo "Machine IP: $MACHINE_IP"
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
@@ -144,46 +144,79 @@ echo "Pausing for 20 seconds to allow system processes to stabilize before conti
 sleep 20
 
 
+# Function to check the status of the last command executed
+check_status() {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1" >&2
+        exit 1
+    fi
+}
+
 echo ">>> xApp Onboarder Deployment"
 echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
-export KONG_PROXY=`sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}'`
-export APPMGR_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}'`
-export ONBOARDER_HTTP=`sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}'`
 
+# Retrieve service IPs and check the status of each command
+export KONG_PROXY=$(sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}')
+check_status "Failed to retrieve KONG_PROXY"
+
+export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
+check_status "Failed to retrieve APPMGR_HTTP"
+
+export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
+check_status "Failed to retrieve ONBOARDER_HTTP"
+
+# Display the retrieved variables
 echo ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
 echo "KONG_PROXY = $KONG_PROXY"
 echo "APPMGR_HTTP = $APPMGR_HTTP"
 echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
+echo "Machine IP: $MACHINE_IP"
 
+# Check for helm charts
 echo ">>> getting charts ... Check for helm charts"
-echo ">>> Get helm charts and check if the current xApp is one of them. If there is no helm chart, then we are good to go. Otherwise, we have to use the existing chart or delete it and then proceed forward."
-curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
-ls
+curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+check_status "Failed to get charts"
+
+# Prepare the JSON file for xApp onboarding
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
+check_status "Failed to create ts-xapp-onboard.url"
 
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
-echo ">>> curl POST... Now we are ready to deploy the xApp"
-curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url" || { echo 'Failed to post onboard download'; check_continue; }
 
+# Attempt to onboard the xApp
+echo ">>> curl POST... Now we are ready to deploy the xApp"
+curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url"
+check_status "Failed to post onboard download"
+
+# Check the onboarded charts
 echo ">>> curl GET..."
-curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts" || { echo 'Failed to get charts'; check_continue; }
+curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+check_status "Failed to get charts after onboarding"
+
+# Attempt to post the xApp
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}' || { echo 'Failed to post xApp'; check_continue; }
+curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}'
+check_status "Failed to post xApp"
 
 echo 'Successful: ts-xapp up and running'
 
 # Verifying xApp Deployment
 echo 'We should see a ricxapp-ts-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
 echo 'Verifying xApp Deployment...'
-sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp
+POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
+if [ -z "$POD_STATUS" ]; then
+    echo "Error: Failed to verify xApp deployment. ricxapp-ts-xapp is not running."
+    exit 1
+else
+    echo "ricxapp-ts-xapp is running."
+fi
 
 # Check if the user wants to see the xApp logs
 read -p "Do you see the ricxapp-ts-xapp in the list and want to check its logs? (y/n): " choice
 case "$choice" in 
   y|Y )
     echo 'Checking xApp logs...'
-    # This command will show us the logs of the pod with the label app=ricxapp-ts-xapp in the ricxapp namespace.
     sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
     ;;
   n|N )
@@ -193,5 +226,4 @@ case "$choice" in
     echo "Invalid input"
     ;;
 esac
-
 # To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
