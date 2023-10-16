@@ -26,8 +26,6 @@ cat << 'EOF'
 ################################################################################
 EOF
 
-git clone https://github.com/natanzi/ts-xapp
-
 # Function to check if the script encounters any issues and prompts the user to continue or exit
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
