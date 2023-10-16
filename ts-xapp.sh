@@ -221,16 +221,36 @@ echo ">>> curl GET..."
 curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts after onboarding"
 sleep 5
+# Colors for output
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Function to check the status of the previous command
+check_status() {
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}$1${NC}"
+        exit 1
+    fi
+}
+
+# Colors for output
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+# Function to check the status of the previous command
+check_status() {
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}$1${NC}"
+        exit 1
+    fi
+}
 
 # Attempt to post the xApp
 echo ">>> curl POST..."
 curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}'
 check_status "Failed to post xApp"
 
-echo 'Successful: ts-xapp up and running'
-sleep 5
 # Verifying xApp Deployment
-echo 'We should see a ricxapp-ts-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
 echo 'Verifying xApp Deployment...'
 sudo kubectl get pods -A
 POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
@@ -238,8 +258,10 @@ POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
 if [ -z "$POD_STATUS" ]; then
     echo "No ricxapp-ts-xapp pods found in the ricxapp namespace."
     echo -e "${RED}xApp Not Unboarded yet!!!!!!${NC}"
-  else
+else
     echo "$POD_STATUS"
+    echo 'Successful: ts-xapp has been posted and is up and running' # Changed success message
+    sleep 5
 fi
 
 # Check if the user wants to see the xApp logs
@@ -259,4 +281,5 @@ while true; do
         echo "Invalid input, please enter 'y' for yes or 'n' for no."
     esac
 done
+
 # To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
