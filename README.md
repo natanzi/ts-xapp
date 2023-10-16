@@ -46,7 +46,7 @@ Start with root permission and:
 
    After this step you should run the below command and see 14 pods
    sudo kubectl get pods -A
-3. Execute KPImon-xApp:
+3. Execute KPImon-xApp in oaic folder:
    ```bash
    chmod +x kpimon.sh
    ./kpimon.sh
