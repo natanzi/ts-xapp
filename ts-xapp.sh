@@ -171,10 +171,13 @@ export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata
 check_status "Failed to retrieve ONBOARDER_HTTP"
 ############################################################################
 # Display the retrieved variables
-echo ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
 RED='\033[0;31m' # Red color
 NC='\033[0m' # No Color
 
+# This line will be displayed in red
+echo -e "${RED}>>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform.${NC}"
+
+# These lines display the variables with their values in red
 echo -e "KONG_PROXY = ${RED}$KONG_PROXY${NC}"
 echo -e "APPMGR_HTTP = ${RED}$APPMGR_HTTP${NC}"
 echo -e "ONBOARDER_HTTP = ${RED}$ONBOARDER_HTTP${NC}"
