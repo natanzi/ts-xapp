@@ -1,3 +1,4 @@
+#!/bin/bash
 cat << 'EOF'
 ################################################################################
 #          Welcome to OAIC Traffic Steering xApp Fast Installation             #
@@ -127,18 +128,18 @@ IMAGE_EXISTS=$(sudo docker image ls | grep "xApp-registry.local:5008/ts-xapp" | 
 # Check if the image exists
 if [ -n "$IMAGE_EXISTS" ]; then
     # Print the result in a rectangle with '#'
-    echo "#############################################"
-    echo "#                                           #"
-    echo "#    Docker Image Found:                    #"
-    echo "#    $IMAGE_EXISTS                          #"
-    echo "#                                           #"
-    echo "#############################################"
+    echo "#######################################################################################################"
+    echo "#                                                                                                     #"
+    echo "#    Docker Image Found:                                                                              #"
+    echo "#    $IMAGE_EXISTS                                                                                    #"
+    echo "#                                                                                                     #"
+    echo "#######################################################################################################"
 else
-    echo "#############################################"
-    echo "#                                           #"
-    echo "#    No Docker Image Found for ts-xapp !     #"
-    echo "#                                           #"
-    echo "#############################################"
+    echo "#######################################################################################################"
+    echo "#                                                                                                     #"
+    echo "#    No Docker Image Found for ts-xapp !                                                              #"
+    echo "#                                                                                                     #"
+    echo "#######################################################################################################"
 fi
 
 if [ -z "$IMAGE_EXISTS" ]; then
@@ -190,11 +191,11 @@ GREEN='\033[0;32m' # Green color
 echo -e ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
 
 # These lines display the variables with their values in red
-export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
-echo -e "KONG_PROXY = ${GREEN$KONG_PROXY${GREEN}"
-echo -e "APPMGR_HTTP = ${GREEN}$APPMGR_HTTP${GREEN}"
-echo -e "ONBOARDER_HTTP = ${GREEN}$ONBOARDER_HTTP${GREEN}"
-echo -e "Machine IP: ${GREEN}$MACHINE_IP${GREEN}"
+export MACHINE_IP=$(hostname  -I | cut -f1 -d' ')
+echo -e "KONG_PROXY = ${GREEN}$KONG_PROXY${NC}"
+echo -e "APPMGR_HTTP = ${GREEN}$APPMGR_HTTP${NC}"
+echo -e "ONBOARDER_HTTP = ${GREEN}$ONBOARDER_HTTP${NC}"
+echo -e "Machine IP: ${GREEN}$MACHINE_IP${NC}"
 ############################################################################
 # Check for helm charts
 echo ">>> getting charts ... Check for helm charts"
@@ -242,17 +243,20 @@ if [ -z "$POD_STATUS" ]; then
 fi
 
 # Check if the user wants to see the xApp logs
-read -p "Do you see the ricxapp-ts-xapp in the list and want to check its logs? (y/n): " choice
-case "$choice" in 
-  y|Y )
-    echo 'Checking xApp logs...'
-    sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp
-    ;;
-  n|N )
-    echo "Skipping xApp logs..."
-    ;;
-  * ) 
-    echo "Invalid input"
-    ;;
-esac
+while true; do
+    read -p "Do you see the ricxapp-ts-xapp in the list and want to check its logs? (y/n): " choice
+    case "$choice" in 
+      y|Y )
+        echo 'Checking xApp logs...'
+        if ! sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
+            echo "Error: Failed to retrieve logs. Make sure your cluster is reachable and the ricxapp-ts-xapp is deployed correctly."
+        fi
+        break ;;
+      n|N )
+        echo "Skipping xApp logs..."
+        break ;;
+      * ) 
+        echo "Invalid input, please enter 'y' for yes or 'n' for no."
+    esac
+done
 # To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
