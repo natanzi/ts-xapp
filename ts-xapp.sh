@@ -167,16 +167,17 @@ check_status "Failed to retrieve ONBOARDER_HTTP"
 # Display the retrieved variables
 RED='\033[0;31m' # Red color
 NC='\033[0m' # No Color
+GREEN='\033[0;32m' # Green color
 
 # This line will be displayed in red
-echo -e "${RED}>>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform.${NC}"
+echo -e ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
 
 # These lines display the variables with their values in red
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
-echo -e "KONG_PROXY = ${RED}$KONG_PROXY${NC}"
-echo -e "APPMGR_HTTP = ${RED}$APPMGR_HTTP${NC}"
-echo -e "ONBOARDER_HTTP = ${RED}$ONBOARDER_HTTP${NC}"
-echo -e "Machine IP: ${RED}$MACHINE_IP${NC}"
+echo -e "KONG_PROXY = ${GREEN$KONG_PROXY${GREEN}"
+echo -e "APPMGR_HTTP = ${GREEN}$APPMGR_HTTP${GREEN}"
+echo -e "ONBOARDER_HTTP = ${GREEN}$ONBOARDER_HTTP${GREEN}"
+echo -e "Machine IP: ${GREEN}$MACHINE_IP${GREEN}"
 ############################################################################
 # Check for helm charts
 echo ">>> getting charts ... Check for helm charts"
@@ -218,7 +219,8 @@ POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
 
 if [ -z "$POD_STATUS" ]; then
     echo "No ricxapp-ts-xapp pods found in the ricxapp namespace."
-else
+    echo -e "${RED}xApp Not Unboarded yet!!!!!!${NC}"
+  else
     echo "$POD_STATUS"
 fi
 
