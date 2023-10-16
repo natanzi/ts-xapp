@@ -151,7 +151,7 @@ check_status() {
         exit 1
     fi
 }
-
+##############################################################################
 echo ">>> xApp Onboarder Deployment"
 echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 
@@ -164,19 +164,22 @@ check_status "Failed to retrieve APPMGR_HTTP"
 
 export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve ONBOARDER_HTTP"
-
+############################################################################
 # Display the retrieved variables
 echo ">>> Get Variables.....First, we need to get some variables of RIC Platform ready. The following variables represent the IP addresses of the services running on the RIC Platform."
-echo "KONG_PROXY = $KONG_PROXY"
-echo "APPMGR_HTTP = $APPMGR_HTTP"
-echo "ONBOARDER_HTTP = $ONBOARDER_HTTP"
-echo "Machine IP: $MACHINE_IP"
+RED='\033[0;31m' # Red color
+NC='\033[0m' # No Color
 
+echo -e "KONG_PROXY = ${RED}$KONG_PROXY${NC}"
+echo -e "APPMGR_HTTP = ${RED}$APPMGR_HTTP${NC}"
+echo -e "ONBOARDER_HTTP = ${RED}$ONBOARDER_HTTP${NC}"
+echo -e "Machine IP: ${RED}$MACHINE_IP${NC}"
+############################################################################
 # Check for helm charts
 echo ">>> getting charts ... Check for helm charts"
 curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts"
-
+############################################################################
 # Prepare the JSON file for xApp onboarding
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
 check_status "Failed to create ts-xapp-onboard.url"
