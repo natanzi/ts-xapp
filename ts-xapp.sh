@@ -62,7 +62,7 @@ oaic=`pwd`
 echo "Installing nginx..."
 sudo apt-get install nginx || { echo 'nginx installation failed'; check_continue; }
 echo "nginx installation completed."  # Corrected here (added closing quotation mark)
-
+sleep 5
 sudo systemctl start nginx.service || { echo 'Failed to start nginx'; check_continue; }
 # New command to check the status of nginx
 sudo systemctl status nginx --no-pager || { echo 'nginx service is not running'; check_continue; }
@@ -96,7 +96,7 @@ location /config_files/ {
 root /var/www/xApp_config.local/;
 }
 }' >xApp_config.local.conf"
-
+sleep 5
 echo ">>> reloading nginx..."
 sudo nginx -t || { echo 'nginx configuration test failed'; check_continue; }
 cd ${oaic}
@@ -109,6 +109,7 @@ sudo chmod 755 /var/www/xApp_config.local/config_files/ts-xapp-config-file.json 
 sudo systemctl reload nginx || { echo 'Failed to reload nginx'; check_continue; }
 echo ">>> getting machine IP..."
 export MACHINE_IP=`hostname  -I | cut -f1 -d' '`
+sleep 5
 echo "Machine IP: $MACHINE_IP"
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
@@ -119,7 +120,7 @@ ls
 echo ">>> Creating ts-xapp Docker image"
 echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
 sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
-
+sleep 5
 echo ">>> Checking if Docker image was successfully built..."
 
 # Check if the Docker image was successfully created
@@ -137,6 +138,10 @@ if [ -z "$IMAGE_EXISTS" ]; then
   fi
 else
   echo "Docker image built successfully. Here are the details:"
+  cat << 'EOF'
+################################################################################
+################################################################################
+EOF
   sudo docker images --filter=reference='xApp-registry.local:5008/ts-xapp:1.0.0'
 fi
 
@@ -158,10 +163,10 @@ echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up a
 # Retrieve service IPs and check the status of each command
 export KONG_PROXY=$(sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve KONG_PROXY"
-
+sleep 5
 export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve APPMGR_HTTP"
-
+sleep 5
 export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve ONBOARDER_HTTP"
 ############################################################################
@@ -179,6 +184,7 @@ echo -e "Machine IP: ${RED}$MACHINE_IP${NC}"
 echo ">>> getting charts ... Check for helm charts"
 curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts"
+sleep 5
 ############################################################################
 # Prepare the JSON file for xApp onboarding
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
@@ -186,6 +192,7 @@ check_status "Failed to create ts-xapp-onboard.url"
 
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
+sleep 5
 
 # Attempt to onboard the xApp
 echo ">>> curl POST... Now we are ready to deploy the xApp"
@@ -196,6 +203,7 @@ check_status "Failed to post onboard download"
 echo ">>> curl GET..."
 curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts after onboarding"
+sleep 5
 
 # Attempt to post the xApp
 echo ">>> curl POST..."
@@ -203,7 +211,7 @@ curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content
 check_status "Failed to post xApp"
 
 echo 'Successful: ts-xapp up and running'
-
+sleep 5
 # Verifying xApp Deployment
 echo 'We should see a ricxapp-ts-xapp pod in the ricxapp namespace. This command lists all the pods in all namespaces.'
 echo 'Verifying xApp Deployment...'
