@@ -78,7 +78,10 @@ Start with root permission and:
 > To delete a Docker image
 > ```bash
 > sudo docker rmi -f xApp-registry.local:5008/ts-xapp:1.0.0
-
+> ```
+> To see the Docker image
+> ```bash
+> docker images
 
 ## 🤝 Contributing
 We welcome your contributions to enhance this xApp! Feel free to fork the repository and submit a pull request with your improvements.
