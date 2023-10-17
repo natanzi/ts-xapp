@@ -18,14 +18,14 @@ RUN apk --no-cache add \
     lksctp-tools-dev
 
 # RMR setup
-RUN mkdir -p /app/route_mr/ /app/ts-xApp
+RUN mkdir -p /app/route_mr/ /app/ts-xapp
 
 # copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/lib64/librmr* /usr/local/lib64/
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.0.5 /usr/local/bin/rmr* /usr/local/bin/
 
 # Set the working directory
-WORKDIR /app/ts-xApp
+WORKDIR /app/ts-xapp
 
 # Copy the requirements.txt first, for separate dependency resolving and layering
 COPY requirements.txt .
