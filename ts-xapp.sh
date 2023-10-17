@@ -175,16 +175,16 @@ check_status() {
     fi
 }
 ##############################################################################
-echo ">>> xApp Onboarder Deployment"
-echo ">>> Before Deploying the xApp, it is essential to have the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
+echo ">>> Enter to xApp onboarder deployment process..."
+echo ">>> Before Deploying the xApp, it is essential to make sure the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 
 # Retrieve service IPs and check the status of each command
 export KONG_PROXY=$(sudo kubectl get svc -n ricplt -l app.kubernetes.io/name=kong -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve KONG_PROXY"
-sleep 5
+
 export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve APPMGR_HTTP"
-sleep 5
+
 export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve ONBOARDER_HTTP"
 ############################################################################
@@ -207,7 +207,7 @@ echo -e "Machine IP: ${GREEN}$MACHINE_IP${NC}"
 echo ">>> getting charts ... Check for helm charts"
 curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts"
-sleep 5
+
 ############################################################################
 # Prepare the JSON file for xApp onboarding
 echo '{"config-file.json_url":"http://'$MACHINE_IP':5010/config_files/ts-xapp-config-file.json"}' > ts-xapp-onboard.url
@@ -215,7 +215,7 @@ check_status "Failed to create ts-xapp-onboard.url"
 
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
-sleep 5
+
 
 # Attempt to onboard the xApp
 echo ">>> curl POST... Now we are ready to deploy the xApp"
@@ -226,7 +226,7 @@ check_status "Failed to post onboard download"
 echo ">>> curl GET..."
 curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts after onboarding"
-sleep 5
+
 # Colors for output
 RED='\033[0;31m'
 NC='\033[0m' # No Color
