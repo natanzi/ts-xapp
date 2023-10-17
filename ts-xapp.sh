@@ -205,7 +205,7 @@ echo -e "Machine IP: ${GREEN}$MACHINE_IP${NC}"
 ############################################################################
 # Check for helm charts
 echo ">>> getting charts ... Check for helm charts"
-curl --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+curl -v --location --request GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts"
 
 ############################################################################
@@ -216,16 +216,16 @@ check_status "Failed to create ts-xapp-onboard.url"
 echo ">>> ts-xapp-onboard.url"
 cat ts-xapp-onboard.url
 
-
 # Attempt to onboard the xApp
 echo ">>> curl POST... Now we are ready to deploy the xApp"
-curl -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url"
+curl -v -L -X POST "http://$KONG_PROXY:32080/onboard/api/v1/onboard/download" --header 'Content-Type: application/json' --data-binary "@ts-xapp-onboard.url"
 check_status "Failed to post onboard download"
 
 # Check the onboarded charts
 echo ">>> curl GET..."
-curl -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
+curl -v -L -X GET "http://$KONG_PROXY:32080/onboard/api/v1/charts"
 check_status "Failed to get charts after onboarding"
+
 
 # Colors for output
 RED='\033[0;31m'
@@ -253,8 +253,8 @@ check_status() {
 
 # Attempt to post the xApp
 echo ">>> curl POST..."
-curl -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}'
-check_status "Failed to post xApp"
+curl -v -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}'
+check_status "Failed to post xApp
 
 # Verifying xApp Deployment
 echo 'Verifying xApp Deployment...'
