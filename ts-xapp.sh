@@ -154,7 +154,13 @@ if [ -z "$IMAGE_EXISTS" ]; then
   fi
 else
   echo "Docker image built successfully. Here are the details:"
+  echo "################################################################################################################################"
+  echo "#                                                                                                                              #"
+  # Execute the command and display its output
   sudo docker images --filter=reference='xApp-registry.local:5008/ts-xapp:1.0.0'
+  echo "#                                                                                                                              #"
+  echo "################################################################################################################################"
+   
 fi
 
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
