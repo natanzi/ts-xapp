@@ -254,7 +254,7 @@ check_status() {
 # Attempt to post the xApp
 echo ">>> curl POST..."
 curl -v -L -X POST "http://$KONG_PROXY:32080/appmgr/ric/v1/xapps" --header 'Content-Type: application/json' --data-raw '{"xappName": "ts-xapp"}'
-check_status "Failed to post xApp
+check_status "Failed to post xApp"
 
 # Verifying xApp Deployment
 echo 'Verifying xApp Deployment...'
