@@ -1,10 +1,28 @@
 {
-"$schema": "http://json-schema.org/draft-07/schema#",
-"$id": "#/controls",
-"type": "object",
-"title": "Controls Section Schema",
-"required": [
-],
-"properties": {
-}
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/controls",
+  "type": "object",
+  "title": "Controls Section Schema",
+  "required": [
+    "ts_control_api",
+    "ts_control_ep"
+  ],
+  "properties": {
+    "ts_control_api": {
+      "$id": "#/properties/controls/items/properties/ts_control_api",
+      "enum": ["rest", "grpc"],
+      "title": "The TS API used to send control messages",
+      "default": "rest"
+    },
+    "ts_control_ep": {
+      "$id": "#/properties/controls/items/properties/ts_control_ep",
+      "type": "string",
+      "title": "The target endpoint of the TS Control API",
+      "default": "http://127.0.0.1:5000/api/echo",
+      "examples": [
+        "http://127.0.0.1:5000/api/echo",
+        "localhost:50051"
+      ]
+    }
+  }
 }
