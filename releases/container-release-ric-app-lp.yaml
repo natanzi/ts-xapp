@@ -4,6 +4,7 @@ container_release_tag: 0.0.1
 container_pull_registry: xApp-registry.local:5008
 container_push_registry: xApp-registry.local:5008
 project: ts-xApp
+#ref: c84738001d53dade028abb3dd15855a04b7153e1
 containers:
     - name: ts-xApp
       version: 1.0.0
