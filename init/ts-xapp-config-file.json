@@ -1,10 +1,10 @@
 {
-    "json_url": "ts-xApp",
-    "xapp_name": "ts-xApp",
+    "json_url": "ts-xapp",
+    "xapp_name": "ts-xapp",
     "version": "1.0.0",
     "containers": [
         {
-            "name": "ts-xApp",
+            "name": "ts-xapp",
             "image": {
                 "registry": "xApp-registry.local:5008",
                 "name": "ts-xApp",
