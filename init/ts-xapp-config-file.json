@@ -21,13 +21,13 @@
                "rxMessages": [ "TS_QOE_PREDICTION", "A1_POLICY_REQ", "TS_ANOMALY_UPDATE" ],
                 "txMessages": [ "TS_UE_LIST", "TS_ANOMALY_ACK" ],
                 "policies": [20008],
-                "description": "rmr receive data port for ts-xApp"
+                "description": "rmr receive data port for ts-xapp"
             },
             {
                 "name": "rmr-route",
-                "container": "ts-xApp",
+                "container": "ts-xapp",
                 "port": 4561,
-                "description": "rmr route port for ts-xApp"
+                "description": "rmr route port for ts-xapp"
             }
         ]
     },
