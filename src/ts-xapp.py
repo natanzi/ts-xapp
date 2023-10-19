@@ -10,7 +10,7 @@ from sdl_health_check import sdl_health_check
 from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
 from path.to.SubscriptionHandler import SubscriptionHandler
 from path.to.RMRManager import rmr_manager
-from config import config  # Importing the Config class
+from config import Config  # Importing the Config class
 from logger import AppLogger  # Importing the AppLogger class
 
 def main():
