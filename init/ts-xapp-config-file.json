@@ -7,7 +7,7 @@
             "name": "ts-xapp",
             "image": {
                 "registry": "xApp-registry.local:5008",
-                "name": "ts-xApp",
+                "name": "ts-xapp",
                 "tag": "1.0.0"
             }
         }
@@ -16,9 +16,9 @@
         "ports": [
             {
                 "name": "rmr-data",
-                "container": "ts-xApp",
+                "container": "ts-xapp",
                 "port": 4560,
-               "rxMessages": [ "TS_QOE_PREDICTION", "A1_POLICY_REQ", "TS_ANOMALY_UPDATE" ],
+                "rxMessages": [ "TS_QOE_PREDICTION", "A1_POLICY_REQ", "TS_ANOMALY_UPDATE" ],
                 "txMessages": [ "TS_UE_LIST", "TS_ANOMALY_ACK" ],
                 "policies": [20008],
                 "description": "rmr receive data port for ts-xapp"
@@ -36,12 +36,11 @@
         "maxSize": 2072,
         "numWorkers": 1,
         "txMessages": [ "TS_UE_LIST", "TS_ANOMALY_ACK" ],
-        "rxMessages": [ "TS_QOE_PREDICTION", "A1_POLICY_REQ", "TS_ANOMALY_UPDATE", ],
-    "policies": [20008]
+        "rxMessages": [ "TS_QOE_PREDICTION", "A1_POLICY_REQ", "TS_ANOMALY_UPDATE" ],
+        "policies": [20008]
     },
     "controls": {
         "ts_control_api": "rest",
         "ts_control_ep": "http://127.0.0.1:5000/api/echo"
     }
-
 }
