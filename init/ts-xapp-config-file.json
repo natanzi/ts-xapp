@@ -40,7 +40,6 @@
         "policies": [20008]
     },
     "controls": {
-        "ts_control_api": "rest",
-        "ts_control_ep": "http://127.0.0.1:5000/api/echo"
+        "__empty_control_section__": {}
     }
 }
