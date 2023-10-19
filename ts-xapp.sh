@@ -259,16 +259,23 @@ check_status "Failed to post xApp"
 # Verifying xApp Deployment
 echo 'Verifying xApp Deployment...'
 sudo kubectl get pods -A
-POD_STATUS=$(sudo kubectl get pods -n ricxapp | grep ricxapp-ts-xapp)
+echo "################################################################################################################################"
+echo "#                                                                                                                              #"
+echo "# Verifying xApp Deployment...                                                                                                 #"
 
+# Capture the output of the command you want to run
+POD_STATUS=$(sudo kubectl get pods -A | grep ricxapp-ts-xapp)
+
+# Check if the variable doesn't contain anything
 if [ -z "$POD_STATUS" ]; then
-    echo "No ricxapp-ts-xapp pods found in the ricxapp namespace."
-    echo -e "${RED}xApp Not Unboarded yet!!!!!!${NC}"
+    echo "# No ricxapp-ts-xapp pods found in the ricxapp namespace.                                                                     #"
 else
-    echo "$POD_STATUS"
-    echo 'Successful: ts-xapp has been posted and is up and running' # Changed success message
-    sleep 5
+    # If the variable contains output, print it
+    echo "# $POD_STATUS                                                                                                                #"
 fi
+
+echo "#                                                                                                                              #"
+echo "################################################################################################################################"
 
 # Check if the user wants to see the xApp logs
 while true; do
