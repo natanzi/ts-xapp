@@ -86,5 +86,12 @@ Start with root permission and:
 get the name of the pod where your container is running:
 kubectl get pods -n ricxapp
 
+ need to know the container's name or ID?
+ docker ps
+ 
+to run commands inside the container
+ docker exec -it <container-name-or-id> /bin/bash
+
+
 ## 🤝 Contributing
 We welcome your contributions to enhance this xApp! Feel free to fork the repository and submit a pull request with your improvements.
