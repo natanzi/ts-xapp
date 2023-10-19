@@ -4,7 +4,7 @@ import time
 import os
 from threading import Thread, Lock
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
-from menu import main_menuclear
+from menu import main_menu
 from rmr_health_check import RMRHealthCheckXapp
 from sdl_health_check import sdl_health_check
 from alarm_handlers import handle_handover_failure, handle_data_retrieval_failure, handle_cell_congestion
