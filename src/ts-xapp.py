@@ -1,5 +1,6 @@
 # This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
-
+import os
+from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 def main():
     print("xApp Onboarded and deployed successfully.\n")
     print("We do RMR health check.\n")
