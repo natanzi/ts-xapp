@@ -6,7 +6,7 @@ def main():
     print("We do RMR health check.\n")
     print("We do SDL health check.\n")
     print("We do API health check.\n")
-    print("xApp started...Please open the dashboard 127.1.1.0/main")
+    print("xApp started...Please open the dashboard 127.1.1.0/main.\n")
 
 if __name__ == "__main__":
     main()
