@@ -23,7 +23,7 @@ def main():
 
     try:
         # Load the configuration
-        config = Config(xapp_name="ts-lsxApp", config_file="/home/ubnt/oaic/ts-xapp/init/ts-xapp-config-file.json") 
+        config = Config(xapp_name="ts-lsxApp", config_file="/app/ts-xapp/init/ts-xapp-config-file.json") 
 
         # Initialize the logger
         app_logger = AppLogger(name="ts-xapp", verbose=2)  # Replace with your actual xApp name and desired verbosity level
