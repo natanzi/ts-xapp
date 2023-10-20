@@ -1,4 +1,5 @@
 # This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
+import sys
 from menu import main_menu
 
 def main():
