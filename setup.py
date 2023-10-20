@@ -5,7 +5,7 @@ def read_file(filename):
     with open(os.path.join(os.path.dirname(__file__), filename), 'r', encoding='utf-8') as file:  # specify the encoding
         return file.read()
 setup(
-    name="TS-xApp",
+    name="ts-xapp",
     version="1.0.0",
     packages=find_packages(exclude=["tests.*", "tests"]),
     description="Traffic Steering xApp",
@@ -13,7 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     author='Milad Natanzi',
     author_email='snatanzi@wpi.edu',
-    url="https://github.com/natanzi/ts-xApp",
+    url="https://github.com/natanzi/ts-xapp",
     install_requires=[
         "wheel",
         "ricxappframe>=1.1.1", 
@@ -31,7 +31,7 @@ setup(
     python_requires='==3.11.5',  
     entry_points={
         "console_scripts": [
-            "ts-xapp=src.ts_xApp:main",  # This tells setuptools to create a script that runs src.TS_xApp.main()
+            "ts-xapp=src.ts-xapp:main",  # This tells setuptools to create a script that runs src.ts_xApp.main()
         ]
     },
     license="Apache 2.0",
