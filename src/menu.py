@@ -1,7 +1,5 @@
 def main_menu():
     print("\nWelcome to the Traffic Steering xApp!")
-    print("xApp Onboarded and deployed successfully.")
-    print("xApp registered via E2.\n")
     
     while True:
         print("\nMenu Options:")
