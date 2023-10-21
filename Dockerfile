@@ -1,4 +1,6 @@
-#do not forget to 
+#do not forget to run this command:
+#docker run -p 3000:3000 your_image_name
+
 # Use the official latest Python image as the base image
 FROM python:latest
 #FROM python:3.8-alpine
