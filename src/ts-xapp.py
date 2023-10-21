@@ -51,5 +51,5 @@ if __name__ == "__main__":
     subprocess.Popen(["python3", "/path/to/dashboard.py"])
     
     logging.info("ts-xApp starting...")
-    app.run(host='0.0.0.0', port=8080)  # You can adjust the port as needed
+    app.run(host='0.0.0.0', port=8080)  # go to http://127.0.0.1:8080 and select the menu
 
