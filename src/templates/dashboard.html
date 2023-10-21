@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TS-xApp Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            border-radius: 5px;
+        }
+        .message {
+            margin: 10px auto;
+            padding: 5px;
+            border-radius: 5px;
+            width: 50%;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h2>TS-xApp Dashboard</h2>
+    
+    <!-- Display flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="/trigger/rmr_health_check" method="post">
+        <input type="submit" value="Run RMR Health Check">
+    </form>
+    
+    <form action="/trigger/sdl_health_check" method="post">
+        <input type="submit" value="Run SDL Health Check">
+    </form>
+    
+    <form action="/trigger/traffic_steering" method="post">
+        <input type="submit" value="Run Traffic Steering">
+    </form>
+</body>
+</html>
