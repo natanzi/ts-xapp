@@ -8,7 +8,7 @@ import signal
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
-from Traffic_Steering import Traffic_Steering
+from traffic_steering import traffic_steering
 
 # Set up logging
 logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
@@ -39,7 +39,7 @@ def run_sdl_health_check():
 @app.route('/traffic_steering', methods=['POST'])
 def run_traffic_steering():
     try:
-        message = Traffic_Steering()
+        message = traffic_steering()
         logging.info(message)
         return jsonify(message=message)
     except Exception as e:
