@@ -3,9 +3,12 @@
 import os
 import logging
 from flask import Flask, jsonify
-from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
 import subprocess
 import signal
+from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
+from rmr_health_check import rmr_health_check
+from sdl_health_check import sdl_health_check
+from Traffic_Steering import Traffic_Steering
 
 # Set up logging
 logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
@@ -16,9 +19,9 @@ app = Flask(__name__)
 @app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
     try:
-        rmr_health_check()
-        logging.info("RMR Health Check executed")
-        return jsonify(message="RMR Health Check executed")
+        message = rmr_health_check()
+        logging.info(message)
+        return jsonify(message=message)
     except Exception as e:
         logging.error(f"Error executing RMR Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
@@ -26,9 +29,9 @@ def run_rmr_health_check():
 @app.route('/sdl_health_check', methods=['POST'])
 def run_sdl_health_check():
     try:
-        sdl_health_check()
-        logging.info("SDL Health Check executed")
-        return jsonify(message="SDL Health Check executed")
+        message = sdl_health_check()
+        logging.info(message)
+        return jsonify(message=message)
     except Exception as e:
         logging.error(f"Error executing SDL Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
@@ -36,9 +39,9 @@ def run_sdl_health_check():
 @app.route('/traffic_steering', methods=['POST'])
 def run_traffic_steering():
     try:
-        Traffic_Steering()
-        logging.info("Traffic Steering function executed")
-        return jsonify(message="Traffic Steering function executed")
+        message = Traffic_Steering()
+        logging.info(message)
+        return jsonify(message=message)
     except Exception as e:
         logging.error(f"Error executing Traffic Steering: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
@@ -59,3 +62,4 @@ signal.signal(signal.SIGTERM, terminate_process)
 if __name__ == "__main__":
     logging.info("ts-xApp starting...")
     app.run(host='0.0.0.0', port=8080)  # go to http://127.0.0.1:8080 and select the menu
+
