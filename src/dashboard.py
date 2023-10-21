@@ -5,7 +5,7 @@ import logging
 app = Flask(__name__)
 
 # Secret key for flashing messages and session management
-app.secret_key = 'your_secret_key_here'
+app.secret_key = '11AB7SX3I0XparYHCoOVv25scQoj1FNrI7BQ2KU24yVtBKX'
 
 # Set up logging
 logging.basicConfig(filename='dashboard.log', level=logging.INFO,
