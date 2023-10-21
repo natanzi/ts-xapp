@@ -1,3 +1,4 @@
+#do not forget to 
 # Use the official latest Python image as the base image
 FROM python:latest
 #FROM python:3.8-alpine
@@ -42,6 +43,7 @@ COPY . .
 # Expose the necessary ports
 EXPOSE 8585
 EXPOSE 8586
+#expose for ts-xapp and its dashboard
 EXPOSE 3000
 EXPOSE 5000
 
