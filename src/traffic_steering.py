@@ -1,6 +1,6 @@
-# Traffic_steering.py
+# traffic_steering.py
 
-def Traffic_Steering():
+def traffic_steering():
     print("Executing Traffic Steering function...")
     return "Traffic Steering completed successfully!"
 
