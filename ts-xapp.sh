@@ -283,9 +283,21 @@ while true; do
     case "$choice" in 
       y|Y )
         echo 'Checking xApp logs...'
+        # Retrieve the Pod Name
+        POD_NAME=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[0].metadata.name}')
+        
+        # Start port-forward in the background
+        kubectl port-forward pod/$POD_NAME 5000:5000 -n ricxapp &
+        PORT_FORWARD_PID=$!
+
+        # Check xApp logs
         if ! sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
             echo "Error: Failed to retrieve logs. Make sure your cluster is reachable and the ricxapp-ts-xapp is deployed correctly."
         fi
+        
+        # Kill the port-forwarding process after checking the logs
+        kill $PORT_FORWARD_PID
+
         break ;;
       n|N )
         echo "Skipping xApp logs..."
