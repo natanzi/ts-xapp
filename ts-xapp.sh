@@ -175,6 +175,30 @@ check_status() {
     fi
 }
 ##############################################################################
+# Set the namespace and service name
+NAMESPACE="ricxapp"
+SERVICE_NAME="ts-xapp-service"
+
+# Check if the service already exists
+if kubectl get svc $SERVICE_NAME -n $NAMESPACE > /dev/null 2>&1; then
+    echo "$SERVICE_NAME already exists in namespace $NAMESPACE."
+else
+    # Apply the configuration
+    kubectl apply -f ts-xapp-service.yaml
+    
+    # Check if the service creation was successful
+    if kubectl get svc $SERVICE_NAME -n $NAMESPACE > /dev/null 2>&1; then
+        echo "$SERVICE_NAME successfully created in namespace $NAMESPACE."
+    else
+        echo "Failed to create $SERVICE_NAME in namespace $NAMESPACE."
+        exit 1
+    fi
+fi
+
+# Describe the service
+kubectl describe svc $SERVICE_NAME -n $NAMESPACE
+##############################################################################
+
 echo ">>> Enter to xApp onboarder deployment process..."
 echo ">>> Before Deploying the xApp, it is essential to make sure the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 
