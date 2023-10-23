@@ -1,5 +1,4 @@
-#do not forget to run this command:
-#docker run -p 3000:3000 your_image_name
+FROM grafana/grafana
 
 # Use the official latest Python image as the base image
 FROM python:latest
@@ -46,7 +45,7 @@ COPY . .
 EXPOSE 8585
 EXPOSE 8586
 #expose for ts-xapp and its dashboard
-EXPOSE 3000
+EXPOSE 8000
 EXPOSE 5000
 
 # Set the default command to run when the container starts.
