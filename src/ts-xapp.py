@@ -61,5 +61,5 @@ signal.signal(signal.SIGTERM, terminate_process)
 
 if __name__ == "__main__":
     logging.info("ts-xApp starting...")
-    app.run(host='0.0.0.0', port=8000)  # go to http://127.0.0.1:8000 and select the menu
+    app.run(host='0.0.0.0', port=8100)  # go to http://127.0.0.1:8100 and select the menu
 
