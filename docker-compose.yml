@@ -10,9 +10,13 @@ services:
       - "8586:8586"
       - "8000:8000"
       - "5000:5000"
-    volumes:
-      - grafana-storage:/var/lib/grafana
+
   grafana:
     image: grafana/grafana
     ports:
       - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:
