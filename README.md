@@ -60,7 +60,8 @@ Start with root permission and:
    ./ts-xapp.sh
 6. Open the below address in your browser to see the dashboard:
    ```bash
-   http://localhost:5000/   
+   http://localhost:5000/
+   http://localhost:8000/     
 > **Note:**
 > 
 > ### xApp Re-Deployment & Undeployment
