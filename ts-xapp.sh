@@ -162,7 +162,21 @@ else
   echo "################################################################################################################################"
    
 fi
+##############################################################################
+echo ">>> Building Grafana Docker image..."
+docker build -f GrafanaDockerfile -t my-grafana-image .
+check_status "Failed to build Grafana Docker image."
 
+echo ">>> Running Grafana Docker container..."
+docker run -d -p 3000:3000 my-grafana-image
+check_status "Failed to run Grafana Docker container."
+
+echo ">>> Checking Grafana deployment..."
+curl http://localhost:3000
+check_status "Failed to access Grafana at http://localhost:3000."
+
+##############################################################################
+##############################################################################
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
 sleep 20
 
@@ -175,6 +189,7 @@ check_status() {
     fi
 }
 ##############################################################################
+
 # Set the namespace and service name
 NAMESPACE="ricxapp"
 SERVICE_NAME="ts-xapp-service"
