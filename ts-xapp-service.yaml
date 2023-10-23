@@ -8,5 +8,5 @@ spec:
     app: ricxapp-ts-xapp
   ports:
     - protocol: TCP
-      port: 8000
-      targetPort: 8000
+      port: 8100
+      targetPort: 8100
