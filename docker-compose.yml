@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  ts-xapp:
+    build:
+      context: .
+      dockerfile: Dockerfile.ts-xapp  # This is your Python app's Dockerfile
+    ports:
+      - "8585:8585"
+      - "8586:8586"
+      - "8000:8000"
+      - "5000:5000"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
