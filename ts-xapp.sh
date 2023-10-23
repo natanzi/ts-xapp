@@ -163,6 +163,22 @@ else
    
 fi
 ##############################################################################
+# Define the check_status function
+check_status() {
+    if [ $? -ne 0 ]; then
+        echo "Error: $1" >&2
+        exit 1
+    fi
+}
+
+# Check if docker-compose is installed, if not, install it
+if ! command -v docker-compose &> /dev/null; then
+    echo ">>> Installing Docker Compose..."
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    check_status "Failed to install Docker Compose."
+fi
+
 echo ">>> Building and running services with Docker Compose..."
 docker-compose up -d --build
 check_status "Failed to build and run services with Docker Compose."
@@ -171,7 +187,6 @@ echo ">>> Checking Grafana deployment..."
 sleep 10  # Give some time for Grafana to start
 curl http://localhost:3000
 check_status "Failed to access Grafana at http://localhost:3000."
-
 ##############################################################################
 ##############################################################################
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
