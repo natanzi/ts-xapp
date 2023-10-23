@@ -12,7 +12,7 @@ logging.basicConfig(filename='dashboard.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 # The service URL for your ts-xApp in Kubernetes
-TS_XAPP_URL = "http://ts-xapp-service:3000"  
+TS_XAPP_URL = "http://ts-xapp-service:8000"  
 
 @app.route('/')
 def index():
