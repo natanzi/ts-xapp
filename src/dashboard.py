@@ -12,7 +12,7 @@ logging.basicConfig(filename='dashboard.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 # The service URL for your ts-xApp in Kubernetes
-TS_XAPP_URL = "http://ts-xapp-service:8000"  
+TS_XAPP_URL = "http://ts-xapp-service:8100"  
 
 @app.route('/')
 def index():
@@ -41,4 +41,4 @@ def trigger_function(function_name):
 
 if __name__ == '__main__':
     logging.info("Dashboard starting...")
-    app.run(host='0.0.0.0', port=5000)  # Adjust port if needed
+    app.run(host='0.0.0.0', port=5100)  # Adjust port if needed
