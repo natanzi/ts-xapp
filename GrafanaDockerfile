@@ -8,4 +8,4 @@ FROM grafana/grafana:latest
 EXPOSE 3000
 
 # Set the entrypoint (this is usually defined in the base image, but can be overridden if necessary)
-ENTRYPOINT ["/run.sh"]
+#ENTRYPOINT ["/run.sh"]
