@@ -9,7 +9,7 @@ services:
       - "8585:8585"
       - "8586:8586"
       - "8100:8100"
-      - "5000:5000"
+      - "5100:5100"
 
   grafana:
     image: grafana/grafana
