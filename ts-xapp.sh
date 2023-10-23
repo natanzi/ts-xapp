@@ -163,15 +163,12 @@ else
    
 fi
 ##############################################################################
-echo ">>> Building Grafana Docker image..."
-docker build -f GrafanaDockerfile -t my-grafana-image .
-check_status "Failed to build Grafana Docker image."
-
-echo ">>> Running Grafana Docker container..."
-docker run -d -p 3000:3000 my-grafana-image
-check_status "Failed to run Grafana Docker container."
+echo ">>> Building and running services with Docker Compose..."
+docker-compose up -d --build
+check_status "Failed to build and run services with Docker Compose."
 
 echo ">>> Checking Grafana deployment..."
+sleep 10  # Give some time for Grafana to start
 curl http://localhost:3000
 check_status "Failed to access Grafana at http://localhost:3000."
 
