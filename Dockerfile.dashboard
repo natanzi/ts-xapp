@@ -1,1 +1,7 @@
+# Use the Miniconda3 image as the base image.
+FROM frolvlad/alpine-miniconda3
+
+# ... [all the necessary steps from Dockerfile.ts-xapp]
+
+# This will execute the dashboard.py script using Python.
 CMD ["python3", "/app/ts-xapp/src/dashboard.py"]
