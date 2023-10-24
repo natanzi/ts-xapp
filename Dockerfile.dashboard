@@ -1,0 +1,1 @@
+CMD ["python3", "/app/ts-xapp/src/dashboard.py"]
