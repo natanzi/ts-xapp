@@ -1,9 +1,5 @@
 # Use the official latest Python image as the base image
 FROM python:latest
-#FROM python:3.8-alpine
-
-# Use the Miniconda3 image as the base image.
-#FROM frolvlad/alpine-miniconda3
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -11,20 +7,18 @@ ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64 \
     RMR_SEED_RT=/app/route_mr/local.rt
 
-# Install system dependencies
-RUN apk --no-cache add \
-    build-base \
-    musl-dev \
-    zlib-dev \
+# Update and Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
     wget \
     dpkg \
     git \
-    lksctp-tools-dev
+    lksctp-tools
 
 # RMR setup
 RUN mkdir -p /app/route_mr/ /app/ts-xapp
 
-# copy rmr files from builder image in lieu of an Alpine package
+# copy rmr files from builder image
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.6.0 /usr/local/lib64/librmr* /usr/local/lib64/
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.6.0 /usr/local/bin/rmr* /usr/local/bin/
 
@@ -42,7 +36,7 @@ COPY . .
 # Expose the necessary ports
 EXPOSE 8585
 EXPOSE 8586
-#expose for ts-xapp and its dashboard
+# Expose for ts-xapp and its dashboard
 EXPOSE 8100
 EXPOSE 5100
 
@@ -51,4 +45,3 @@ RUN python3 --version
 
 # This will execute the TS-xApp.py script using Python.
 CMD ["python3", "/app/ts-xapp/src/ts-xapp.py"]
-
