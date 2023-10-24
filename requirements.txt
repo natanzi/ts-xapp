@@ -3,5 +3,5 @@ thread6
 Flask==3.0.0
 influxdb-client==1.38.0
 ricxappframe
+hiredis==2.2.3
 ricsdl==3.1.3
-
