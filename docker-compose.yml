@@ -3,14 +3,14 @@ version: '3'
 services:
   ts-xapp:
     build:
-      context: .  # Directory containing the Dockerfile for ts-xapp
+      context: .  # Directory containing the Dockerfiles
       dockerfile: Dockerfile.ts-xapp
     ports:
       - "8100:8100"
 
   dashboard:
     build:
-      context: .  # Directory containing the Dockerfile for dashboard
+      context: .  # Directory containing the Dockerfiles
       dockerfile: Dockerfile.dashboard
     ports:
       - "5100:5100"
@@ -24,4 +24,3 @@ services:
 
 volumes:
   grafana-storage:
-
