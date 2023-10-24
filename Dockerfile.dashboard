@@ -13,7 +13,6 @@ RUN apk --no-cache add \
     musl-dev \
     zlib-dev \
     wget \
-    dpkg \
     git \
     lksctp-tools-dev
 
