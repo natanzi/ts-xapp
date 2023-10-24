@@ -115,12 +115,14 @@ echo "Machine IP: $MACHINE_IP"
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
+
 cd ${oaic}/ts-xapp
 echo ">>> checking directory"
 ls
 echo ">>> Creating ts-xapp Docker image"
-echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
-sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
+sudo docker build . -f Dockerfile.ts-xapp -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed for ts-xapp'; check_continue; }
+echo ">>> Creating dashboard Docker image"
+sudo docker build . -f Dockerfile.dashboard -t xApp-registry.local:5008/dashboard:1.0.0 || { echo 'docker build failed for dashboard'; check_continue; }
 
 # Check if the Docker image was successfully created
 IMAGE_EXISTS=$(sudo docker image ls | grep "xApp-registry.local:5008/ts-xapp" | grep "1.0.0")
