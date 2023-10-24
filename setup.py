@@ -16,7 +16,8 @@ setup(
     url="https://github.com/natanzi/ts-xapp",
     install_requires=[
         "wheel",
-        "ricxappframe>=1.1.1", 
+        "ricxappframe>=1.1.1",
+        "hiredis==2.2.3",
         "ricsdl==3.1.3", 
         "socket.py", 
         "APScheduler", 
