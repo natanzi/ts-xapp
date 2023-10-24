@@ -43,8 +43,8 @@ COPY . .
 EXPOSE 8585
 EXPOSE 8586
 #expose for ts-xapp and its dashboard
-EXPOSE 8000
-EXPOSE 5000
+EXPOSE 8100
+EXPOSE 5100
 
 # Set the default command to run when the container starts.
 RUN python3 --version
