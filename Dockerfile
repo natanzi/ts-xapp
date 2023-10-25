@@ -1,5 +1,5 @@
 # Use the official latest Python image as the base image
-FROM python:latest
+#FROM python:latest
 
 # Use the Miniconda3 image as the base image.
 FROM frolvlad/alpine-miniconda3
