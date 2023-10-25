@@ -1,5 +1,8 @@
 # Use the official latest Python image as the base image
-FROM python:3.8
+FROM python:latest
+
+# Use the Miniconda3 image as the base image.
+FROM frolvlad/alpine-miniconda3
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -7,18 +10,20 @@ ENV PYTHONUNBUFFERED=1 \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64 \
     RMR_SEED_RT=/app/route_mr/local.rt
 
-# Update and Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
+# Install system dependencies
+RUN apk --no-cache add \
+    build-base \
+    musl-dev \
+    zlib-dev \
     wget \
     dpkg \
     git \
-    lksctp-tools
+    lksctp-tools-dev
 
 # RMR setup
 RUN mkdir -p /app/route_mr/ /app/ts-xapp
 
-# copy rmr files from builder image
+# copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.6.0 /usr/local/lib64/librmr* /usr/local/lib64/
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.6.0 /usr/local/bin/rmr* /usr/local/bin/
 
@@ -36,9 +41,9 @@ COPY . .
 # Expose the necessary ports
 EXPOSE 8585
 EXPOSE 8586
-# Expose for ts-xapp and its dashboard
-EXPOSE 8100
-EXPOSE 5100
+#expose for ts-xapp and its dashboard
+EXPOSE 3000
+EXPOSE 5000
 
 # Set the default command to run when the container starts.
 RUN python3 --version
