@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+import time
 import requests
 import logging
+time.sleep(10)
 
 app = Flask(__name__)
 
