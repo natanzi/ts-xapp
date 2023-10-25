@@ -13,7 +13,7 @@ services:
       context: .  # Directory containing the Dockerfiles
       dockerfile: Dockerfile.dashboard
     ports:
-      - "5100:5100"
+      - "5101:5100"
 
   grafana:
     image: grafana/grafana
