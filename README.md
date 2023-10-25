@@ -58,10 +58,10 @@ Start with root permission and:
    ```bash
    chmod +x ts-xapp.sh
    ./ts-xapp.sh
-6. Open the below address in your browser to see the dashboard:
+6. Open the below address in your browser to see the ts-xapp dashboard and grafana:
    ```bash
    http://localhost:5000/
-   http://localhost:8000/     
+   http://localhost:3000/     
 > **Note:**
 > 
 > ### xApp Re-Deployment & Undeployment
