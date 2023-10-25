@@ -298,6 +298,28 @@ fi
 
 echo "#                                                                                                                              #"
 echo "################################################################################################################################"
+echo "################################################################################################################################"
+echo "######################################### Setting up Grafana... ################################################################"
+echo "################################################################################################################################"
+
+# Create a custom Docker network (if not already created at the beginning of the script)
+docker network create my_network
+
+# Pull and run Grafana container
+docker pull grafana/grafana
+docker run -d --name=grafana --network=my_network -p 3000:3000 grafana/grafana
+
+# Optional: Check if Grafana container is up and running
+GRAFANA_STATUS=$(docker ps | grep "grafana/grafana")
+if [ -z "$GRAFANA_STATUS" ]; then
+    echo -e "${RED}Error: Grafana container not running.${NC}"
+    exit 1
+else
+    echo "Grafana is up and running at http://localhost:3000"
+fi
+
+echo "################################################################################################################################"
+
 
 # Check if the user wants to see the xApp logs
 while true; do
