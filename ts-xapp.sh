@@ -1,4 +1,3 @@
-#!/bin/bash
 cat << 'EOF'
 ################################################################################
 #          Welcome to OAIC Traffic Steering xApp Fast Installation             #
@@ -115,14 +114,12 @@ echo "Machine IP: $MACHINE_IP"
 echo ">>> checking for config-file"
 curl http://${MACHINE_IP}:5010/config_files/ts-xapp-config-file.json || { echo 'Failed to fetch config-file'; check_continue; }
 echo ">>> building docker image...."
-
 cd ${oaic}/ts-xapp
 echo ">>> checking directory"
 ls
 echo ">>> Creating ts-xapp Docker image"
-sudo docker build . -f Dockerfile.ts-xapp -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed for ts-xapp'; check_continue; }
-echo ">>> Creating dashboard Docker image"
-sudo docker build . -f Dockerfile.dashboard -t xApp-registry.local:5008/dashboard:1.0.0 || { echo 'docker build failed for dashboard'; check_continue; }
+echo ">>> Now, we create a docker image of the ts-xApp using the given docker file."
+sudo docker build . -t xApp-registry.local:5008/ts-xapp:1.0.0 || { echo 'docker build failed'; check_continue; }
 
 # Check if the Docker image was successfully created
 IMAGE_EXISTS=$(sudo docker image ls | grep "xApp-registry.local:5008/ts-xapp" | grep "1.0.0")
@@ -164,33 +161,7 @@ else
   echo "################################################################################################################################"
    
 fi
-##############################################################################
-# Define the check_status function
-check_status() {
-    if [ $? -ne 0 ]; then
-        echo "Error: $1" >&2
-        exit 1
-    fi
-}
 
-# Check if docker-compose is installed, if not, install it
-if ! command -v docker-compose &> /dev/null; then
-    echo ">>> Installing Docker Compose..."
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    sudo chmod +x /usr/local/bin/docker-compose
-    check_status "Failed to install Docker Compose."
-fi
-
-echo ">>> Building and running services with Docker Compose..."
-docker-compose up -d --build
-check_status "Failed to build and run services with Docker Compose."
-
-echo ">>> Checking Grafana deployment..."
-sleep 10  # Give some time for Grafana to start
-curl http://localhost:3000
-check_status "Failed to access Grafana at http://localhost:3000."
-##############################################################################
-##############################################################################
 echo "Pausing for 20 seconds to allow system processes to stabilize before continuing..."
 sleep 20
 
@@ -203,7 +174,6 @@ check_status() {
     fi
 }
 ##############################################################################
-
 # Set the namespace and service name
 NAMESPACE="ricxapp"
 SERVICE_NAME="ts-xapp-service"
@@ -227,7 +197,6 @@ fi
 # Describe the service
 kubectl describe svc $SERVICE_NAME -n $NAMESPACE
 ##############################################################################
-
 echo ">>> Enter to xApp onboarder deployment process..."
 echo ">>> Before Deploying the xApp, it is essential to make sure the 5G Network Up and Running. Otherwise the subscription procedure will not be successful."
 
@@ -340,7 +309,7 @@ while true; do
         POD_NAME=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[0].metadata.name}')
         
         # Start port-forward in the background
-        kubectl port-forward pod/$POD_NAME 5100:5100 -n ricxapp &
+        kubectl port-forward pod/$POD_NAME 5000:5000 -n ricxapp &
         PORT_FORWARD_PID=$!
 
         # Check xApp logs
