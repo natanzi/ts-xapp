@@ -302,14 +302,35 @@ echo "##########################################################################
 echo "######################################### Setting up Grafana... ################################################################"
 echo "################################################################################################################################"
 
+# Check if Docker is installed and running
+if ! command -v docker &> /dev/null; then
+    echo -e "${RED}Docker is not installed. Please install Docker and try again.${NC}"
+    exit 1
+fi
+
+DOCKER_RUNNING=$(systemctl is-active docker)
+if [ "$DOCKER_RUNNING" != "active" ]; then
+    echo -e "${RED}Docker service is not running. Please start Docker and try again.${NC}"
+    exit 1
+fi
+
 # Create a custom Docker network (if not already created at the beginning of the script)
-docker network create my_network
+DOCKER_NETWORK_EXISTS=$(docker network ls | grep "my_network")
+if [ -z "$DOCKER_NETWORK_EXISTS" ]; then
+    docker network create my_network
+fi
 
 # Pull and run Grafana container
-docker pull grafana/grafana
-docker run -d --name=grafana --network=my_network -p 3000:3000 grafana/grafana
+GRAFANA_CONTAINER_EXISTS=$(docker ps -a | grep "grafana")
+if [ -z "$GRAFANA_CONTAINER_EXISTS" ]; then
+    docker pull grafana/grafana
+    docker run -d --name=grafana --network=my_network -p 3000:3000 grafana/grafana
+else
+    echo "Grafana container already exists. Starting it if it's not running..."
+    docker start grafana
+fi
 
-# Optional: Check if Grafana container is up and running
+# Check if Grafana container is up and running
 GRAFANA_STATUS=$(docker ps | grep "grafana/grafana")
 if [ -z "$GRAFANA_STATUS" ]; then
     echo -e "${RED}Error: Grafana container not running.${NC}"
@@ -319,7 +340,6 @@ else
 fi
 
 echo "################################################################################################################################"
-
 
 # Check if the user wants to see the xApp logs
 while true; do
