@@ -5,14 +5,14 @@ import logging
 app = Flask(__name__)
 
 # Secret key for flashing messages and session management
-app.secret_key = '11AB7SX3I0XparYHCoOVv25scQoj1FNrI7BQ2KU24yVtBKX'
+app.secret_key = 'your_secret_key_here'
 
 # Set up logging
 logging.basicConfig(filename='dashboard.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 # The service URL for your ts-xApp in Kubernetes
-TS_XAPP_URL = "http://ts-xapp-service:8100"  
+TS_XAPP_URL = "http://ts-xapp-service:8080"  
 
 @app.route('/')
 def index():
@@ -41,4 +41,5 @@ def trigger_function(function_name):
 
 if __name__ == '__main__':
     logging.info("Dashboard starting...")
-    app.run(host='0.0.0.0', port=5100)  # Adjust port if needed
+    app.run(host='0.0.0.0', port=5000)  # Adjust port if needed
+
