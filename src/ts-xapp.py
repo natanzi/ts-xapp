@@ -49,7 +49,16 @@ def run_traffic_steering():
 # Store the subprocess reference
 dashboard_process = subprocess.Popen(["python3", "/app/ts-xapp/src/dashboard.py"])
 
+# Define the signal handler function
+def terminate_process(signum, frame):
+    dashboard_process.terminate()
+    logging.info("Dashboard subprocess terminated.")
+    exit(0)
+
+# Attach the handler to SIGINT (Ctrl+C) and SIGTERM (termination signal)
+signal.signal(signal.SIGINT, terminate_process)
+signal.signal(signal.SIGTERM, terminate_process)
+
 if __name__ == "__main__":
     logging.info("ts-xApp starting...")
-    app.run(host='0.0.0.0', port=8100)  # go to http://127.0.0.1:8100 and select the menu
-
+    app.run(host='0.0.0.0', port=3000)  # go to http://127.0.0.1:3000 and select the menu
