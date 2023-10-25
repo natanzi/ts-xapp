@@ -42,8 +42,8 @@ COPY . .
 EXPOSE 8585
 EXPOSE 8586
 #expose for ts-xapp and its dashboard
-#Port 3000 is related to ts-xapp & Port 5000 is related to its dashboard
-EXPOSE 3000
+#Port 6000 is related to ts-xapp & Port 5000 is related to its dashboard
+EXPOSE 6000
 EXPOSE 5000
 
 # Set the default command to run when the container starts.
