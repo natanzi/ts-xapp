@@ -6,6 +6,7 @@ from flask import Flask, jsonify
 import subprocess
 import signal
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
+from subscription_manager import SubscriptionManager
 from default_handler import default_rmr_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
@@ -16,6 +17,9 @@ logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
 rmr_xapp = RMRXapp(default_rmr_handler, rmr_port=4560)
+
+# Create an instance of the SubscriptionManager
+subscription_manager = SubscriptionManager(rmr_xapp)
 
 app = Flask(__name__)
 
@@ -64,4 +68,8 @@ signal.signal(signal.SIGTERM, terminate_process)
 
 if __name__ == "__main__":
     logging.info("ts-xApp starting...")
+
+    # Initialize subscriptions
+    subscription_manager.initialize_subscriptions()
+
     app.run(host='0.0.0.0', port=6000)  # go to http://127.0.0.1:6000 and select the menu
