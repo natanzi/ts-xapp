@@ -13,8 +13,15 @@ from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
 
 # Set up logging
-logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
-                    format='%(asctime)s:%(levelname)s:%(message)s')
+logging.basicConfig(
+    filename='ts-xapp.log',
+    level=logging.INFO,
+    format='%(asctime)s:%(levelname)s:%(message)s',
+    handlers=[
+        logging.FileHandler('ts-xapp.log'),
+        logging.StreamHandler()
+    ]
+)
 
 rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
 
