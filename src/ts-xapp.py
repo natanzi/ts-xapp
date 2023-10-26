@@ -22,7 +22,7 @@ app = Flask(__name__)
 @app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
     try:
-        message = rmr_health_check()
+        message = rmr_health_check(rmr_xapp)
         logging.info(message)
         return jsonify(message=message)
     except Exception as e:
