@@ -1,6 +1,13 @@
 #default_handler.py
 import logging
 from ricxappframe.xapp_frame import rmr
+from subscription_manager import SubscriptionManager
+
+subscription_manager = None  # This will be set in your main application file
+
+def set_subscription_manager(manager):
+    global subscription_manager
+    subscription_manager = manager
 
 def handle_subscription_request(summary, sbuf):
     logging.info("Handling RIC Subscription Request")
@@ -8,7 +15,10 @@ def handle_subscription_request(summary, sbuf):
 
 def handle_subscription_response(summary, sbuf):
     logging.info("Handling RIC Subscription Response")
-    # Add your logic here to handle the subscription response
+    if subscription_manager:
+        subscription_manager.handle_subscription_response(summary, sbuf)
+    else:
+        logging.error("Subscription manager is not set")
 
 def handle_subscription_failure(summary, sbuf):
     logging.info("Handling RIC Subscription Failure")
@@ -20,7 +30,10 @@ def handle_subscription_delete_request(summary, sbuf):
 
 def handle_subscription_delete_response(summary, sbuf):
     logging.info("Handling RIC Subscription Delete Response")
-    # Add your logic here to handle the subscription delete response
+    if subscription_manager:
+        subscription_manager.handle_unsubscription_response(summary, sbuf)
+    else:
+        logging.error("Subscription manager is not set")
 
 def handle_subscription_delete_failure(summary, sbuf):
     logging.info("Handling RIC Subscription Delete Failure")
