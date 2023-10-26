@@ -6,6 +6,7 @@ from flask import Flask, jsonify
 import subprocess
 import signal
 from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
+from default_handler import default_rmr_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
@@ -13,6 +14,8 @@ from traffic_steering import traffic_steering
 # Set up logging
 logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
+
+rmr_xapp = RMRXapp(default_rmr_handler, rmr_port=4560)
 
 app = Flask(__name__)
 
