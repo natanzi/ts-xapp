@@ -1,5 +1,30 @@
 #default_handler.py
 import logging
+from ricxappframe.xapp_frame import rmr
+
+def handle_subscription_request(summary, sbuf):
+    logging.info("Handling RIC Subscription Request")
+    # Add your logic here to handle the subscription request
+
+def handle_subscription_response(summary, sbuf):
+    logging.info("Handling RIC Subscription Response")
+    # Add your logic here to handle the subscription response
+
+def handle_subscription_failure(summary, sbuf):
+    logging.info("Handling RIC Subscription Failure")
+    # Add your logic here to handle the subscription failure
+
+def handle_subscription_delete_request(summary, sbuf):
+    logging.info("Handling RIC Subscription Delete Request")
+    # Add your logic here to handle the subscription delete request
+
+def handle_subscription_delete_response(summary, sbuf):
+    logging.info("Handling RIC Subscription Delete Response")
+    # Add your logic here to handle the subscription delete response
+
+def handle_subscription_delete_failure(summary, sbuf):
+    logging.info("Handling RIC Subscription Delete Failure")
+    # Add your logic here to handle the subscription delete failure
 
 def default_rmr_handler(summary, sbuf):
     """
@@ -8,37 +33,32 @@ def default_rmr_handler(summary, sbuf):
     :param summary: A dictionary containing information about the received message.
     :param sbuf: The received RMR message buffer.
     """
-    # Extracting message details from the summary
     msg_type = summary.get('mtype', 'Unknown')
     msg_state = summary.get('state', 'Unknown')
     transaction_id = summary.get('xid', 'Unknown')
 
-    # Logging the received message details
     logging.info(f"Received RMR message - Type: {msg_type}, State: {msg_state}, Transaction ID: {transaction_id}")
+
+    if msg_type == 12010:  # RIC Subscription Request
+        handle_subscription_request(summary, sbuf)
+    elif msg_type == 12011:  # RIC Subscription Response
+        handle_subscription_response(summary, sbuf)
+    elif msg_type == 12012:  # RIC Subscription Failure
+        handle_subscription_failure(summary, sbuf)
+    elif msg_type == 12013:  # RIC Subscription Delete Request
+        handle_subscription_delete_request(summary, sbuf)
+    elif msg_type == 12014:  # RIC Subscription Delete Response
+        handle_subscription_delete_response(summary, sbuf)
+    elif msg_type == 12015:  # RIC Subscription Delete Failure
+        handle_subscription_delete_failure(summary, sbuf)
+    else:
+        # Handle other message types as needed
+        pass
 
     # Accessing and logging the payload of the message
     payload = sbuf.get_payload()
     logging.info(f"Message payload: {payload}")
 
-    # Add any additional logic you need for handling messages here
-
-    # If needed, you can send a response back using the rmr.rmr_send_msg function
-    # response_sbuf = rmr.rmr_alloc_msg(rmr_xapp.rmr_ctx, 256)
-    # response_sbuf.contents.mtype = <response_message_type>
-    # response_sbuf.contents.len = len(response_payload)
-    # response_sbuf.contents.payload = response_payload
-    # rmr.rmr_send_msg(rmr_xapp.rmr_ctx, response_sbuf)
-
     # Freeing the RMR message buffer
     sbuf.contents.state = 0  # Resetting the state before freeing
     rmr.rmr_free_msg(sbuf)
-
-# If you want to test the default handler independently, you can add a main function here
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    logging.info("Testing the default RMR handler")
-    
-    # You would need to set up a mock summary and sbuf for testing
-    # summary = {'mtype': 10000, 'state': 0, 'xid': '12345'}
-    # sbuf = ...
-    # default_rmr_handler(summary, sbuf)
