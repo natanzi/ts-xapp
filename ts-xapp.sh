@@ -55,6 +55,8 @@ echo "iperf3 installation completed."
 echo "Installing vim..."
 sudo apt install vim || { echo 'vim installation failed'; check_continue; }
 echo "vim installation completed."
+apt install python3-pip
+
 
 oaic=`pwd`
 echo "Installing nginx..."
