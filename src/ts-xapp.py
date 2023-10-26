@@ -5,9 +5,9 @@ import logging
 from flask import Flask, jsonify
 import subprocess
 import signal
-from ricxappframe.xapp_frame import RMRXapp, rmr, Xapp
+from ricxappframe.xapp_frame import RMRXapp
 from subscription_manager import SubscriptionManager
-from default_handler import default_rmr_handler
+import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
@@ -16,10 +16,13 @@ from traffic_steering import traffic_steering
 logging.basicConfig(filename='ts-xapp.log', level=logging.INFO,
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
-rmr_xapp = RMRXapp(default_rmr_handler, rmr_port=4560)
+rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
 
 # Create an instance of the SubscriptionManager
 subscription_manager = SubscriptionManager(rmr_xapp)
+
+# Set the SubscriptionManager in default_handler
+default_handler.set_subscription_manager(subscription_manager)
 
 app = Flask(__name__)
 
