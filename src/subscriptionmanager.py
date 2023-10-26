@@ -1,3 +1,4 @@
+#subscriptionmanager.py
 import logging
 
 class SubscriptionHandler:
