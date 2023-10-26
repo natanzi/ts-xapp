@@ -11,6 +11,7 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
+from e2_health_check import perform_e2_health_check
 
 # Set up logging
 logging.basicConfig(
@@ -33,6 +34,21 @@ default_handler.set_subscription_manager(subscription_manager)
 
 app = Flask(__name__)
 
+@app.route('/e2_health_check', methods=['POST'])
+def run_e2_health_check():
+    try:
+        result = perform_e2_health_check()
+        if result:
+            message = "E2 Health Check Passed"
+            logging.info(message)
+        else:
+            message = "E2 Health Check Failed"
+            logging.error(message)
+        return jsonify(message=message)
+    except Exception as e:
+        logging.error(f"Error executing E2 Health Check: {str(e)}")
+        return jsonify(message=f"Error: {str(e)}"), 500
+        
 @app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
     try:
