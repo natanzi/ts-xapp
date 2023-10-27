@@ -51,4 +51,6 @@ class SubscriptionManager:
         else:
             logging.warning("Received unsubscription response for unknown subscription ID: %s", subscription_id)
 
-
+    def initialize_subscriptions(self):
+        # Add your logic for initializing subscriptions here
+        logging.info("Subscriptions initialized")
