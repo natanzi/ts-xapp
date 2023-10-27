@@ -1,6 +1,7 @@
 # This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
 #ts-xapp.py
 import os
+import sys
 import logging
 from flask import Flask, jsonify
 import subprocess
@@ -15,12 +16,11 @@ from traffic_steering import traffic_steering
 
 # Set up logging
 logging.basicConfig(
-    filename='ts-xapp.log',
     level=logging.INFO,
     format='%(asctime)s:%(levelname)s:%(message)s',
     handlers=[
         logging.FileHandler('ts-xapp.log'),
-        logging.StreamHandler()
+        logging.StreamHandler(sys.stdout)
     ]
 )
 
