@@ -12,7 +12,6 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
-
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
