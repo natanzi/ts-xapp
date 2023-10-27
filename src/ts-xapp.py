@@ -12,7 +12,6 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
-#from e2_health_check import perform_e2_health_check
 
 # Set up logging
 logging.basicConfig(
@@ -24,31 +23,20 @@ logging.basicConfig(
     ]
 )
 
+# Create an RMR xApp instance
 rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
 
+# Provide the correct URI for the Subscription Manager
+subscription_manager_uri = "http://<subscription_manager_host>:<subscription_manager_port>/"
+
 # Create an instance of the SubscriptionManager
-subscription_manager = SubscriptionManager(rmr_xapp)
+subscription_manager = SubscriptionManager(uri=subscription_manager_uri)
 
 # Set the SubscriptionManager in default_handler
 default_handler.set_subscription_manager(subscription_manager)
 
 app = Flask(__name__)
 
-#@app.route('/e2_health_check', methods=['POST'])
-#def run_e2_health_check():
-#    #try:
-#        result = perform_e2_health_check()
-#        if result:
-#            message = "E2 Health Check Passed"
-#            logging.info(message)
-#        else:
-#            message = "E2 Health Check Failed"
-#            logging.error(message)
-#        return jsonify(message=message)
-#    except Exception as e:
-#        logging.error(f"Error executing E2 Health Check: {str(e)}")
-#        return jsonify(message=f"Error: {str(e)}"), 500
-        
 @app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
     try:
