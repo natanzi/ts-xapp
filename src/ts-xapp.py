@@ -11,7 +11,7 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
-from e2_health_check import perform_e2_health_check
+#from e2_health_check import perform_e2_health_check
 
 # Set up logging
 logging.basicConfig(
