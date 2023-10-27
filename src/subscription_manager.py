@@ -18,7 +18,6 @@ class SubscriptionManager:
             action = ActionToBeSetup(action_id=1, action_type="report")
             subscription_detail = SubscriptionDetail(xapp_event_instance_id=subscription_id, action_to_be_setup_list=[action])
             params = SubscriptionParams(subscription_id=subscription_id, subscription_details=[subscription_detail])
-            
             response, reason, status = self.subscriber.Subscribe(subs_params=params)
             if status == 200:
                 self.logger.info("Subscription request sent successfully for subscription ID: %s", subscription_id)
