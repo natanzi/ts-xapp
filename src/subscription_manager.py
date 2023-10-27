@@ -49,3 +49,5 @@ class SubscriptionManager:
                 self.logger.warning("Unknown subscription ID: %s", subscription_id)
         except Exception as e:
             self.logger.error("An error occurred while unsubscribing for subscription ID: %s, Error: %s", subscription_id, str(e))
+
+
