@@ -27,7 +27,7 @@ logging.basicConfig(
 rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
 
 # Provide the correct URI for the Subscription Manager
-subscription_manager_uri = "http://<subscription_manager_host>:<subscription_manager_port>/"
+subscription_manager_uri = "http://10.244.0.18:3800/"
 
 # Create an instance of the SubscriptionManager
 subscription_manager = SubscriptionManager(uri=subscription_manager_uri)
