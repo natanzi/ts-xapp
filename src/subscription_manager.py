@@ -1,9 +1,9 @@
-#subscription_manager.py
+# subscription_manager.py
 import logging
 from ricxappframe.xapp_subscribe import NewSubscriber, SubscriptionParams, SubscriptionDetail, ActionToBeSetup
 
 class SubscriptionManager:
-    def __init__(self, uri, local_address="0.0.0.0", local_port=8088):
+    def __init__(self, uri="http://10.244.0.18:3800/", local_address="0.0.0.0", local_port=8088):
         self.subscriptions = {}
         self.subscriber = NewSubscriber(uri=uri, local_address=local_address, local_port=local_port)
         self.logger = logging.getLogger(__name__)
@@ -48,4 +48,3 @@ class SubscriptionManager:
                 self.logger.warning("Unknown subscription ID: %s", subscription_id)
         except Exception as e:
             self.logger.error("An error occurred while unsubscribing for subscription ID: %s, Error: %s", subscription_id, str(e))
-
