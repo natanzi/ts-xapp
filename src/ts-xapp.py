@@ -30,7 +30,7 @@ rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
 subscription_manager_uri = "http://10.244.0.18:3800/"
 
 # Create an instance of the SubscriptionManager
-subscription_manager = SubscriptionManager(uri=subscription_manager_uri)
+subscription_manager = SubscriptionManager(uri=subscription_manager_uri, local_address="0.0.0.0", local_port=8088)
 
 # Set the SubscriptionManager in default_handler
 default_handler.set_subscription_manager(subscription_manager)
