@@ -9,6 +9,10 @@ class SubscriptionManager:
         self.logger = logging.getLogger(__name__)
         self.subscriber.ResponseHandler(responseCB=self.subscription_response_handler)
 
+    def initialize_subscriptions(self):
+        # Initialize your subscriptions here if needed
+        pass
+
     def send_subscription_request(self, subscription_id, payload):
         try:
             action = ActionToBeSetup(action_id=1, action_type="report")
@@ -17,7 +21,7 @@ class SubscriptionManager:
             
             response, reason, status = self.subscriber.Subscribe(subs_params=params)
             if status == 200:
-                self.logger.info("Subscription request sent successfully for subscription ID: %s, Response: %s", subscription_id, response)
+                self.logger.info("Subscription request sent successfully for subscription ID: %s", subscription_id)
                 self.subscriptions[subscription_id] = {'status': 'pending', 'payload': payload}
             else:
                 self.logger.error("Failed to send subscription request for subscription ID: %s, Reason: %s, Status: %s", subscription_id, reason, status)
@@ -28,11 +32,6 @@ class SubscriptionManager:
         try:
             self.logger.info("Received subscription response: %s", data)
             # Add logic to parse and handle the response data
-            # Example:
-            # subscription_id = data.get('subscription_id')
-            # status = data.get('status')
-            # if subscription_id in self.subscriptions:
-            #     self.subscriptions[subscription_id]['status'] = status
         except Exception as e:
             self.logger.error("An error occurred while handling subscription response, Error: %s", str(e))
 
@@ -49,3 +48,4 @@ class SubscriptionManager:
                 self.logger.warning("Unknown subscription ID: %s", subscription_id)
         except Exception as e:
             self.logger.error("An error occurred while unsubscribing for subscription ID: %s, Error: %s", subscription_id, str(e))
+
