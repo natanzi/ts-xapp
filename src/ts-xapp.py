@@ -16,7 +16,7 @@ from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
 
 # Initialize the app and set environment variables
-from __init__ import init_app
+from init_app import init_app
 init_app()
 
 # Set up logging
