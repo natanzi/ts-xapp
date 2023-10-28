@@ -5,7 +5,7 @@ import sys
 import subprocess
 import logging
 import signal
-from . import init_app
+import init_app
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s:%(levelname)s:%(message)s',
