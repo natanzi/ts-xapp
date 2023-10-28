@@ -67,7 +67,15 @@ def run_traffic_steering():
         return jsonify(message=f"Error: {str(e)}"), 500
 
 # Store the subprocess reference
-dashboard_process = subprocess.Popen(["python3", "/app/ts-xapp/src/dashboard.py"])
+try:
+    logging.debug("Attempting to start the dashboard subprocess...")
+    dashboard_process = subprocess.Popen(
+        ["python3", "/app/ts-xapp/src/dashboard.py"],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    logging.debug("Dashboard subprocess started successfully.")
+except Exception as e:
+    logging.error(f"Failed to start the dashboard subprocess: {str(e)}")
 
 # Define the signal handler function
 def terminate_process(signum, frame):
