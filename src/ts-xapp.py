@@ -85,4 +85,4 @@ if __name__ == "__main__":
     # Initialize subscriptions
     subscription_manager.initialize_subscriptions()
 
-    app.run(host='0.0.0.0', port=6000)  # go to http://127.0.0.1:6000 and select the menu
+    app.run(host='0.0.0.0', port=5000)  # go to http://127.0.0.1:5000 and select the menu
