@@ -3,6 +3,8 @@
 import json
 import os
 import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+from __init__ import init_app
 import logging
 from flask import Flask, jsonify
 import subprocess
