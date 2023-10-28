@@ -14,7 +14,7 @@ from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
 # Set up logging
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.DEBUG,  # Change from INFO to DEBUG
     format='%(asctime)s:%(levelname)s:%(message)s',
     handlers=[
         logging.FileHandler('ts-xapp.log'),
