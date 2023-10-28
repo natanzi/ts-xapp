@@ -8,12 +8,9 @@ spec:
   selector:
     app: ricxapp-ts-xapp
   ports:
-    - name: ts-xapp
-      protocol: TCP
+    - protocol: TCP
       port: 6000
       targetPort: 6000
-    - name: dashboard
-      protocol: TCP
+    - protocol: TCP
       port: 5000
       targetPort: 5000
-
