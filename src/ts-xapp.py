@@ -1,5 +1,5 @@
 # This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
-#ts-xapp.py
+# ts-xapp.py
 import json
 import os
 import sys
@@ -13,7 +13,10 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
-from src import app  # This will run __init__.py in the 'src' directory and initialize the app
+
+# Initialize the app and set environment variables
+from src import init_app
+init_app()
 
 # Set up logging
 logging.basicConfig(
@@ -26,7 +29,7 @@ logging.basicConfig(
 )
 
 # Create an RMR xApp instance
-rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=4560)
+rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=int(os.environ.get("RMR_PORT", 4560)))
 
 # Provide the correct URI for the Subscription Manager
 subscription_manager_uri = "http://10.244.0.18:3800/"
@@ -37,9 +40,9 @@ subscription_manager = SubscriptionManager(uri=subscription_manager_uri, local_a
 # Set the SubscriptionManager in default_handler
 default_handler.set_subscription_manager(subscription_manager)
 
-app = Flask(__name__)
+ts_app = Flask(__name__)
 
-@app.route('/rmr_health_check', methods=['POST'])
+@ts_app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
     try:
         message = rmr_health_check(rmr_xapp)
@@ -49,7 +52,7 @@ def run_rmr_health_check():
         logging.error(f"Error executing RMR Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
 
-@app.route('/sdl_health_check', methods=['POST'])
+@ts_app.route('/sdl_health_check', methods=['POST'])
 def run_sdl_health_check():
     try:
         message = sdl_health_check()
@@ -59,7 +62,7 @@ def run_sdl_health_check():
         logging.error(f"Error executing SDL Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
 
-@app.route('/traffic_steering', methods=['POST'])
+@ts_app.route('/traffic_steering', methods=['POST'])
 def run_traffic_steering():
     try:
         message = traffic_steering()
@@ -96,4 +99,4 @@ if __name__ == "__main__":
     # Initialize subscriptions
     subscription_manager.initialize_subscriptions()
 
-    app.run(host='0.0.0.0', port=5000)  # go to http://127.0.0.1:5000 and select the menu
+    ts_app.run(host='0.0.0.0', port=5000)  # go to http://127.0.0.1:5000 in your browser
