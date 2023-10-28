@@ -15,6 +15,21 @@ check_status() {
     fi
 }
 
+# Function to cleanup port forwarding on script exit
+cleanup() {
+  echo "Stopping port forwarding..."
+  if [ -n "$PORT_FORWARD_PID" ]; then
+    kill $PORT_FORWARD_PID 2>/dev/null
+    unset PORT_FORWARD_PID
+    echo "Port forwarding stopped."
+  else
+    echo "No port forwarding process found."
+  fi
+}
+
+# Set the trap function for script exit
+trap cleanup EXIT
+
 # Retrieve the IP addresses of necessary services
 export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve APPMGR_HTTP IP" "APPMGR_HTTP IP retrieved successfully: $APPMGR_HTTP"
