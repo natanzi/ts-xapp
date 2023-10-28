@@ -60,8 +60,13 @@ Start with root permission and:
    ./ts-xapp.sh
 6. Open the below address in your browser to see the ts-xapp dashboard and grafana:
    ```bash
-   http://localhost:5000/
-   http://localhost:3000/     
+   http://localhost:5001/
+   http://localhost:3000/
+   
+7. To remove the ts-xapp:
+   ```bash
+   chmod +x del-ts-xapp.sh
+   ./del-ts-xapp.sh    
 > **Note:**
 > 
 > ### xApp Re-Deployment & Undeployment
