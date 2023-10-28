@@ -13,6 +13,8 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
+from src import app  # This will run __init__.py in the 'src' directory and initialize the app
+
 # Set up logging
 logging.basicConfig(
     level=logging.DEBUG,  # Change from INFO to DEBUG
