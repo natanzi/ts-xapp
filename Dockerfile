@@ -1,5 +1,4 @@
 # Use the official latest Python image as the base image
-
 # Use the Miniconda3 image as the base image.
 FROM frolvlad/alpine-miniconda3
 
@@ -7,7 +6,7 @@ FROM frolvlad/alpine-miniconda3
 ENV PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64 \
-    ENV RMR_SEED_RT=/app/ts-xapp/init/test_route.rt
+    RMR_SEED_RT=/app/ts-xapp/init/test_route.rt
 
 # Install system dependencies
 RUN apk --no-cache add \
