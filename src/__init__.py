@@ -5,6 +5,7 @@ import sys
 import subprocess
 import logging
 import signal
+from . import init_app
 
 logging.basicConfig(
     level=logging.INFO,
