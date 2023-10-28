@@ -3,7 +3,6 @@ import json
 import os
 import sys
 import subprocess
-import signal
 import logging
 
 logging.basicConfig(
@@ -15,7 +14,8 @@ logging.basicConfig(
     ]
 )
 
-def load_config(config_path):
+def load_config():
+    config_path = os.path.join(os.path.dirname(__file__), '../init/ts-xapp-config-file.json')
     try:
         with open(config_path, 'r') as f:
             config = json.load(f)
@@ -40,8 +40,7 @@ def start_ts_xapp():
     subprocess.run(cmd)
 
 if __name__ == "__main__":
-    config_file = os.getenv("CONFIG_FILE", "init/ts-xapp-config-file.json")
-    config = load_config(config_file)
+    config = load_config()
     
     if set_environment_variables(config):
         logging.info("Environment variables set successfully")
