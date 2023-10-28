@@ -364,7 +364,7 @@ while true; do
         POD_NAME=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[0].metadata.name}')
         
         # Start port-forward in the background
-        kubectl port-forward pod/$POD_NAME 5000:5000 -n ricxapp &
+        kubectl port-forward pod/$POD_NAME 5001:5001 -n ricxapp &
         PORT_FORWARD_PID=$!
         echo "Port forwarding is now running in the background. PID: $PORT_FORWARD_PID"
 
