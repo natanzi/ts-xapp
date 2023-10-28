@@ -1,5 +1,6 @@
 # This is Traffic Steering xApp version 1.0.0 by Milad Natanzi
 #ts-xapp.py
+import json
 import os
 import sys
 import logging
