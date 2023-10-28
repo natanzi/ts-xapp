@@ -65,8 +65,8 @@ Start with root permission and:
    
 7. To remove the ts-xapp:
    ```bash
-   chmod +x del-ts-xapp.sh
-   ./del-ts-xapp.sh    
+   chmod +x del-tsxapp.sh
+   ./del-tsxapp.sh   
 > **Note:**
 > 
 > ### xApp Re-Deployment & Undeployment
