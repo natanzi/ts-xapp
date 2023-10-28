@@ -20,7 +20,7 @@ RUN apk --no-cache add \
 
 # RMR setup
 RUN mkdir -p /app/route_mr/ /app/ts-xapp/init
-COPY ts-xapp/init/test_route.rt /app/ts-xapp/init/test_route.rt
+COPY init/test_route.rt /app/ts-xapp/init/test_route.rt
 
 # copy rmr files from builder image in lieu of an Alpine package
 COPY --from=nexus3.o-ran-sc.org:10002/o-ran-sc/bldr-alpine3-rmr:4.6.0 /usr/local/lib64/librmr* /usr/local/lib64/
