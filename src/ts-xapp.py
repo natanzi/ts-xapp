@@ -3,9 +3,6 @@
 import json
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-from src import load_config, set_environment_variables, start_ts_xapp, terminate_process
-from __init__ import init_app
 import logging
 from flask import Flask, jsonify
 import subprocess
@@ -23,7 +20,7 @@ init_app()
 
 # Set up logging
 logging.basicConfig(
-    level=logging.DEBUG,  # Change from INFO to DEBUG
+    level=logging.DEBUG,
     format='%(asctime)s:%(levelname)s:%(message)s',
     handlers=[
         logging.FileHandler('ts-xapp.log'),
