@@ -3,12 +3,13 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import time
 import requests
 import logging
+
 time.sleep(10)
 
-app = Flask(__name__)
+dashboard_app = Flask(__name__)
 
 # Secret key for flashing messages and session management
-app.secret_key = 'your_secret_key_here'
+dashboard_app.secret_key = 'your_secret_key_here'
 
 # Set up logging
 logging.basicConfig(filename='dashboard.log', level=logging.INFO,
@@ -17,11 +18,11 @@ logging.basicConfig(filename='dashboard.log', level=logging.INFO,
 # The service URL for your ts-xApp in Kubernetes
 TS_XAPP_URL = "http://ts-xapp-service:5000"  
 
-@app.route('/')
+@dashboard_app.route('/')
 def index():
     return render_template('dashboard.html')
 
-@app.route('/trigger/<function_name>', methods=['POST'])
+@dashboard_app.route('/trigger/<function_name>', methods=['POST'])
 def trigger_function(function_name):
     try:
         response = requests.post(f"{TS_XAPP_URL}/{function_name}")
@@ -44,5 +45,4 @@ def trigger_function(function_name):
 
 if __name__ == '__main__':
     logging.info("Dashboard starting...")
-    app.run(host='0.0.0.0', port=5001)  # Adjust port if needed
-
+    dashboard_app.run(host='0.0.0.0', port=5001)  # Adjust port if needed
