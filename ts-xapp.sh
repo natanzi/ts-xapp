@@ -343,6 +343,17 @@ fi
 
 echo "################################################################################################################################"
 
+# Function to cleanup port forwarding on script exit
+function cleanup {
+  echo "Stopping port forwarding..."
+  if [ -n "$PORT_FORWARD_PID" ]; then
+    kill $PORT_FORWARD_PID
+  fi
+}
+
+# Set the trap function for script exit
+trap cleanup EXIT
+
 # Check if the user wants to see the xApp logs
 while true; do
     read -p "Do you see the ricxapp-ts-xapp in the list and want to check its logs? (y/n): " choice
@@ -355,6 +366,7 @@ while true; do
         # Start port-forward in the background
         kubectl port-forward pod/$POD_NAME 5000:5000 -n ricxapp &
         PORT_FORWARD_PID=$!
+        echo "Port forwarding is now running in the background. PID: $PORT_FORWARD_PID"
 
         # Check xApp logs
         if ! sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
@@ -363,6 +375,7 @@ while true; do
         
         # Kill the port-forwarding process after checking the logs
         kill $PORT_FORWARD_PID
+        unset PORT_FORWARD_PID
 
         break ;;
       n|N )
