@@ -44,5 +44,5 @@ def trigger_function(function_name):
 
 if __name__ == '__main__':
     logging.info("Dashboard starting...")
-    app.run(host='0.0.0.0', port=5000)  # Adjust port if needed
+    app.run(host='0.0.0.0', port=5001)  # Adjust port if needed
 
