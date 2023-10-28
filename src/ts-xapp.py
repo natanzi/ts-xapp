@@ -3,6 +3,7 @@
 import json
 import os
 import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import logging
 from flask import Flask, jsonify
 import subprocess
@@ -15,7 +16,7 @@ from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
 
 # Initialize the app and set environment variables
-from src import init_app
+from init_app import init_app
 init_app()
 
 # Set up logging
