@@ -16,7 +16,8 @@ logging.basicConfig(
 
 
 def load_config():
-    config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../init/ts-xapp-config-file.json'))
+    # Use the absolute path to the configuration file
+    config_path = '/app/ts-xapp/init/ts-xapp-config-file.json'
     
     # Print the computed config path to verify it's correct
     print("Config path:", config_path)
