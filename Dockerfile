@@ -37,9 +37,9 @@ RUN pip install --upgrade pip && \
 # Copy the rest of the application code and dependencies into the container
 COPY . .
 
-# Expose the necessary ports
-EXPOSE 8587
-EXPOSE 8588
+# Expose the necessary ports ts-xapp inside influxdb
+EXPOSE 8087
+EXPOSE 8088
 EXPOSE 3000
 # Expose for ts-xapp and its dashboard
 # Port 6000 is related to ts-xapp & Port 5001 is related to ts-xapp's API
