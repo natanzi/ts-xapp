@@ -38,11 +38,11 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # Expose the necessary ports
-EXPOSE 8585
-EXPOSE 8586
+EXPOSE 8587
+EXPOSE 8588
 EXPOSE 3000
 # Expose for ts-xapp and its dashboard
-# Port 6000 is related to ts-xapp & Port 5000 is related to ts-xapp's API
+# Port 6000 is related to ts-xapp & Port 5001 is related to ts-xapp's API
 # Port 5001 is related to ts-xapp's dashboard
 EXPOSE 6000
 EXPOSE 5000
