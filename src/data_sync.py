@@ -6,22 +6,36 @@ import logging
 
 class DATABASE(object):
     def __init__(self, dbname, host='localhost', port='8086'):
+        self.dbname = dbname  # Define the database name as an instance variable
         self.data = None
         self.client = DataFrameClient(host, port, dbname)
-
+    
     def create_database(self):
-        self.client.create_database(self.dbname)
-
+        # Check if the database exists before trying to create it
+        if not {'name': self.dbname} in self.client.get_list_database():
+            self.client.create_database(self.dbname)
+            logging.info(f"Database {self.dbname} created.")
+        else:
+            logging.info(f"Database {self.dbname} already exists.")
+    
     def read_data(self, meas, limit=1):
         self.client.switch_database('kpimon')
-        result = self.client.query('select * from ' + meas + ' limit ' + str(limit))
-        if len(result[meas]) != 0:
+        query = f'SELECT * FROM {meas} LIMIT {limit}'
+        result = self.client.query(query)
+        if meas in result and not result[meas].empty:
             self.data = result[meas]
         else:
-            raise Exception('Data not found for ' + meas + ' vnf')
+            logging.warning(f'Data not found for {meas}. No data will be synchronized.')
+            self.data = pd.DataFrame()  # Return an empty DataFrame
 
     def write_data(self, df, meas='actions'):
-        self.client.write_points(df, meas)
+        if not df.empty:
+            self.client.switch_database(self.dbname)  # Ensure you are writing to the correct database
+            self.client.write_points(df, meas)
+            logging.info(f"Data written to measurement {meas} in database {self.dbname}.")
+        else:
+            logging.info("No data to write.")
+
 
 def sync_kpimon_data():
     try:
