@@ -342,6 +342,39 @@ else
 fi
 
 echo "################################################################################################################################"
+echo "# Connecting ts-xapp to Docker Network and Running with Exposed Ports                                                          #"
+echo "################################################################################################################################"
+
+# Check if the Docker network exists, if not, create it
+DOCKER_NETWORK_EXISTS=$(docker network ls | grep "my_network")
+if [ -z "$DOCKER_NETWORK_EXISTS" ]; then
+    echo "Creating Docker network 'my_network'..."
+    docker network create my_network
+    echo "Docker network 'my_network' created successfully."
+else
+    echo "Docker network 'my_network' already exists. Proceeding to the next steps..."
+fi
+
+# Check if ts-xapp container is already running
+TS_XAPP_RUNNING=$(docker ps | grep "ts-xapp")
+if [ -n "$TS_XAPP_RUNNING" ]; then
+    echo "ts-xapp container is already running. Stopping and removing the container to apply new settings..."
+    docker stop ts-xapp
+    docker rm ts-xapp
+    echo "ts-xapp container stopped and removed successfully."
+fi
+
+# Run ts-xapp container with the exposed InfluxDB port
+echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
+docker run -d --name ts-xapp -p 8087:8087 -p 8086:8086 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
+echo "ts-xapp container is up and running with exposed ports."
+
+# Connect ts-xapp to Docker network (if not already connected)
+echo "Connecting ts-xapp container to 'my_network' Docker network..."
+docker network connect my_network ts-xapp
+echo "ts-xapp container is now connected to 'my_network' Docker network."
+
+echo "################################################################################################################################"
 
 # Function to cleanup port forwarding on script exit
 function cleanup {
@@ -385,5 +418,3 @@ while true; do
         echo "Invalid input, please enter 'y' for yes or 'n' for no."
     esac
 done
-
-# To ensure successful deployment, you should see the expected logs without any error messages, and the status of the pods should be 'Running'.
