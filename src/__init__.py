@@ -17,6 +17,15 @@ logging.basicConfig(
 
 def load_config():
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../init/ts-xapp-config-file.json'))
+    
+    # Print the computed config path to verify it's correct
+    print("Config path:", config_path)
+    
+    # Check if the config file exists at the specified path
+    if not os.path.exists(config_path):
+        logging.error(f"Config file does not exist at {config_path}")
+        sys.exit(1)
+
     try:
         with open(config_path, 'r') as f:
             config = json.load(f)
