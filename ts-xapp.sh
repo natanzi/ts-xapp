@@ -25,7 +25,24 @@ cat << 'EOF'
 #   limitations under the License.                                             #
 ################################################################################
 EOF
-
+################################################################################
+create_docker_network() {
+    local network_name="$1"
+    
+    # Check if the Docker network already exists
+    DOCKER_NETWORK_EXISTS=$(docker network ls | grep "$network_name")
+    
+    if [ -z "$DOCKER_NETWORK_EXISTS" ]; then
+        echo "Creating Docker network '$network_name'..."
+        docker network create "$network_name"
+        echo "Docker network '$network_name' created successfully."
+    else
+        echo "Docker network '$network_name' already exists. Proceeding to the next steps..."
+    fi
+}
+#################################################################################
+create_docker_network "my_network"
+#################################################################################
 # Function to check if the script encounters any issues and prompts the user to continue or exit
 function check_continue() {
     read -p "An issue occurred. Do you want to continue? (y/n): " choice
@@ -316,12 +333,6 @@ if [ "$DOCKER_RUNNING" != "active" ]; then
     exit 1
 fi
 
-# Create a custom Docker network (if not already created at the beginning of the script)
-DOCKER_NETWORK_EXISTS=$(docker network ls | grep "my_network")
-if [ -z "$DOCKER_NETWORK_EXISTS" ]; then
-    docker network create my_network
-fi
-
 # Pull and run Grafana container
 GRAFANA_CONTAINER_EXISTS=$(docker ps -a | grep "grafana")
 if [ -z "$GRAFANA_CONTAINER_EXISTS" ]; then
@@ -345,29 +356,16 @@ echo "##########################################################################
 echo "# Connecting ts-xapp to Docker Network and Running with Exposed Ports                                                          #"
 echo "################################################################################################################################"
 
-# Check if the Docker network exists, if not, create it
-DOCKER_NETWORK_EXISTS=$(docker network ls | grep "my_network")
-if [ -z "$DOCKER_NETWORK_EXISTS" ]; then
-    echo "Creating Docker network 'my_network'..."
-    docker network create my_network
-    echo "Docker network 'my_network' created successfully."
-else
-    echo "Docker network 'my_network' already exists. Proceeding to the next steps..."
-fi
-
 # Check if ts-xapp container is already running
 TS_XAPP_RUNNING=$(docker ps | grep "ts-xapp")
 if [ -n "$TS_XAPP_RUNNING" ]; then
-    echo "ts-xapp container is already running. Stopping and removing the container to apply new settings..."
-    docker stop ts-xapp
-    docker rm ts-xapp
-    echo "ts-xapp container stopped and removed successfully."
+    echo "ts-xapp container is already running. Skipping stopping and removing the container."
+else
+    # Run ts-xapp container with the exposed InfluxDB port
+    echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
+    docker run -d --name ts-xapp -p 8087:8087 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
+    echo "ts-xapp container is up and running with exposed ports."
 fi
-
-# Run ts-xapp container with the exposed InfluxDB port
-echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
-docker run -d --name ts-xapp -p 8087:8087 -p 8086:8086 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
-echo "ts-xapp container is up and running with exposed ports."
 
 # Connect ts-xapp to Docker network (if not already connected)
 echo "Connecting ts-xapp container to 'my_network' Docker network..."
@@ -375,6 +373,16 @@ docker network connect my_network ts-xapp
 echo "ts-xapp container is now connected to 'my_network' Docker network."
 
 echo "################################################################################################################################"
+
+# List all running containers along with their network connections
+echo "Listing all running containers with their network connections:"
+docker ps --format 'table {{.Names}}\t{{.Networks}}'
+
+# Inspect the specific Docker network
+echo "Inspecting 'my_network' Docker network:"
+docker network inspect my_network
+echo "################################################################################################################################"
+
 
 # Function to cleanup port forwarding on script exit
 function cleanup {
