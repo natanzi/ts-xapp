@@ -55,7 +55,11 @@ check_status "Failed to delete Docker image" "Docker image deleted successfully"
 # Remove Kubernetes resources associated with the xApp
 echo "Removing Kubernetes resources associated with the xApp..."
 for resource in pods services deployments; do
-    kubectl delete $resource -n ricxapp -l app=ricxapp-ts-xapp
+    if [ "$resource" == "pods" ]; then
+        kubectl delete $resource -n ricxapp -l app=ricxapp-ts-xapp --force --grace-period=0
+    else
+        kubectl delete $resource -n ricxapp -l app=ricxapp-ts-xapp
+    fi
 done
 check_status "Failed to remove Kubernetes resources" "Kubernetes resources removed successfully"
 
