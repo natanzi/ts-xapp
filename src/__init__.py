@@ -6,13 +6,14 @@ import subprocess
 import logging
 import signal
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.INFO,  # You can set this to DEBUG for more verbose output
     format='%(asctime)s:%(levelname)s:%(message)s',
     handlers=[
         logging.FileHandler('init-ts-xapp.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
+
 
 def load_config():
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../init/ts-xapp-config-file.json'))
