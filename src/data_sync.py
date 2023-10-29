@@ -5,7 +5,7 @@ import pandas as pd
 import logging
 
 class DATABASE(object):
-    def __init__(self, dbname, host='localhost', port='8086'):
+    def __init__(self, dbname, host='localhost', port='8087'):
         self.dbname = dbname  # Define the database name as an instance variable
         self.data = None
         self.client = DataFrameClient(host, port, dbname)
@@ -42,7 +42,7 @@ def sync_kpimon_data():
         # Specify your InfluxDB settings
         dbname = 'ts-xapp_influxdb'  # Replace with your desired database name
         host = 'influxdb-host'  # Replace with your InfluxDB host
-        port = '8086'
+        port = '8087'
 
         # Create an instance of the DATABASE class
         db = DATABASE(dbname, host, port)
