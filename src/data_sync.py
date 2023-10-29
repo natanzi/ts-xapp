@@ -38,13 +38,13 @@ def sync_kpimon_data():
 
         # Read data from kpimon xApp
         db.read_data("ricIndication_UeMetrics")
-        ue_data_kpimon = db.data.values.tolist()
-
-        # Create a DataFrame from the data
-        df = pd.DataFrame(ue_data_kpimon)
-
-        # Write the data to your InfluxDB
-        db.write_data(df, 'my_measurement')
+        ue_data_kpimon = db.data
+        
+        if not ue_data_kpimon.empty:
+            # Write the data to your InfluxDB
+            db.write_data(ue_data_kpimon, 'my_measurement')
+        else:
+            logging.info("No data received from KPImon. No data will be written to InfluxDB.")
 
         logging.info("Data synchronization with kpimon successful")
     except Exception as e:
