@@ -27,8 +27,25 @@ cleanup() {
   fi
 }
 
+# Function to free up a specified port
+free_up_port() {
+    local port=$1
+    echo "Checking if port $port is in use..."
+    local pid=$(sudo lsof -t -i:$port)
+    if [ -n "$pid" ]; then
+        echo "Port $port is in use by process $pid. Attempting to free up..."
+        sudo kill -9 $pid
+        check_status "Failed to free up port $port" "Port $port freed up successfully"
+    else
+        echo "Port $port is not in use."
+    fi
+}
+
 # Set the trap function for script exit
 trap cleanup EXIT
+
+# Free up ports used by the xApp (if necessary)
+free_up_port 5001
 
 # Retrieve the IP addresses of necessary services
 export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
