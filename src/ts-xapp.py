@@ -14,6 +14,7 @@ import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
+from data_sync import sync_kpimon_data
 
 # Initialize the app and set environment variables
 from init_app import init_app
@@ -42,6 +43,16 @@ subscription_manager = SubscriptionManager(uri=subscription_manager_uri, local_a
 default_handler.set_subscription_manager(subscription_manager)
 
 ts_app = Flask(__name__)
+
+@ts_app.route('/sync_kpimon', methods=['POST'])
+def run_sync_kpimon_data():
+    try:
+        sync_kpimon_data()
+        logging.info("Data synchronization with KPImon initiated successfully")
+        return jsonify(message="Data synchronization with KPImon initiated successfully")
+    except Exception as e:
+        logging.error(f"Error syncing data with KPImon: {str(e)}")
+        return jsonify(message=f"Error: {str(e)}"), 500
 
 @ts_app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
