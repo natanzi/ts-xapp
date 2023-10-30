@@ -353,7 +353,7 @@ else
 fi
 
 echo "################################################################################################################################"
-echo "# Connecting ts-xapp to Docker Network and Running with Exposed Ports                                                          #"
+echo "# Connecting ts-xapp to Docker Network and Running with Exposed Ports"
 echo "################################################################################################################################"
 
 # Check if ts-xapp container is already running
@@ -382,15 +382,23 @@ else
     fi
 fi
 
-# Connect ts-xapp to Docker network (if not already connected)
-echo "Connecting ts-xapp container to 'my_network' Docker network..."
-docker network connect my_network ts-xapp
-echo "ts-xapp container is now connected to 'my_network' Docker network."
+# Check if ts-xapp container exists
+if docker ps -a | grep -q "ts-xapp"; then
+    # Check if ts-xapp is already connected to 'my_network'
+    if docker network inspect my_network | grep -q "ts-xapp"; then
+        echo "ts-xapp container is already connected to 'my_network'."
+    else
+        # Connect ts-xapp to Docker network (if not already connected)
+        echo "Connecting ts-xapp container to 'my_network' Docker network..."
+        docker network connect my_network ts-xapp
+        echo "ts-xapp container is now connected to 'my_network' Docker network."
+    fi
+else
+    echo "Error: ts-xapp container does not exist."
+    exit 1
+fi
 
 echo "################################################################################################################################"
-# ... rest of the script
-
-
 # List all running containers along with their network connections
 echo "Listing all running containers with their network connections:"
 docker ps --format 'table {{.Names}}\t{{.Networks}}'
