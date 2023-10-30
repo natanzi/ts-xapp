@@ -30,7 +30,7 @@ setup(
         "influxdb-client",
         "flask"
     ],
-    python_requires='==3.12',  
+    python_requires='==3.11',  
     entry_points={
         "console_scripts": [
             "ts-xapp=src.ts-xapp:main",  # This tells setuptools to create a script that runs src.ts_xApp.main()
