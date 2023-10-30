@@ -132,5 +132,12 @@ if __name__ == "__main__":
     ts_app.logger.addHandler(handler)
     ts_app.logger.setLevel(logging.DEBUG)
 
+    # Initiate data synchronization from KPImon
+    try:
+        sync_kpimon_data()
+        logging.info("Data synchronization from KPImon initiated successfully")
+    except Exception as e:
+        logging.error(f"Error initiating data synchronization from KPImon: {str(e)}")
+
     # Start the Flask app
     ts_app.run(host='0.0.0.0', port=5000)  # go to http://127.0.0.1:5001 in your browser
