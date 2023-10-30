@@ -90,7 +90,7 @@ def run_sdl_health_check():
         return jsonify(message=f"Error: {str(e)}"), 500
         
 a1_health_check = A1HealthCheck(rmr_xapp)
-@ts_app.route('/a1_health_check', methods=['GET'])
+@ts_app.route('/a1_health_check', methods=['POST'])
 def run_a1_health_check():
     print("A1 health check endpoint called")
     try:
