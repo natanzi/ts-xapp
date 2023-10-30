@@ -38,6 +38,7 @@ class DATABASE(object):
 
 
 def sync_kpimon_data():
+    print("sync_kpimon_data endpoint called")
     try:
         # Specify your InfluxDB settings
         dbname = 'ts-xapp_influxdb'  # Replace with your desired database name
