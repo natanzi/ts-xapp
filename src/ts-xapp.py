@@ -17,7 +17,7 @@ from e2_health_check import e2_health_check
 from traffic_steering import traffic_steering
 from data_sync import sync_kpimon_data
 from .handler.A1PolicyHandler import A1PolicyHandler
-from src.A1PolicyHandler import A1PolicyHandler
+from src.handler.A1PolicyHandler import A1PolicyHandler
 from manager.A1PolicyManager import A1PolicyManager
 from A1_health_check import A1HealthCheck
 from constants import Constants
