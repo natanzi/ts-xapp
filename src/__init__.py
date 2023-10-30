@@ -13,7 +13,7 @@ logging.basicConfig(
         logging.StreamHandler(sys.stdout)
     ]
 )
-
+print("Running __init__.py")
 def load_config():
     # Use the absolute path to the configuration file
     config_path = '/app/ts-xapp/init/ts-xapp-config-file.json'
