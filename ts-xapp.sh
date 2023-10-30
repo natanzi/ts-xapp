@@ -363,7 +363,7 @@ if [ -n "$TS_XAPP_RUNNING" ]; then
 else
     # Run ts-xapp container with the exposed InfluxDB port
     echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
-    docker run -d --name ts-xapp -p 8087:8087 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
+    docker run -d --name ts-xapp -p 8086:8086 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
     echo "ts-xapp container is up and running with exposed ports."
 fi
 
