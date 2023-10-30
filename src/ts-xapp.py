@@ -17,6 +17,7 @@ from traffic_steering import traffic_steering
 from data_sync import sync_kpimon_data
 from src.handler.A1PolicyHandler import A1PolicyHandler
 from src.manager.A1PolicyManager import A1PolicyManager
+from A1_health_check import A1HealthCheck
 from constants import Constants
 
 # Initialize the app and set environment variables
@@ -88,11 +89,12 @@ def run_sdl_health_check():
         logging.error(f"Error executing SDL Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
         
+a1_health_check = A1HealthCheck(rmr_xapp)
 @ts_app.route('/a1_health_check', methods=['GET'])
 def run_a1_health_check():
     print("A1 health check endpoint called")
     try:
-        message = a1_health_check_handler.handle_health_check()
+        message = a1_health_check.perform_health_check()
         logging.info(message)
         return jsonify(message=message)
     except Exception as e:
