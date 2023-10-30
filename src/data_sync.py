@@ -42,7 +42,7 @@ def sync_kpimon_data():
     try:
         # Specify your InfluxDB settings
         dbname = 'ts-xapp_influxdb'  # Replace with your desired database name
-        host = 'ricplt-influxdb.ricplt'  # Replace with your InfluxDB host
+        host = 'ricplt-influxdb.ricplt.svc.cluster.local'  # Updated to use the full DNS name within the Kubernetes cluster
         port = '8086'
 
         # Create an instance of the DATABASE class
