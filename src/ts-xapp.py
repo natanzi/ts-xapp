@@ -110,9 +110,27 @@ signal.signal(signal.SIGINT, terminate_process)
 signal.signal(signal.SIGTERM, terminate_process)
 
 if __name__ == "__main__":
+    # Configure logging
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s:%(levelname)s:%(message)s',
+        handlers=[
+            logging.FileHandler('ts-xapp.log'),
+            logging.StreamHandler(sys.stdout)
+        ]
+    )
+
+    # Log a startup message
     logging.info("ts-xApp starting...")
 
     # Initialize subscriptions
     subscription_manager.initialize_subscriptions()
 
+    # Attach handlers to Flask's logger if needed
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setLevel(logging.DEBUG)
+    ts_app.logger.addHandler(handler)
+    ts_app.logger.setLevel(logging.DEBUG)
+
+    # Start the Flask app
     ts_app.run(host='0.0.0.0', port=5000)  # go to http://127.0.0.1:5000 in your browser
