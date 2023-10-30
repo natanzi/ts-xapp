@@ -15,6 +15,8 @@ from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
 from traffic_steering import traffic_steering
 from data_sync import sync_kpimon_data
+from src.handler.A1PolicyHandler import A1PolicyHandler
+from src.manager.A1PolicyManager import A1PolicyManager
 
 # Initialize the app and set environment variables
 from init_app import init_app
@@ -32,6 +34,12 @@ logging.basicConfig(
 
 # Create an RMR xApp instance
 rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=int(os.environ.get("RMR_PORT", 4560)))
+# Initialize A1PolicyManager and A1PolicyHandler
+a1_policy_manager = A1PolicyManager(rmr_xapp)
+a1_policy_handler = A1PolicyHandler(rmr_xapp, msgtype)
+
+# Startup A1PolicyManager
+a1_policy_manager.startup()
 
 # Provide the correct URI for the Subscription Manager
 subscription_manager_uri = "http://10.244.0.18:3800/"
@@ -110,16 +118,6 @@ signal.signal(signal.SIGINT, terminate_process)
 signal.signal(signal.SIGTERM, terminate_process)
 
 if __name__ == "__main__":
-    # Configure logging
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s:%(levelname)s:%(message)s',
-        handlers=[
-            logging.FileHandler('ts-xapp.log'),
-            logging.StreamHandler(sys.stdout)
-        ]
-    )
-
     # Log a startup message
     logging.info("ts-xApp starting...")
 
