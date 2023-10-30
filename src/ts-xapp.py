@@ -13,6 +13,7 @@ from subscription_manager import SubscriptionManager
 import default_handler
 from rmr_health_check import rmr_health_check
 from sdl_health_check import sdl_health_check
+from e2_health_check import e2_health_check
 from traffic_steering import traffic_steering
 from data_sync import sync_kpimon_data
 from src.handler.A1PolicyHandler import A1PolicyHandler
@@ -90,14 +91,14 @@ def run_sdl_health_check():
         return jsonify(message=f"Error: {str(e)}"), 500
         
 @ts_app.route('/e2_health_check', methods=['POST'])
-def run_sdl_health_check():
-    print("e2_check endpoint called")
+def run_e2_health_check():
+    print("E2 health check endpoint called")
     try:
         message = e2_health_check()
         logging.info(message)
         return jsonify(message=message)
     except Exception as e:
-        logging.error(f"Error executing e2 Health Check: {str(e)}")
+        logging.error(f"Error executing E2 Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500        
         
 a1_health_check = A1HealthCheck(rmr_xapp)
