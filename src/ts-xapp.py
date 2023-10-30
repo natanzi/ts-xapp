@@ -46,6 +46,7 @@ ts_app = Flask(__name__)
 
 @ts_app.route('/sync_kpimon', methods=['POST'])
 def run_sync_kpimon_data():
+    print("Sync KPI Mon Data endpoint called")
     try:
         sync_kpimon_data()
         logging.info("Data synchronization with KPImon initiated successfully")
@@ -56,6 +57,7 @@ def run_sync_kpimon_data():
 
 @ts_app.route('/rmr_health_check', methods=['POST'])
 def run_rmr_health_check():
+    print("rmr_health_check endpoint called")
     try:
         message = rmr_health_check(rmr_xapp)
         logging.info(message)
@@ -66,6 +68,7 @@ def run_rmr_health_check():
 
 @ts_app.route('/sdl_health_check', methods=['POST'])
 def run_sdl_health_check():
+    print("sdl_health_check endpoint called")
     try:
         message = sdl_health_check()
         logging.info(message)
@@ -76,6 +79,7 @@ def run_sdl_health_check():
 
 @ts_app.route('/traffic_steering', methods=['POST'])
 def run_traffic_steering():
+    print("traffic_steering endpoint called")
     try:
         message = traffic_steering()
         logging.info(message)
