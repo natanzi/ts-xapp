@@ -42,7 +42,7 @@ def sync_kpimon_data():
     try:
         # Specify your InfluxDB settings
         dbname = 'ts-xapp_influxdb'  # Replace with your desired database name
-        host = 'influxdb-host'  # Replace with your InfluxDB host
+        host = 'ricplt-influxdb.ricplt'  # Replace with your InfluxDB host
         port = '8086'
 
         # Create an instance of the DATABASE class
