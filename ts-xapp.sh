@@ -364,7 +364,22 @@ else
     # Run ts-xapp container with the exposed InfluxDB port
     echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
     docker run -d --name ts-xapp -p 8086:8086 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0
-    echo "ts-xapp container is up and running with exposed ports."
+    echo "ts-xapp container is starting..."
+
+    # Wait for the ts-xapp container to be in the running state
+    echo "Waiting for ts-xapp container to be in the running state..."
+    for i in {1..10}; do
+        if docker ps | grep -q "ts-xapp"; then
+            echo "ts-xapp container is now running."
+            break
+        fi
+        sleep 1
+    done
+    
+    if ! docker ps | grep -q "ts-xapp"; then
+        echo "Error: ts-xapp container did not start successfully."
+        exit 1
+    fi
 fi
 
 # Connect ts-xapp to Docker network (if not already connected)
@@ -373,6 +388,8 @@ docker network connect my_network ts-xapp
 echo "ts-xapp container is now connected to 'my_network' Docker network."
 
 echo "################################################################################################################################"
+# ... rest of the script
+
 
 # List all running containers along with their network connections
 echo "Listing all running containers with their network connections:"
