@@ -35,10 +35,10 @@ logging.basicConfig(
 
 # Create an RMR xApp instance
 rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=int(os.environ.get("RMR_PORT", 4560)))
+
 # Initialize A1PolicyManager and A1PolicyHandler
 a1_policy_manager = A1PolicyManager(rmr_xapp)
-a1_policy_handler = A1PolicyHandler(rmr_xapp, msgtype)
-
+a1_policy_handler = A1PolicyHandler(rmr_xapp, Constants.A1_POLICY_REQ)
 # Startup A1PolicyManager
 a1_policy_manager.startup()
 
