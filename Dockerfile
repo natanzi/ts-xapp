@@ -37,9 +37,8 @@ RUN pip install --upgrade pip && \
 # Copy the rest of the application code and dependencies into the container
 COPY . .
 
-# Expose the necessary ports ts-xapp inside influxdb
-EXPOSE 8087
-EXPOSE 8088
+# Expose the necessary ports influxdb and grafana
+EXPOSE 8086
 EXPOSE 3000
 # Expose for ts-xapp and its dashboard
 # Port 6000 is related to ts-xapp & Port 5001 is related to ts-xapp's API
