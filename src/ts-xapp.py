@@ -39,6 +39,8 @@ rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=int(os.environ.
 # Initialize A1PolicyManager and A1PolicyHandler
 a1_policy_manager = A1PolicyManager(rmr_xapp)
 a1_policy_handler = A1PolicyHandler(rmr_xapp, Constants.A1_POLICY_REQ)
+# Initialize the A1 health check handler
+a1_health_check_handler = A1HealthCheckHandler(rmr_xapp)
 # Startup A1PolicyManager
 a1_policy_manager.startup()
 
@@ -85,6 +87,18 @@ def run_sdl_health_check():
     except Exception as e:
         logging.error(f"Error executing SDL Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
+        
+@ts_app.route('/a1_health_check', methods=['GET'])
+def run_a1_health_check():
+    print("A1 health check endpoint called")
+    try:
+        message = a1_health_check_handler.handle_health_check()
+        logging.info(message)
+        return jsonify(message=message)
+    except Exception as e:
+        logging.error(f"Error executing A1 Health Check: {str(e)}")
+        return jsonify(message=f"Error: {str(e)}"), 500
+
 
 @ts_app.route('/traffic_steering', methods=['POST'])
 def run_traffic_steering():
