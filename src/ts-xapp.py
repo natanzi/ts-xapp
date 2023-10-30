@@ -89,6 +89,17 @@ def run_sdl_health_check():
         logging.error(f"Error executing SDL Health Check: {str(e)}")
         return jsonify(message=f"Error: {str(e)}"), 500
         
+@ts_app.route('/e2_health_check', methods=['POST'])
+def run_sdl_health_check():
+    print("e2_check endpoint called")
+    try:
+        message = e2_health_check()
+        logging.info(message)
+        return jsonify(message=message)
+    except Exception as e:
+        logging.error(f"Error executing e2 Health Check: {str(e)}")
+        return jsonify(message=f"Error: {str(e)}"), 500        
+        
 a1_health_check = A1HealthCheck(rmr_xapp)
 @ts_app.route('/a1_health_check', methods=['POST'])
 def run_a1_health_check():
