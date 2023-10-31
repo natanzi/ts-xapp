@@ -5,7 +5,7 @@
 #####################################################################################################################################################################
 import logging
 from ricxappframe.xapp_frame import RMRXapp
-from constants import Constants
+A1_helath_check import A1HealthCheck
 
 class A1HealthCheck:
     def __init__(self, rmr_xapp: RMRXapp):
