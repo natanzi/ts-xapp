@@ -390,12 +390,18 @@ else
 fi
 
 # Additional check to ensure ts-xapp is connected to my_network
-if ! docker network inspect my_network | grep -q "ts-xapp"; then
-    echo "Error: ts-xapp container is not connected to 'my_network'."
-    exit 1
-else
-    echo "ts-xapp container is confirmed to be connected to 'my_network'."
-fi
+for i in {1..5}; do
+    if docker network inspect my_network | grep -q "ts-xapp"; then
+        echo "ts-xapp container is confirmed to be connected to 'my_network'."
+        exit 0
+    else
+        echo "Waiting for ts-xapp container to connect to 'my_network'..."
+        sleep 2
+    fi
+done
+
+echo "Error: ts-xapp container is not connected to 'my_network'."
+exit 1
 
 echo "################################################################################################################################"
 
