@@ -1,44 +1,41 @@
 #A1PolicyHandler.py
+from ricxappframe.xapp_frame import RMRXapp
 import json
 import logging
-from ricxappframe.xapp_frame import RMRXapp
-import rmr
-from constants import Constants
-
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 class A1PolicyHandler:
-    def __init__(self, rmr_xapp: RMRXapp, msgtype):
+    def __init__(self, rmr_xapp: RMRXapp):
         self._rmr_xapp = rmr_xapp
-        self.msgtype = msgtype
-        logger.info(f"A1PolicyHandler initialized with msgtype: {msgtype}")
+        self.logger = logging.getLogger(__name__)
 
     def request_handler(self, summary, sbuf):
         self._rmr_xapp.rmr_free(sbuf)
         try:
-            req = json.loads(summary[rmr.RMR_MS_PAYLOAD])  # input should be a json encoded as bytes
-            logger.debug("A1PolicyHandler.resp_handler:: Handler processing request")
+            req = json.loads(summary['payload'])  # input should be a json encoded as bytes
+            self.logger.debug("A1PolicyHandler.request_handler:: Handler processing request")
         except (json.decoder.JSONDecodeError, KeyError):
-            logger.error("A1PolicyManager.resp_handler:: Handler failed to parse request")
+            self.logger.error("A1PolicyHandler.request_handler:: Handler failed to parse request")
             return
 
         if self.verifyPolicy(req):
-            logger.info("A1PolicyHandler.resp_handler:: Handler processed request: {}".format(req))
+            self.logger.info("A1PolicyHandler.request_handler:: Handler processed request: {}".format(req))
         else:
-            logger.error("A1PolicyHandler.resp_handler:: Request verification failed: {}".format(req))
+            self.logger.error("A1PolicyHandler.request_handler:: Request verification failed: {}".format(req))
             return
-        logger.debug("A1PolicyHandler.resp_handler:: Request verification success: {}".format(req))
+        self.logger.debug("A1PolicyHandler.request_handler:: Request verification success: {}".format(req))
 
         resp = self.buildPolicyResp(req)
-        self._rmr_xapp.rmr_send(json.dumps(resp).encode(), Constants.A1_POLICY_RESP)
-        logger.info("A1PolicyHandler.resp_handler:: Response sent: {}".format(resp))
+        self._rmr_xapp.rmr_send(json.dumps(resp).encode(), your_message_type)
+        self.logger.info("A1PolicyHandler.request_handler:: Response sent: {}".format(resp))
 
-    def verifyPolicy(self, req):
-        # Implement your policy verification logic here
+    def verifyPolicy(self, req: dict):
+        for i in ["policy_type_id", "operation", "policy_instance_id"]:
+            if i not in req:
+                return False
         return True
 
-    def buildPolicyResp(self, req):
-        # Implement your policy response building logic here
-        return {}
+    def buildPolicyResp(self, req: dict):
+        req["handler_id"] = self._rmr_xapp.config["xapp_name"]
+        del req["operation"]
+        req["status"] = "OK"
+        return req
