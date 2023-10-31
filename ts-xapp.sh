@@ -390,7 +390,7 @@ else
 fi
 
 # Additional check to ensure ts-xapp is connected to my_network
-for i in {1..15}; do
+for i in {1..20}; do
     if docker network inspect my_network | grep -q "ts-xapp"; then
         echo "ts-xapp container is confirmed to be connected to 'my_network'."
         exit 0
