@@ -42,7 +42,7 @@ rmr_xapp = RMRXapp(default_handler.default_rmr_handler, rmr_port=int(os.environ.
 a1_policy_manager = A1PolicyManager(rmr_xapp)
 a1_policy_handler = A1PolicyHandler(rmr_xapp, Constants.A1_POLICY_REQ)
 # Initialize the A1 health check handler
-a1_health_check_handler = A1HealthCheckHandler(rmr_xapp)
+a1_health_check_handler = A1HealthCheck(rmr_xapp)
 # Startup A1PolicyManager
 a1_policy_manager.startup()
 
