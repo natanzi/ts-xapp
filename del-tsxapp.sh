@@ -33,13 +33,39 @@ free_up_port() {
     echo "Checking if port $port is in use..."
     local pid=$(sudo lsof -t -i:$port)
     if [ -n "$pid" ]; then
-        echo "Port $port is in use by process $pid. Attempting to free up..."
-        sudo kill -9 $pid
-        check_status "Failed to free up port $port" "Port $port freed up successfully"
+        local process_name=$(ps -p $pid -o comm=)
+        echo "Port $port is in use by process $pid ($process_name). Attempting to free up..."
+        
+        # Optional: Ask for user confirmation
+        read -p "Do you want to terminate process $pid ($process_name) using port $port? (y/n) " confirm
+        if [ "$confirm" != "y" ]; then
+            echo "User aborted the operation."
+            exit 1
+        fi
+
+        # Send a SIGTERM signal first
+        sudo kill $pid
+        sleep 2
+
+        # Check if the process is still running, and if so, force kill
+        if ps -p $pid > /dev/null; then
+            echo "Process did not terminate gracefully. Force killing..."
+            sudo kill -9 $pid
+        fi
+
+        # Wait a moment and check if the port is freed up
+        sleep 1
+        if sudo lsof -t -i:$port > /dev/null; then
+            echo "Failed to free up port $port"
+            exit 1
+        else
+            echo "Port $port freed up successfully"
+        fi
     else
         echo "Port $port is not in use."
     fi
 }
+
 
 # Set the trap function for script exit
 trap cleanup EXIT
