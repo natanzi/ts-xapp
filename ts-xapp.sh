@@ -366,6 +366,7 @@ if [ -n "$TS_XAPP_RUNNING" ]; then
         echo "Connecting ts-xapp container to 'my_network' Docker network..."
         docker network connect my_network ts-xapp
         echo "ts-xapp container is now connected to 'my_network' Docker network."
+        sleep 5  # Wait for Docker to update its internal state
     fi
 else
     # Run ts-xapp container with the exposed InfluxDB port
@@ -397,6 +398,7 @@ else
 fi
 
 echo "################################################################################################################################"
+
 
 
 # List all running containers along with their network connections
