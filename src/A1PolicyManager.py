@@ -1,6 +1,8 @@
 #A1PolicyManager.py
+import logging
 from ricxappframe.xapp_frame import RMRXapp
 from constants import Constants
+
 class A1PolicyManager:
     def __init__(self, rmr_xapp: RMRXapp):
         self._rmr_xapp = rmr_xapp
