@@ -25,7 +25,7 @@ class A1PolicyHandler:
         self.logger.debug("A1PolicyHandler.request_handler:: Request verification success: {}".format(req))
 
         resp = self.buildPolicyResp(req)
-        self._rmr_xapp.rmr_send(json.dumps(resp).encode(), your_message_type)
+        self._rmr_xapp.rmr_send(json.dumps(resp).encode(), Constants.A1_POLICY_RESP)
         self.logger.info("A1PolicyHandler.request_handler:: Response sent: {}".format(resp))
 
     def verifyPolicy(self, req: dict):
