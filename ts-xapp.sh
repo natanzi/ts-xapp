@@ -352,70 +352,25 @@ else
     echo "Grafana is up and running at http://localhost:3000"
 fi
 
-echo "################################################################################################################################"
-echo "# Connecting ts-xapp to Docker Network and Running with Exposed Ports"
+cho "################################################################################################################################"
+echo "# Verifying ts-xapp is Running"
 echo "################################################################################################################################"
 
-# Check if ts-xapp container is already running
-TS_XAPP_RUNNING=$(docker ps | grep "ts-xapp")
-if [ -n "$TS_XAPP_RUNNING" ]; then
-    echo "ts-xapp container is already running. Checking if it is connected to 'my_network'..."
-    
-    if ! docker network inspect my_network | grep -q "ts-xapp"; then
-        # Connect ts-xapp to Docker network (if not already connected)
-        echo "Connecting ts-xapp container to 'my_network' Docker network..."
-        docker network connect my_network ts-xapp
-        echo "ts-xapp container is now connected to 'my_network' Docker network."
-        sleep 5  # Wait for Docker to update its internal state
-    fi
+# Check if ts-xapp pod is running in Kubernetes
+TS_XAPP_RUNNING=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[*].status.phase}')
+if [[ "$TS_XAPP_RUNNING" == "Running" ]]; then
+    echo "ts-xapp pod is running."
 else
-    # Run ts-xapp container with the exposed InfluxDB port
-    echo "Running ts-xapp container with exposed ports for InfluxDB and connecting it to 'my_network'..."
-    docker run -d --name ts-xapp -p 8086:8086 --network my_network xApp-registry.local:5008/ts-xapp:1.0.0 && echo "Container started successfully" || echo "Failed to start container"
-    
-    # Wait for the ts-xapp container to be in the running state
-    echo "Waiting for ts-xapp container to be in the running state..."
-    for i in {1..30}; do
-        if docker ps | grep -q "ts-xapp"; then
-            echo "ts-xapp container is now running."
-            break
-        fi
-        sleep 1
-    done
-    
-    if ! docker ps | grep -q "ts-xapp"; then
-        echo "Error: ts-xapp container did not start successfully."
-        exit 1
-    fi
+    echo "Error: ts-xapp pod is not running. Current status: $TS_XAPP_RUNNING"
+    exit 1
 fi
 
-# Additional check to ensure ts-xapp is connected to my_network
-for i in {1..20}; do
-    if docker network inspect my_network | grep -q "ts-xapp"; then
-        echo "ts-xapp container is confirmed to be connected to 'my_network'."
-        exit 0
-    else
-        echo "Waiting for ts-xapp container to connect to 'my_network'..."
-        sleep 2
-    fi
-done
-
-echo "Error: ts-xapp container is not connected to 'my_network'."
-exit 1
-
 echo "################################################################################################################################"
-
-
-
-# List all running containers along with their network connections
-echo "Listing all running containers with their network connections:"
+echo "# Listing all running containers with their network connections:"
 docker ps --format 'table {{.Names}}\t{{.Networks}}'
-
-# Inspect the specific Docker network
-echo "Inspecting 'my_network' Docker network:"
+echo "# Inspecting 'my_network' Docker network:"
 docker network inspect my_network
 echo "################################################################################################################################"
-
 
 # Function to cleanup port forwarding on script exit
 function cleanup {
