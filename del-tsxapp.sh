@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Set colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -72,7 +71,18 @@ trap cleanup EXIT
 
 # Free up ports used by the xApp (if necessary)
 free_up_port 5001
+free_up_port 8086
 
+# Check if InfluxDB is running in Kubernetes
+if ! kubectl get pods -n $NAMESPACE | grep -q "$INFLUXDB_SERVICE"; then
+    echo -e "${RED}InfluxDB is not running in Kubernetes. Please deploy InfluxDB and try again.${NC}"
+    exit 1
+fi
+echo "InfluxDB is running."
+
+# Port-forward InfluxDB
+kubectl port-forward svc/$INFLUXDB_SERVICE 8086:8086 -n $NAMESPACE &
+echo "InfluxDB port-forwarding setup complete."
 # Retrieve the IP addresses of necessary services
 export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve APPMGR_HTTP IP" "APPMGR_HTTP IP retrieved successfully: $APPMGR_HTTP"
