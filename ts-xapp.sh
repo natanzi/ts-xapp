@@ -319,8 +319,6 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo "################################################################################################################################"
-echo "#                                                                                                                              #"
-echo "################################################################################################################################"
 echo "######################################### Setting up Grafana... ################################################################"
 echo "################################################################################################################################"
 
@@ -333,7 +331,7 @@ fi
 # Set your namespace and service names here
 NAMESPACE="ricplt"
 INFLUXDB_SERVICE="ricplt-influxdb"
-GRAFANA_SERVICE="ricplt-grafana"
+GRAFANA_SERVICE="grafana" # Name of Grafana service or Docker container
 
 # Check if InfluxDB is running in Kubernetes
 if ! kubectl get pods -n $NAMESPACE | grep -q "$INFLUXDB_SERVICE"; then
@@ -347,15 +345,20 @@ kubectl port-forward svc/$INFLUXDB_SERVICE 8086:8086 -n $NAMESPACE &
 echo "InfluxDB port-forwarding setup complete."
 
 # Check if Grafana is running in Kubernetes
-if ! kubectl get pods -n $NAMESPACE | grep -q "$GRAFANA_SERVICE"; then
-    echo -e "${RED}Grafana is not running in Kubernetes. Please deploy Grafana and try again.${NC}"
-    exit 1
+if kubectl get pods -n $NAMESPACE | grep -q "$GRAFANA_SERVICE"; then
+    echo "Grafana is running in Kubernetes."
+    # Port-forward Grafana
+    kubectl port-forward svc/$GRAFANA_SERVICE 3000:3000 -n $NAMESPACE &
+    echo "Grafana port-forwarding setup complete. Grafana is accessible at http://localhost:3000"
+else
+    # Check if Grafana is running as a Docker container
+    if docker ps | grep -q "$GRAFANA_SERVICE"; then
+        echo "Grafana is running as a Docker container."
+    else
+        echo -e "${RED}Grafana is not running. Please start Grafana and try again.${NC}"
+        exit 1
+    fi
 fi
-echo "Grafana is running."
-
-# Port-forward Grafana
-kubectl port-forward svc/$GRAFANA_SERVICE 3000:3000 -n $NAMESPACE &
-echo "Grafana port-forwarding setup complete. Grafana is accessible at http://localhost:3000"
 
 echo "################################################################################################################################"
 echo "# Verifying ts-xapp is Running"
