@@ -346,6 +346,7 @@ else
     INFLUXDB_NETWORK=$(docker network inspect my_network | grep "influxdb")
     if [ -z "$INFLUXDB_NETWORK" ]; then
         docker network connect my_network influxdb
+        sudo ufw allow 8086/tcp
     fi
 fi
 
@@ -399,16 +400,26 @@ echo "# Inspecting 'my_network' Docker network:"
 docker network inspect my_network
 echo "################################################################################################################################"
 
-# Function to cleanup port forwarding on script exit
+# Function to clean port forwarding on script exit
 function cleanup {
   echo "Stopping port forwarding..."
   if [ -n "$PORT_FORWARD_PID" ]; then
     kill $PORT_FORWARD_PID
+    echo "Stopped port forwarding for ricxapp-ts-xapp."
+  fi
+  if [ -n "$INFLUXDB_PORT_FORWARD_PID" ]; then
+    kill $INFLUXDB_PORT_FORWARD_PID
+    echo "Stopped port forwarding for InfluxDB."
   fi
 }
 
 # Set the trap function for script exit
 trap cleanup EXIT
+
+# Start port-forward for InfluxDB in the background
+kubectl port-forward svc/ricplt-influxdb 8086:8086 -n ricplt &
+INFLUXDB_PORT_FORWARD_PID=$!
+echo "Port forwarding for InfluxDB is now running in the background. PID: $INFLUXDB_PORT_FORWARD_PID"
 
 # Check if the user wants to see the xApp logs
 while true; do
@@ -422,7 +433,7 @@ while true; do
         # Start port-forward in the background
         kubectl port-forward pod/$POD_NAME 5001:5001 -n ricxapp &
         PORT_FORWARD_PID=$!
-        echo "Port forwarding is now running in the background. PID: $PORT_FORWARD_PID"
+        echo "Port forwarding for ricxapp-ts-xapp is now running in the background. PID: $PORT_FORWARD_PID"
 
         # Check xApp logs
         if ! sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
