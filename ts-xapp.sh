@@ -356,14 +356,21 @@ echo "##########################################################################
 echo "# Verifying ts-xapp is Running"
 echo "################################################################################################################################"
 
-# Check if ts-xapp pod is running in Kubernetes
-TS_XAPP_RUNNING=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[*].status.phase}')
-if [[ "$TS_XAPP_RUNNING" == "Running" ]]; then
-    echo "ts-xapp pod is running."
-else
-    echo "Error: ts-xapp pod is not running. Current status: $TS_XAPP_RUNNING"
-    exit 1
-fi
+# Function to get the status of ts-xapp pod
+get_ts_xapp_status() {
+    kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[*].status.phase}'
+}
+
+# Wait for ts-xapp pod to be in Running status
+TS_XAPP_RUNNING=$(get_ts_xapp_status)
+while [[ "$TS_XAPP_RUNNING" != "Running" ]]; do
+    echo "Waiting for ts-xapp pod to be in Running status. Current status: $TS_XAPP_RUNNING"
+    sleep 5
+    TS_XAPP_RUNNING=$(get_ts_xapp_status)
+done
+
+echo "ts-xapp pod is running."
+
 
 echo "################################################################################################################################"
 echo "# Listing all running containers with their network connections:"
