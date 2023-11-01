@@ -401,6 +401,12 @@ function cleanup {
 # Set the trap function for script exit
 trap cleanup EXIT
 
+# Check if InfluxDB is running in the Kubernetes cluster
+if ! kubectl get svc -n ricplt | grep -q "ricplt-influxdb"; then
+  echo "InfluxDB service is not running in the Kubernetes cluster in namespace 'ricplt'. Please deploy InfluxDB and try again."
+  exit 1
+fi
+
 # Start port-forward for InfluxDB in the background
 kubectl port-forward svc/ricplt-influxdb 8086:8086 -n ricplt &
 INFLUXDB_PORT_FORWARD_PID=$!
@@ -412,16 +418,21 @@ while true; do
     case "$choice" in 
       y|Y )
         echo 'Checking xApp logs...'
+
         # Retrieve the Pod Name
         POD_NAME=$(kubectl get pods -n ricxapp -l app=ricxapp-ts-xapp -o jsonpath='{.items[0].metadata.name}')
-        
+        if [ -z "$POD_NAME" ]; then
+          echo "Error: ricxapp-ts-xapp pod not found in namespace 'ricxapp'."
+          exit 1
+        fi
+
         # Start port-forward in the background
         kubectl port-forward pod/$POD_NAME 5001:5001 -n ricxapp &
         PORT_FORWARD_PID=$!
         echo "Port forwarding for ricxapp-ts-xapp is now running in the background. PID: $PORT_FORWARD_PID"
 
         # Check xApp logs
-        if ! sudo kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
+        if ! kubectl logs -f -n ricxapp -l app=ricxapp-ts-xapp; then
             echo "Error: Failed to retrieve logs. Make sure your cluster is reachable and the ricxapp-ts-xapp is deployed correctly."
         fi
         
