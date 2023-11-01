@@ -399,16 +399,6 @@ cleanup() {
     fi
     echo "Stopped port forwarding for ricxapp-ts-xapp."
   fi
-
-  if [ -n "$INFLUXDB_PORT_FORWARD_PID" ]; then
-    kill $INFLUXDB_PORT_FORWARD_PID 2>/dev/null
-    sleep 2
-    if ps -p $INFLUXDB_PORT_FORWARD_PID > /dev/null; then
-      echo "Port forwarding for InfluxDB did not stop gracefully, force stopping..."
-      kill -9 $INFLUXDB_PORT_FORWARD_PID 2>/dev/null
-    fi
-    echo "Stopped port forwarding for InfluxDB."
-  fi
 }
 
 # Set the trap function for script exit
@@ -421,15 +411,10 @@ if ! kubectl get svc -n ricplt | grep -q "ricplt-influxdb"; then
 fi
 
 # Check if port 8086 is already in use
-if lsof -i :8086 &>/dev/null; then
-  echo "Port 8086 is already in use. Please free up the port or ensure InfluxDB port-forwarding is set up correctly."
+if ! lsof -i :8086 &>/dev/null; then
+  echo "Port 8086 is not in use. Please ensure InfluxDB port-forwarding is set up correctly."
   exit 1
 fi
-
-# Start port-forward for InfluxDB in the background
-kubectl port-forward svc/ricplt-influxdb 8086:8086 -n ricplt &
-INFLUXDB_PORT_FORWARD_PID=$!
-echo "Port forwarding for InfluxDB is now running in the background. PID: $INFLUXDB_PORT_FORWARD_PID"
 
 # Check if the user wants to see the xApp logs
 while true; do
