@@ -315,8 +315,11 @@ else
     echo "# $POD_STATUS                                                                                                                #"
 fi
 
-echo "#                                                                                                                              #"
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 echo "################################################################################################################################"
+echo "#                                                                                                                              #"
 echo "################################################################################################################################"
 echo "######################################### Setting up Grafana... ################################################################"
 echo "################################################################################################################################"
@@ -333,13 +336,30 @@ if [ "$DOCKER_RUNNING" != "active" ]; then
     exit 1
 fi
 
+# Check if InfluxDB container is running
+INFLUXDB_CONTAINER=$(docker ps | grep "influxdb")
+if [ -z "$INFLUXDB_CONTAINER" ]; then
+    echo -e "${RED}InfluxDB container is not running. Please start InfluxDB and try again.${NC}"
+    exit 1
+else
+    # Ensure InfluxDB is connected to the network
+    INFLUXDB_NETWORK=$(docker network inspect my_network | grep "influxdb")
+    if [ -z "$INFLUXDB_NETWORK" ]; then
+        docker network connect my_network influxdb
+    fi
+fi
+
 # Pull and run Grafana container
 GRAFANA_CONTAINER_EXISTS=$(docker ps -a | grep "grafana")
 if [ -z "$GRAFANA_CONTAINER_EXISTS" ]; then
     docker pull grafana/grafana
     docker run -d --name=grafana --network=my_network -p 3000:3000 grafana/grafana
 else
-    echo "Grafana container already exists. Starting it if it's not running..."
+    echo "Grafana container already exists. Connecting it to the network (if not connected) and starting it if it's not running..."
+    GRAFANA_NETWORK=$(docker network inspect my_network | grep "grafana")
+    if [ -z "$GRAFANA_NETWORK" ]; then
+        docker network connect my_network grafana
+    fi
     docker start grafana
 fi
 
