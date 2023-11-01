@@ -1,4 +1,5 @@
 #!/bin/bash
+#del-tsxapp.sh
 # Set colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -65,13 +66,17 @@ free_up_port() {
     fi
 }
 
-
 # Set the trap function for script exit
 trap cleanup EXIT
 
 # Free up ports used by the xApp (if necessary)
 free_up_port 5001
 free_up_port 8086
+
+# Set your namespace and service names here
+NAMESPACE="ricplt"
+INFLUXDB_SERVICE="ricplt-influxdb"
+GRAFANA_SERVICE="ricplt-grafana"
 
 # Check if InfluxDB is running in Kubernetes
 if ! kubectl get pods -n $NAMESPACE | grep -q "$INFLUXDB_SERVICE"; then
@@ -80,14 +85,11 @@ if ! kubectl get pods -n $NAMESPACE | grep -q "$INFLUXDB_SERVICE"; then
 fi
 echo "InfluxDB is running."
 
-# Port-forward InfluxDB
-kubectl port-forward svc/$INFLUXDB_SERVICE 8086:8086 -n $NAMESPACE &
-echo "InfluxDB port-forwarding setup complete."
 # Retrieve the IP addresses of necessary services
-export APPMGR_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
+export APPMGR_HTTP=$(sudo kubectl get svc -n $NAMESPACE --field-selector metadata.name=service-$NAMESPACE-appmgr-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve APPMGR_HTTP IP" "APPMGR_HTTP IP retrieved successfully: $APPMGR_HTTP"
 
-export ONBOARDER_HTTP=$(sudo kubectl get svc -n ricplt --field-selector metadata.name=service-ricplt-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
+export ONBOARDER_HTTP=$(sudo kubectl get svc -n $NAMESPACE --field-selector metadata.name=service-$NAMESPACE-xapp-onboarder-http -o jsonpath='{.items[0].spec.clusterIP}')
 check_status "Failed to retrieve ONBOARDER_HTTP IP" "ONBOARDER_HTTP IP retrieved successfully: $ONBOARDER_HTTP"
 
 # Undeploy the xApp
