@@ -387,26 +387,42 @@ docker ps --format 'table {{.Names}}\t{{.Networks}}'
 echo "# Inspecting 'my_network' Docker network:"
 docker network inspect my_network
 echo "################################################################################################################################"
-
-# Function to clean port forwarding on script exit
-function cleanup {
+# Function to clean up port forwarding on script exit
+cleanup() {
   echo "Stopping port forwarding..."
   if [ -n "$PORT_FORWARD_PID" ]; then
-    kill $PORT_FORWARD_PID
+    kill $PORT_FORWARD_PID 2>/dev/null
+    sleep 2
+    if ps -p $PORT_FORWARD_PID > /dev/null; then
+      echo "Port forwarding for ricxapp-ts-xapp did not stop gracefully, force stopping..."
+      kill -9 $PORT_FORWARD_PID 2>/dev/null
+    fi
     echo "Stopped port forwarding for ricxapp-ts-xapp."
   fi
+
   if [ -n "$INFLUXDB_PORT_FORWARD_PID" ]; then
-    kill $INFLUXDB_PORT_FORWARD_PID
+    kill $INFLUXDB_PORT_FORWARD_PID 2>/dev/null
+    sleep 2
+    if ps -p $INFLUXDB_PORT_FORWARD_PID > /dev/null; then
+      echo "Port forwarding for InfluxDB did not stop gracefully, force stopping..."
+      kill -9 $INFLUXDB_PORT_FORWARD_PID 2>/dev/null
+    fi
     echo "Stopped port forwarding for InfluxDB."
   fi
 }
 
 # Set the trap function for script exit
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
 
 # Check if InfluxDB is running in the Kubernetes cluster
 if ! kubectl get svc -n ricplt | grep -q "ricplt-influxdb"; then
   echo "InfluxDB service is not running in the Kubernetes cluster in namespace 'ricplt'. Please deploy InfluxDB and try again."
+  exit 1
+fi
+
+# Check if port 8086 is already in use
+if lsof -i :8086 &>/dev/null; then
+  echo "Port 8086 is already in use. Please free up the port or ensure InfluxDB port-forwarding is set up correctly."
   exit 1
 fi
 
@@ -429,6 +445,12 @@ while true; do
           exit 1
         fi
 
+        # Check if port 5001 is already in use
+        if lsof -i :5001 &>/dev/null; then
+          echo "Port 5001 is already in use. Please free up the port or ensure ricxapp-ts-xapp port-forwarding is set up correctly."
+          exit 1
+        fi
+
         # Start port-forward in the background
         kubectl port-forward pod/$POD_NAME 5001:5001 -n ricxapp &
         PORT_FORWARD_PID=$!
@@ -440,9 +462,7 @@ while true; do
         fi
         
         # Kill the port-forwarding process after checking the logs
-        kill $PORT_FORWARD_PID
-        unset PORT_FORWARD_PID
-
+        cleanup
         break ;;
       n|N )
         echo "Skipping xApp logs..."
