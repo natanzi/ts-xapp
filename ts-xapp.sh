@@ -324,58 +324,43 @@ echo "##########################################################################
 echo "######################################### Setting up Grafana... ################################################################"
 echo "################################################################################################################################"
 
-# Check if Docker is installed and running
-if ! command -v docker &> /dev/null; then
-    echo -e "${RED}Docker is not installed. Please install Docker and try again.${NC}"
+# Check if kubectl is installed
+if ! command -v kubectl &> /dev/null; then
+    echo -e "${RED}kubectl is not installed. Please install kubectl and try again.${NC}"
     exit 1
 fi
 
-DOCKER_RUNNING=$(systemctl is-active docker)
-if [ "$DOCKER_RUNNING" != "active" ]; then
-    echo -e "${RED}Docker service is not running. Please start Docker and try again.${NC}"
+# Set your namespace and service names here
+NAMESPACE="ricplt"
+INFLUXDB_SERVICE="ricplt-influxdb"
+GRAFANA_SERVICE="ricplt-grafana"
+
+# Check if InfluxDB is running in Kubernetes
+if ! kubectl get pods -n $NAMESPACE | grep -q "$INFLUXDB_SERVICE"; then
+    echo -e "${RED}InfluxDB is not running in Kubernetes. Please deploy InfluxDB and try again.${NC}"
     exit 1
 fi
+echo "InfluxDB is running."
 
-# Check if InfluxDB container is running
-INFLUXDB_CONTAINER=$(docker ps | grep "influxdb")
-if [ -z "$INFLUXDB_CONTAINER" ]; then
-    echo -e "${RED}InfluxDB container is not running. Please start InfluxDB and try again.${NC}"
+# Port-forward InfluxDB
+kubectl port-forward svc/$INFLUXDB_SERVICE 8086:8086 -n $NAMESPACE &
+echo "InfluxDB port-forwarding setup complete."
+
+# Check if Grafana is running in Kubernetes
+if ! kubectl get pods -n $NAMESPACE | grep -q "$GRAFANA_SERVICE"; then
+    echo -e "${RED}Grafana is not running in Kubernetes. Please deploy Grafana and try again.${NC}"
     exit 1
-else
-    # Ensure InfluxDB is connected to the network
-    INFLUXDB_NETWORK=$(docker network inspect my_network | grep "influxdb")
-    if [ -z "$INFLUXDB_NETWORK" ]; then
-        docker network connect my_network influxdb
-        sudo ufw allow 8086/tcp
-    fi
 fi
+echo "Grafana is running."
 
-# Pull and run Grafana container
-GRAFANA_CONTAINER_EXISTS=$(docker ps -a | grep "grafana")
-if [ -z "$GRAFANA_CONTAINER_EXISTS" ]; then
-    docker pull grafana/grafana
-    docker run -d --name=grafana --network=my_network -p 3000:3000 grafana/grafana
-else
-    echo "Grafana container already exists. Connecting it to the network (if not connected) and starting it if it's not running..."
-    GRAFANA_NETWORK=$(docker network inspect my_network | grep "grafana")
-    if [ -z "$GRAFANA_NETWORK" ]; then
-        docker network connect my_network grafana
-    fi
-    docker start grafana
-fi
-
-# Check if Grafana container is up and running
-GRAFANA_STATUS=$(docker ps | grep "grafana/grafana")
-if [ -z "$GRAFANA_STATUS" ]; then
-    echo -e "${RED}Error: Grafana container not running.${NC}"
-    exit 1
-else
-    echo "Grafana is up and running at http://localhost:3000"
-fi
+# Port-forward Grafana
+kubectl port-forward svc/$GRAFANA_SERVICE 3000:3000 -n $NAMESPACE &
+echo "Grafana port-forwarding setup complete. Grafana is accessible at http://localhost:3000"
 
 echo "################################################################################################################################"
 echo "# Verifying ts-xapp is Running"
 echo "################################################################################################################################"
+
 
 # Function to get the status of ts-xapp pod
 get_ts_xapp_status() {
