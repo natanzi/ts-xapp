@@ -12,6 +12,7 @@ def create_connection(host, port):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host, port))
+        print(f"Successfully connected to the server {host} on port {port}")
         return s
     except socket.error as err:
         print(f"Connection failed with error: {err}")
