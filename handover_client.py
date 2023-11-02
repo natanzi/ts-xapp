@@ -12,10 +12,10 @@ def create_connection(host, port):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((host, port))
-        print(f"Successfully connected to the server {host} on port {port}")
+        print(f"Successfully connected to the Handover server {host} on port {port}")
         return s
     except socket.error as err:
-        print(f"Connection failed with error: {err}")
+        print(f"Handover Connection failed with error: {err}")
         return None
 
 def send_handover_command(sock, ue_id, target_enb_id):
