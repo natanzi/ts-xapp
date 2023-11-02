@@ -1,53 +1,59 @@
 #handover_client.py
 import socket
-import json
+import sys
+import time
 
-# Replace with the appropriate host and port
-HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 12345        # The port used by the server
+# Replace with the server's IP address and port
+HOST = '192.168.1.10'  # The server's IP address
+PORT = 12345           # The port used by the server
 
-def send_handover_command(server_address, ue_id, target_cell):
-    """ Sends a handover command to the handover server. """
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        try:
-            s.connect(server_address)
+def create_connection(host, port):
+    """Attempts to create a socket connection to the server."""
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host, port))
+        return s
+    except socket.error as err:
+        print(f"Connection failed with error: {err}")
+        return None
+
+def send_handover_command(sock, ue_id, target_enb_id):
+    """Sends a handover command to the server."""
+    try:
+        # Construct the handover command
+        message = f"Handover command for UE: {ue_id} to target eNB: {target_enb_id}\n"
+        sock.sendall(message.encode())
+
+        # Wait for a response from the server
+        response = sock.recv(1024)
+        print("Server response:", response.decode())
+
+    except socket.error as err:
+        print(f"Send/receive failed with error: {err}")
+
+def main():
+    sock = create_connection(HOST, PORT)
+    if not sock:
+        print("Failed to connect to the server. Exiting.")
+        sys.exit(1)
+
+    try:
+        while True:
+            # Example UE ID and target eNB ID for handover
+            ue_id = '123'
+            target_enb_id = '456'
             
-            # Construct the handover command as a dictionary
-            handover_command = {
-                'command': 'handover',
-                'ue_id': ue_id,
-                'target_cell': target_cell
-            }
-            
-            # Convert the command to a JSON string
-            handover_command_str = json.dumps(handover_command)
-            
-            # Send the command
-            s.sendall(handover_command_str.encode('utf-8'))
-            
-            # Wait for a response
-            response = s.recv(1024)
-            print('Received:', response.decode('utf-8'))
+            send_handover_command(sock, ue_id, target_enb_id)
 
-        except socket.error as e:
-            print(f"Socket error occurred: {e}")
+            # Example delay between handover commands
+            time.sleep(5)
 
-        except json.JSONDecodeError as e:
-            print(f"JSON decode error: {e}")
+    except KeyboardInterrupt:
+        print("Interrupted by the user.")
 
-        except Exception as e:
-            print(f"An error occurred: {e}")
+    finally:
+        if sock:
+            sock.close()
 
-        finally:
-            # Attempt to close the socket in case of any failure
-            try:
-                s.shutdown(socket.SHUT_RDWR)
-            except Exception:
-                pass  # Ignore errors in shutdown
-            s.close()
-
-# Example usage
-if __name__ == "__main__":
-    # Replace 'ue_id' and 'target_cell' with appropriate values
-    send_handover_command((HOST, PORT), ue_id='1234', target_cell='5678')
-
+if __name__ == '__main__':
+    main()
