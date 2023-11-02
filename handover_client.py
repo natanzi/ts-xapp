@@ -7,19 +7,24 @@ import time
 HOST = '192.168.1.10'  # The server's IP address
 PORT = 12345           # The port used by the server
 
-def create_connection(host, port):
-    """Attempts to create a socket connection to the server."""
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((host, port))
-        print(f"Successfully connected to the Handover server {host} on port {port}")
-        return s
-    except socket.error as err:
-        print(f"Handover Connection failed with error: {err}")
-        return None
+def create_connection(host, port, retries=5, delay=2):
+    """Attempts to create a socket connection to the server, with retries."""
+    attempt = 0
+    while attempt < retries:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect((host, port))
+            print(f"Successfully connected to the server {host} on port {port}")
+            return s
+        except socket.error as err:
+            print(f"Connection failed with error: {err}. Retrying in {delay} seconds...")
+            time.sleep(delay)
+            attempt += 1
+    print("Maximum retries reached. Failed to connect to the server.")
+    return None
 
 def send_handover_command(sock, ue_id, target_enb_id):
-    """Sends a handover command to the server."""
+    """Sends a handover command to the server and handles network errors."""
     try:
         # Construct the handover command
         message = f"Handover command for UE: {ue_id} to target eNB: {target_enb_id}\n"
@@ -30,7 +35,10 @@ def send_handover_command(sock, ue_id, target_enb_id):
         print("Server response:", response.decode())
 
     except socket.error as err:
-        print(f"Send/receive failed with error: {err}")
+        print(f"Send/receive failed with error: {err}.")
+        # Here you can decide whether to terminate or retry the command
+        return False
+    return True
 
 def main():
     sock = create_connection(HOST, PORT)
@@ -44,7 +52,12 @@ def main():
             ue_id = '123'
             target_enb_id = '456'
             
-            send_handover_command(sock, ue_id, target_enb_id)
+            if not send_handover_command(sock, ue_id, target_enb_id):
+                print("Attempting to reconnect to the server...")
+                sock = create_connection(HOST, PORT)
+                if not sock:
+                    print("Reconnection failed. Exiting.")
+                    break
 
             # Example delay between handover commands
             time.sleep(5)
