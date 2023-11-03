@@ -1,11 +1,11 @@
-#handover_client.py
+# handover_client.py
 import socket
 import sys
 import time
 
 # Replace with the server's IP address and port
 HOST = '127.0.0.1'  # The server's IP address
-PORT = 12345           # The port used by the server
+PORT = 12345        # The port used by the server
 
 def create_connection(host, port, retries=5, delay=2):
     """Attempts to create a socket connection to the server, with retries."""
@@ -44,29 +44,33 @@ def send_handover_command(sock, ue_id, target_enb_id):
     return True
 
 def main():
-    with create_connection(HOST, PORT) as sock:
-        if not sock:
-            print("Failed to connect to the server. Exiting.")
-            sys.exit(1)
+    sock = create_connection(HOST, PORT)
+    if not sock:
+        print("Failed to connect to the server. Exiting.")
+        sys.exit(1)
 
-        try:
-            while True:
-                # Example UE ID and target eNB ID for handover
-                ue_id = '123'
-                target_enb_id = '456'
-                
-                if not send_handover_command(sock, ue_id, target_enb_id):
-                    print("Attempting to reconnect to the server...")
-                    sock = create_connection(HOST, PORT)
-                    if not sock:
-                        print("Reconnection failed. Exiting.")
-                        break
+    try:
+        while True:
+            # Example UE ID and target eNB ID for handover
+            ue_id = '123'
+            target_enb_id = '456'
+            
+            if not send_handover_command(sock, ue_id, target_enb_id):
+                print("Attempting to reconnect to the server...")
+                sock.close()  # Close the previous socket before creating a new one
+                sock = create_connection(HOST, PORT)
+                if not sock:
+                    print("Reconnection failed. Exiting.")
+                    break
 
-                # Example delay between handover commands
-                time.sleep(5)
+            # Example delay between handover commands
+            time.sleep(5)
 
-        except KeyboardInterrupt:
-            print("Interrupted by the user.")
+    except KeyboardInterrupt:
+        print("Interrupted by the user.")
+    finally:
+        if sock:
+            sock.close()  # Ensure the socket is closed on exit
 
 if __name__ == '__main__':
     main()
