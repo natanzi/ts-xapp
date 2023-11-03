@@ -1,4 +1,5 @@
 #handover_client.py
+#handover_client.py
 import socket
 import sys
 import time
@@ -38,36 +39,35 @@ def send_handover_command(sock, ue_id, target_enb_id):
         print(f"Send/receive failed with error: {err}.")
         # Here you can decide whether to terminate or retry the command
         return False
+    except ConnectionResetError:
+        print("Connection was closed by the server.")
+        return False
     return True
 
 def main():
-    sock = create_connection(HOST, PORT)
-    if not sock:
-        print("Failed to connect to the server. Exiting.")
-        sys.exit(1)
+    with create_connection(HOST, PORT) as sock:
+        if not sock:
+            print("Failed to connect to the server. Exiting.")
+            sys.exit(1)
 
-    try:
-        while True:
-            # Example UE ID and target eNB ID for handover
-            ue_id = '123'
-            target_enb_id = '456'
-            
-            if not send_handover_command(sock, ue_id, target_enb_id):
-                print("Attempting to reconnect to the server...")
-                sock = create_connection(HOST, PORT)
-                if not sock:
-                    print("Reconnection failed. Exiting.")
-                    break
+        try:
+            while True:
+                # Example UE ID and target eNB ID for handover
+                ue_id = '123'
+                target_enb_id = '456'
+                
+                if not send_handover_command(sock, ue_id, target_enb_id):
+                    print("Attempting to reconnect to the server...")
+                    sock = create_connection(HOST, PORT)
+                    if not sock:
+                        print("Reconnection failed. Exiting.")
+                        break
 
-            # Example delay between handover commands
-            time.sleep(5)
+                # Example delay between handover commands
+                time.sleep(5)
 
-    except KeyboardInterrupt:
-        print("Interrupted by the user.")
-
-    finally:
-        if sock:
-            sock.close()
+        except KeyboardInterrupt:
+            print("Interrupted by the user.")
 
 if __name__ == '__main__':
     main()
