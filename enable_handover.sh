@@ -1,8 +1,5 @@
 #!/bin/bash
 # Ensure the script is run as root
-#!/bin/bash
-
-# Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
   echo "This script must be run as root" >&2
   exit 1
@@ -34,42 +31,37 @@ compare_checksums() {
   fi
 }
 
-# Define the local directory where downloaded files are placed
-# Replace "/path/to/downloaded/files" with the actual path where the downloaded files are stored.
-LOCAL_DIR="https://github.com/natanzi/srsRAN_4G_handover/"
+# Define the destination directory
 DEST_DIR="/home/ubnt/main-file-repo/oaic/srsRAN-e2"
 
-# Define an associative array with local and destination paths
-declare -A files_to_copy=(
-  ["$LOCAL_DIR/srsenb/src/main.cc"]="$DEST_DIR/srsenb/src/main.cc"
-  ["$LOCAL_DIR/lib/include/srsran/common/handover_server.h"]="$DEST_DIR/lib/include/srsran/common/handover_server.h"
-  ["$LOCAL_DIR/CMakeLists.txt"]="$DEST_DIR/CMakeLists.txt"
-  ["$LOCAL_DIR/lib/src/common/handover_server.cpp"]="$DEST_DIR/lib/src/common/handover_server.cpp"
+# Define the URLs of the source files
+declare -A files_to_download=(
+  ["srsenb/src/main.cc"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/srsenb/src/main.cc"
+  ["lib/include/srsran/common/handover_server.h"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/lib/include/srsran/common/handover_server.h"
+  ["CMakeLists.txt"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/CMakeLists.txt"
+  ["lib/src/common/handover_server.cpp"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/lib/src/common/handover_server.cpp"
 )
 
-# Copy or create the files
-for src in "${!files_to_copy[@]}"; do
-  dest=${files_to_copy[$src]}
-  dest_dir=$(dirname "$dest")
+# Download and copy files
+for dest_path in "${!files_to_download[@]}"; do
+  url=${files_to_download[$dest_path]}
+  full_dest_path="${DEST_DIR}/${dest_path}"
 
-  # Create the destination directory if it doesn't exist
-  mkdir -p "$dest_dir"
+  # Create destination directory if it doesn't exist
+  mkdir -p "$(dirname "$full_dest_path")"
 
-  # Check if the source file exists
-  if [ -f "$src" ]; then
-    # Copy the file and overwrite the destination
-    cp -f "$src" "$dest" && echo "Copied $src to $dest"
-    # Verify the copy by comparing checksums
-    if ! compare_checksums "$src" "$dest"; then
-      echo "Copy verification failed for $src to $dest" >&2
+  # Download the file using wget or curl
+  if wget -q -O "$full_dest_path" "$url" || curl -s -o "$full_dest_path" "$url"; then
+    echo "Downloaded $url to $full_dest_path"
+    # Verify the download by comparing checksums with the online file
+    if ! compare_checksums <(curl -s "$url") "$full_dest_path"; then
+      echo "Download verification failed for $url to $full_dest_path" >&2
       exit 1
     fi
   else
-    # If the source file does not exist, create an empty file at the destination
-    touch "$dest" && echo "Created empty file at $dest"
+    echo "Failed to download $url to $full_dest_path" >&2
+    exit 1
   fi
 done
 
-echo "All files have been processed successfully."
-
-
+echo "All files have been downloaded and verified successfully."
