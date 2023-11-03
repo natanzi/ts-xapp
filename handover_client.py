@@ -4,7 +4,7 @@ import sys
 import time
 
 # Replace with the server's IP address and port
-HOST = '192.168.1.10'  # The server's IP address
+HOST = '127.0.0.1'  # The server's IP address
 PORT = 12345           # The port used by the server
 
 def create_connection(host, port, retries=5, delay=2):
