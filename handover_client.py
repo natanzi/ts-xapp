@@ -1,5 +1,4 @@
 #handover_client.py
-#handover_client.py
 import socket
 import sys
 import time
