@@ -1,38 +1,75 @@
 #!/bin/bash
+# Ensure the script is run as root
+#!/bin/bash
 
-# The script should be placed in the root directory of the project.
-REQUIRED_PWD="/path/to/your/project/root" # Replace with the actual required path.
-
-# Target directory where files will be copied.
-TARGET_DIR="/home/ubnt/main-file-repo/oaic/srsRAN-e2"
-
-# Files to copy.
-FILES_TO_COPY=(
-  "srsRAN_4G_handover/srsenb/src/main.cc"
-  "srsRAN_4G_handover/lib/include/srsran/common/handover_server.h"
-  "srsRAN_4G_handover/CMakeLists.txt"
-  "srsRAN_4G_handover/lib/src/common/handover_server.cpp"
-)
-
-# Check if the user is in the required pwd to run the script.
-if [ "$(pwd)" != "$REQUIRED_PWD" ]; then
-  echo "Error: This script must be run from $REQUIRED_PWD"
+# Ensure the script is run as root
+if [ "$(id -u)" -ne 0 ]; then
+  echo "This script must be run as root" >&2
   exit 1
 fi
 
-# Copy the files.
-for file in "${FILES_TO_COPY[@]}"; do
-  if [ -f "$file" ]; then
-    # Use the -f flag to force the copy and overwrite the destination files.
-    cp -f "$file" "$TARGET_DIR/$(basename "$file")" || { 
-      echo "Failed to copy $file to $TARGET_DIR"
-      exit 1
-    }
-    echo "Copied $file to $TARGET_DIR"
+# Check the current working directory
+REQUIRED_DIR="/home/ubnt/main-file-repo/oaic"
+if [ "$(pwd)" != "$REQUIRED_DIR" ]; then
+  echo "This script must be run from $REQUIRED_DIR" >&2
+  exit 1
+fi
+
+# Function to compare file checksums
+compare_checksums() {
+  local src_file=$1
+  local dest_file=$2
+
+  # Calculate MD5 checksums
+  local src_checksum=$(md5sum "$src_file" | cut -d ' ' -f1)
+  local dest_checksum=$(md5sum "$dest_file" | cut -d ' ' -f1)
+
+  # Compare the checksums
+  if [ "$src_checksum" == "$dest_checksum" ]; then
+    echo "Checksums match for $src_file and $dest_file."
+    return 0
   else
-    echo "Error: File $file does not exist."
-    exit 1
+    echo "Checksums do not match for $src_file and $dest_file!" >&2
+    return 1
+  fi
+}
+
+# Define the local directory where downloaded files are placed
+# Replace "/path/to/downloaded/files" with the actual path where the downloaded files are stored.
+LOCAL_DIR="https://github.com/natanzi/srsRAN_4G_handover/"
+DEST_DIR="/home/ubnt/main-file-repo/oaic/srsRAN-e2"
+
+# Define an associative array with local and destination paths
+declare -A files_to_copy=(
+  ["$LOCAL_DIR/srsenb/src/main.cc"]="$DEST_DIR/srsenb/src/main.cc"
+  ["$LOCAL_DIR/lib/include/srsran/common/handover_server.h"]="$DEST_DIR/lib/include/srsran/common/handover_server.h"
+  ["$LOCAL_DIR/CMakeLists.txt"]="$DEST_DIR/CMakeLists.txt"
+  ["$LOCAL_DIR/lib/src/common/handover_server.cpp"]="$DEST_DIR/lib/src/common/handover_server.cpp"
+)
+
+# Copy or create the files
+for src in "${!files_to_copy[@]}"; do
+  dest=${files_to_copy[$src]}
+  dest_dir=$(dirname "$dest")
+
+  # Create the destination directory if it doesn't exist
+  mkdir -p "$dest_dir"
+
+  # Check if the source file exists
+  if [ -f "$src" ]; then
+    # Copy the file and overwrite the destination
+    cp -f "$src" "$dest" && echo "Copied $src to $dest"
+    # Verify the copy by comparing checksums
+    if ! compare_checksums "$src" "$dest"; then
+      echo "Copy verification failed for $src to $dest" >&2
+      exit 1
+    fi
+  else
+    # If the source file does not exist, create an empty file at the destination
+    touch "$dest" && echo "Created empty file at $dest"
   fi
 done
 
-echo "All files have been copied successfully."
+echo "All files have been processed successfully."
+
+
