@@ -13,6 +13,7 @@ if [ "$(pwd)" != "$REQUIRED_DIR" ]; then
 fi
 
 ######################### Install srsRAN #####################
+sudo apt install nlohmann-json3-dev
 sudo apt-get install build-essential cmake libfftw3-dev libmbedtls-dev libboost-program-options-dev libconfig++-dev libsctp-dev
 sudo apt-get install libzmq3-dev
 sudo add-apt-repository ppa:ettusresearch/uhd
@@ -30,10 +31,10 @@ DEST_DIR="/home/ubnt/main-file-repo/oaic/srsRAN-e2"
 
 # Define the URLs of the source files to be replaced
 declare -A files_to_download=(
-  ["srsenb/src/main.cc"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/srsenb/src/main.cc"
-  ["lib/include/srsran/common/handover_server.h"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/lib/include/srsran/common/handover_server.h"
-  ["CMakeLists.txt"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/CMakeLists.txt"
-  ["lib/src/common/handover_server.cpp"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_handover/master/lib/src/common/handover_server.cpp"
+  ["srsenb/src/main.cc"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/main.cc"
+  ["lib/include/srsran/common/handover_server.h"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/lib/include/srsran/common/handover_server.h"
+  ["CMakeLists.txt"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/CMakeLists.txt"
+  ["lib/src/common/handover_server.cpp"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/lib/src/common/handover_server.cpp"
 )
 
 # Download and copy files
