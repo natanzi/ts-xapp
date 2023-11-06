@@ -73,6 +73,7 @@ echo "Installing vim..."
 sudo apt install vim || { echo 'vim installation failed'; check_continue; }
 echo "vim installation completed."
 apt install python3-pip
+sudo apt install nlohmann-json3-dev
 
 
 oaic=`pwd`
