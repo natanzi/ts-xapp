@@ -31,11 +31,15 @@ DEST_DIR="/home/ubnt/main-file-repo/oaic/srsRAN-e2"
 
 # Define the URLs of the source files to be replaced
 declare -A files_to_download=(
+  ["srsenb/src/handover_server/handover_server.cpp"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/handover_server/handover_server.cpp"
+  ["srsenb/src/handover_server/handover_server.h"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/handover_server/handover_server.h"
+  ["srsenb/src/CMakeLists.txt"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/CMakeLists.txt"
   ["srsenb/src/main.cc"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/main.cc"
-  ["lib/include/srsran/common/handover_server.h"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/lib/include/srsran/common/handover_server.h"
-  ["CMakeLists.txt"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/CMakeLists.txt"
-  ["lib/src/common/handover_server.cpp"]="https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/lib/src/common/handover_server.cpp"
 )
+
+# Create the handover_server directory
+HANDOVER_SERVER_DIR="${DEST_DIR}/srsenb/src/handover_server"
+mkdir -p "$HANDOVER_SERVER_DIR"
 
 # Download and copy files
 for dest_path in "${!files_to_download[@]}"; do
@@ -54,7 +58,7 @@ for dest_path in "${!files_to_download[@]}"; do
   fi
 done
 
-echo "Files have been downloaded successfully."
+echo "Files have been downloaded and placed in the correct directories successfully."
 
 # Navigate to the srsRAN build directory and build the project
 cd "${DEST_DIR}"
@@ -68,7 +72,7 @@ sudo make install
 sudo ldconfig
 
 # Export the environment variable for srsRAN
-export SRS=`realpath .`
+export SRS=$(realpath .)
 # Additional cmake configurations, assuming e2_bindings directory exists under ${SRS}
 cmake ../ -DCMAKE_BUILD_TYPE=RelWithDebInfo \
           -DRIC_GENERATED_E2AP_BINDING_DIR=${SRS}/e2_bindings/E2AP-v01.01 \
