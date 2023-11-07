@@ -5,7 +5,7 @@ import time
 
 # Replace with the server's IP address and port
 HOST = '127.0.0.1'  # The server's IP address
-PORT = 12345        # The port used by the server
+PORT = 54321        # The port used by the server
 
 def create_connection(host, port, retries=5, delay=2):
     """Attempts to create a socket connection to the server, with retries."""
