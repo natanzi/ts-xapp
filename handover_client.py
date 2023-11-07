@@ -2,6 +2,7 @@
 import socket
 import sys
 import time
+import json
 
 # Replace with the server's IP address and port
 HOST = '127.0.0.1'  # The server's IP address
