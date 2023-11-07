@@ -17,11 +17,14 @@ cd srsRAN-e2/srsenb/src
 mkdir handover_server
 cd handover_server
 
-wget https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/handover_server/handover_server.cpp
-wget https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/handover_server/handover_server.h
+wget -O CMakeLists.txt https://raw.githubusercontent.com/natanzi/srsran_test/main/srsRAN-e2/srsenb/src/handover_server/CMakeLists.txt
+wget -O handover_server.cpp https://raw.githubusercontent.com/natanzi/srsran_test/main/srsRAN-e2/srsenb/src/handover_server/handover_server.cpp
+wget -O handover_server.h https://raw.githubusercontent.com/natanzi/srsran_test/main/srsRAN-e2/srsenb/src/handover_server/handover_server.h
+
 cd ..
-wget -O CMakeLists.txt https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/CMakeLists.txt
-wget -O main.cc https://raw.githubusercontent.com/natanzi/srsRAN_4G_Handover/master/srsenb/src/main.cc
+wget -O CMakeLists.txt https://raw.githubusercontent.com/natanzi/srsran_test/main/srsRAN-e2/srsenb/src/CMakeLists.txt
+wget -O main.cc https://raw.githubusercontent.com/natanzi/srsran_test/main/srsRAN-e2/srsenb/src/main.cc
+
 cd ..
 cd ..
 
