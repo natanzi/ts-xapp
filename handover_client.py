@@ -24,10 +24,17 @@ def create_connection(host, port, retries=5, delay=2):
     return None
 
 def send_handover_command(sock, ue_id, target_enb_id):
-    """Sends a handover command to the server and handles network errors."""
     try:
-        # Construct the handover command
-        message = f"Handover command for UE: {ue_id} to target eNB: {target_enb_id}\n"
+        # Construct the handover command as a JSON formatted string
+        command = {
+            "message_id": "some_unique_id",  # You need to generate a unique ID for each message
+            "command": "handover",
+            "parameters": {
+                "ue_id": ue_id,
+                "target_enb_id": target_enb_id
+            }
+        }
+        message = json.dumps(command) + "\n"
         sock.sendall(message.encode())
 
         # Wait for a response from the server
@@ -36,7 +43,6 @@ def send_handover_command(sock, ue_id, target_enb_id):
 
     except socket.error as err:
         print(f"Send/receive failed with error: {err}.")
-        # Here you can decide whether to terminate or retry the command
         return False
     except ConnectionResetError:
         print("Connection was closed by the server.")
